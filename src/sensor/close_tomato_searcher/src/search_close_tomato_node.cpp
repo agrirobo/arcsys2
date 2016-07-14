@@ -10,10 +10,9 @@
 class ShowImage {
 public:
   ShowImage()
-    : m_gamma(2048)
-    , RGB_WINDOW_NAME("RGB image")
-    //, DEPTH_WINDOW_NAME("Depth image")
-    , BINARY_WINDOW_NAME("Binary image")
+    : m_gamma(2048),
+      RGB_WINDOW_NAME("RGB image"),
+      BINARY_WINDOW_NAME("Binary image")
   {
     float v;
     for(int i = 0; i < 2048; i++) {
@@ -54,40 +53,40 @@ public:
 
       switch(pval >> 8) {
       case 0:
-	output.at<cv::Vec3b>(y,x)[2] = 255;
-	output.at<cv::Vec3b>(y,x)[1] = 255-lb;
-	output.at<cv::Vec3b>(y,x)[0] = 255-lb;
-	break;
+        output.at<cv::Vec3b>(y,x)[2] = 255;
+        output.at<cv::Vec3b>(y,x)[1] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[0] = 255-lb;
+        break;
       case 1:
-	output.at<cv::Vec3b>(y,x)[2] = 255;
-	output.at<cv::Vec3b>(y,x)[1] = lb;
-	output.at<cv::Vec3b>(y,x)[0] = 0;
-	break;
+        output.at<cv::Vec3b>(y,x)[2] = 255;
+        output.at<cv::Vec3b>(y,x)[1] = lb;
+        output.at<cv::Vec3b>(y,x)[0] = 0;
+        break;
       case 2:
-	output.at<cv::Vec3b>(y,x)[2] = 255-lb;
-	output.at<cv::Vec3b>(y,x)[1] = 255;
-	output.at<cv::Vec3b>(y,x)[0] = 0;
-	break;
+        output.at<cv::Vec3b>(y,x)[2] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[1] = 255;
+        output.at<cv::Vec3b>(y,x)[0] = 0;
+        break;
       case 3:
-	output.at<cv::Vec3b>(y,x)[2] = 0;
-	output.at<cv::Vec3b>(y,x)[1] = 255;
-	output.at<cv::Vec3b>(y,x)[0] = lb;
-	break;
+        output.at<cv::Vec3b>(y,x)[2] = 0;
+        output.at<cv::Vec3b>(y,x)[1] = 255;
+        output.at<cv::Vec3b>(y,x)[0] = lb;
+        break;
       case 4:
-	output.at<cv::Vec3b>(y,x)[2] = 0;
-	output.at<cv::Vec3b>(y,x)[1] = 255-lb;
-	output.at<cv::Vec3b>(y,x)[0] = 255;
-	break;
+        output.at<cv::Vec3b>(y,x)[2] = 0;
+        output.at<cv::Vec3b>(y,x)[1] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[0] = 255;
+        break;
       case 5:
-	output.at<cv::Vec3b>(y,x)[2] = 0;
-	output.at<cv::Vec3b>(y,x)[1] = 0;
-	output.at<cv::Vec3b>(y,x)[0] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[2] = 0;
+        output.at<cv::Vec3b>(y,x)[1] = 0;
+        output.at<cv::Vec3b>(y,x)[0] = 255-lb;
         break;
       default:
         output.at<cv::Vec3b>(y,x)[2] = 0;
-	output.at<cv::Vec3b>(y,x)[1] = 0;
-	output.at<cv::Vec3b>(y,x)[0] = 0;
-	break;
+        output.at<cv::Vec3b>(y,x)[1] = 0;
+        output.at<cv::Vec3b>(y,x)[0] = 0;
+        break;
       }
     }
     imshow(DEPTH_WINDOW_NAME, output);
@@ -106,7 +105,7 @@ public:
     : si_obj()
   {}
 
-  ~SearchTomato(){}
+  ~SearchTomato() {}
 
   bool getPoint(const cv::Mat& capture_rgb, geometry_msgs::Point& tomato_point) {
     si_obj.showRGB(capture_rgb);
@@ -148,11 +147,13 @@ private:
     int a, x, y;
     for(y = 0; y < hsv.rows; y++) {
       for(x = 0; x < hsv.cols; x++) {
-	a = hsv.step*y+(x*3);
-	if((hsv.data[a] <= 5 || hsv.data[a] >= 175) && hsv.data[a+1] >= 50 && hsv.data[a+2] >= 50)
-	  binary.at<unsigned char>(y,x) = 255;
-	else
-	  binary.at<unsigned char>(y,x) = 0;
+        a = hsv.step*y+(x*3);
+        if((hsv.data[a] <= 5 || hsv.data[a] >= 175)
+           && hsv.data[a+1] >= 50
+           && hsv.data[a+2] >= 50)
+          binary.at<unsigned char>(y,x) = 255;
+        else
+          binary.at<unsigned char>(y,x) = 0;
       }
     }
   }
@@ -190,8 +191,8 @@ private:
 
       not_likelihood = abs(box.x + width/2 - width/2) + abs(box.y + box.height/2 - height/2);
       if (not_likelihood < most_not_likelihood || most_not_likelihood == -1) {
-	tomato_box = box;
-	most_not_likelihood = not_likelihood;
+        tomato_box = box;
+        most_not_likelihood = not_likelihood;
       }
     }
 
@@ -214,14 +215,13 @@ class ImageConverter {
 
  public:
   ImageConverter()
-    : it(nh)
-    , st_obj()
-    {
-      pub_obj = nh.advertise<geometry_msgs::Point>("close_tomato_point", 1);
-      camera_sub = it.subscribe("/usb_cam/image_raw", 1, &ImageConverter::cameraCb , this);
-    }
+    : it(nh), st_obj()
+  {
+    pub_obj = nh.advertise<geometry_msgs::Point>("close_tomato_point", 1);
+    camera_sub = it.subscribe("/usb_cam/image_raw", 1, &ImageConverter::cameraCb , this);
+  }
 
-  ~ImageConverter(){}
+  ~ImageConverter() {}
 
   void cameraCb(const sensor_msgs::ImageConstPtr& msg) {
     try {
