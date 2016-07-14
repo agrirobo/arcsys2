@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="kinect_broadcaster" args="0 0 2 0 0 0 robot_base kinect" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="arm_base_broadcaster" args="0 0 1 0 0 0 robot_base arm_base" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="hand_cam_broadcaster" args="0 0 1 0 0 0 hand hand_cam" />
+</launch>
