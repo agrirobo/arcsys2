@@ -1,0 +1,12 @@
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video1" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="io_method" value="mmap"/>
+  </node>
+  <node name="hand_tomato" pkg="search_close_tomato" type="search_close_tomato_node" />
+  <node pkg="search_close_tomato" type="close_tomato_broadcaster" name="hand_tomato_broadcaster" />
+</launch>
