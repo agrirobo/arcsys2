@@ -154,12 +154,14 @@ private:
   }
 
   void resetKalman() {
-    kf.errorCovPre.at<float>(0) = 1; // px
-    kf.errorCovPre.at<float>(7) = 1; // px
-    kf.errorCovPre.at<float>(14) = 1;
-    kf.errorCovPre.at<float>(21) = 1;
-    kf.errorCovPre.at<float>(28) = 1; // px
-    kf.errorCovPre.at<float>(35) = 1; // px
+//     kf.errorCovPre.at<float>(0) = 1; // px
+//     kf.errorCovPre.at<float>(7) = 1; // px
+//     kf.errorCovPre.at<float>(14) = 1;
+//     kf.errorCovPre.at<float>(21) = 1;
+//     kf.errorCovPre.at<float>(28) = 1; // px
+//     kf.errorCovPre.at<float>(35) = 1; // px
+
+    for (int i=0; i<6; i++) kf.errorCovPre.at<float>(i*7) = 1;
   }
 
   bool found_flag;
