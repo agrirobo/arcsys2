@@ -1,17 +1,14 @@
 <?xml version="1.0"?>
 <package>
-  <name>kinect_tomato_search</name>
-  <version>0.1.0</version>
-  <description>The kinect_tomato_search package</description>
+  <name>kinect_tomato_searcher</name>
+  <version>0.2.0</version>
+  <description>The kinect_tomato_searcher package</description>
 
   <maintainer email="o111027y@mail.kyutech.jp">Yusuke Doi</maintainer>
 
-  <license>BSD</license>
+  <license>MIT</license>
 
-  <!-- Author tags are optional, mutiple are allowed, one per tag -->
-  <!-- Authors do not have to be maintianers, but could be -->
-  <!-- Example: -->
-  <!-- <author email="jane.doe@example.com">Jane Doe</author> -->
+  <author email="o111027y@mail.kyutech.jp">Yusuke Doi</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
@@ -33,5 +30,4 @@
   <run_depend>freenect_camera</run_depend>>
   <run_depend>tf2</run_depend>>
   <run_depend>tf2_ros</run_depend>>
-
 </package>

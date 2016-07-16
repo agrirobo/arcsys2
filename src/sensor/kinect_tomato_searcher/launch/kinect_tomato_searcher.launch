@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="kinect_tomato_searcher" type="kinect_tomato_searcher_node" name="search_tomato_node" />
+  <node pkg="kinect_tomato_searcher" type="tomato_broadcaster" name="tomato_broadcaster" />
+</launch>
