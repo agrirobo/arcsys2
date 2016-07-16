@@ -42,8 +42,8 @@ add_executable(krs_servo_node src/krs_servo_node.cpp)
 add_dependencies(krs_servo_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(Kkrs_servo_node
-  krsservo
+target_link_libraries(krs_servo_node
+  krs_servo_driver
   ${catkin_LIBRARIES}
 )
 
