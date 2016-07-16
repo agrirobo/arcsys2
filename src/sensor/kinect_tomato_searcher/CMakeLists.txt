@@ -28,7 +28,7 @@ include_directories(
 )
 
 ## Declare a C++ executable
-add_executable(kinect_tomato_searcher_node src/kinect_tomato_search_node.cpp)
+add_executable(kinect_tomato_searcher_node src/kinect_tomato_searcher_node.cpp)
 add_executable(kinect_tomato_group_search_node src/kinect_tomato_group_search_node.cpp)
 add_executable(tomato_broadcaster src/tomato_broadcaster.cpp)
 
