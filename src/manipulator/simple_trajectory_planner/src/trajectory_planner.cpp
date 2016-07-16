@@ -14,16 +14,20 @@ public:
 
   TargetPlanner()
     : transform_buffer(),
-      transform_listener(transform_buffer)
+      transform_listener(transform_buffer),
+      transform_stamped()
   {
+    servo.resize(SERVO_ID_MAX);
     for (int i=0; i<SERVO_ID_MAX; i++) servo[i].id = i;
     frame_length = FRAME_LENGTH;
   }
 
   explicit TargetPlanner(double desired_length)
     : transform_buffer(),
-      transform_listener(transform_buffer)
+      transform_listener(transform_buffer),
+      transform_stamped()
   {
+    servo.resize(SERVO_ID_MAX);
     for (int i=0; i<SERVO_ID_MAX; i++) servo[i].id = i;
     frame_length = desired_length;
   }
@@ -40,13 +44,13 @@ public:
       return false;
     }
 
-    std_msgs::float64 sqrt
-      = std::sqrt(std::pow(transform_stamped.transform.translation.x)
-        + std::sqrt(std::pow(transform_stamped.transform.translation.y);
+    double sqrt
+      = std::sqrt(std::pow(transform_stamped.transform.translation.x, 2))
+        + std::sqrt(std::pow(transform_stamped.transform.translation.y, 2));
 
     servo[0].angle
-      = std::atan(transform_stamped.transfrom.translation.y
-                  / transform_stamped.transfrom.translation.x)
+      = std::atan(transform_stamped.transform.translation.y
+                  / transform_stamped.transform.translation.x)
         + std::acos(sqrt / (2 * frame_length));
 
     servo[1].angle = 2 * servo[0].angle;
@@ -55,12 +59,15 @@ public:
     return true;
   }
 
+  servo_msgs::KrsServoDegree getServoDegree(unsigned int id) {
+    return servo[id];
+  }
+
 private:
   tf2_ros::Buffer transform_buffer;
   tf2_ros::TransformListener transform_listener;
-
   geometry_msgs::TransformStamped transform_stamped;
-  std::vector<servo_msgs::KrsServoDegree> servo[SERVO_ID_MAX];
+  std::vector<servo_msgs::KrsServoDegree> servo;
   double frame_length;
 };
 
@@ -76,7 +83,7 @@ int main(int argc, char** argv) {
   while (node_handle.ok()) {
     if (planner.plan())
       for (int id = 0; id < planner.SERVO_ID_MAX; id++)
-        publisher.publish(planner.servo[id]);
+        publisher.publish(planner.getServoDegree(id));
 
     rate.sleep();
   }

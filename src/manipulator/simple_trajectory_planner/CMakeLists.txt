@@ -16,12 +16,14 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES simple_trajectory_planner
   CATKIN_DEPENDS roscpp tf2 tf2_ros geometry_msgs servo_msgs
-#  DEPENDS system_lib
+  DEPENDS system_lib
 )
 
 ###########
 ## Build ##
 ###########
+
+include_directories(${catkin_INCLUDE_DIRS})
 
 ## Declare a C++ executable
 add_executable(simple_trajectory_planner_node src/trajectory_planner.cpp)
@@ -36,5 +38,5 @@ add_dependencies(simple_trajectory_planner_node
 ## Specify libraries to link a library or executable target against
 target_link_libraries(simple_trajectory_planner_node
   ${catkin_LIBRARIES}
-  math
+  m
 )
