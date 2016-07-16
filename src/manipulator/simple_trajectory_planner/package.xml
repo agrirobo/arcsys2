@@ -4,14 +4,10 @@
   <version>0.0.0</version>
   <description>The simple_trajectory_planner package</description>
 
-  <maintainer email="yamasa@todo.todo">yamasa</maintainer>
-  <license>BSD</license>
+  <maintainer email="httperror@404-notfound.jp">YamaCIR-KIT</maintainer>
+  <license>MIT</license>
 
 
-  <!-- Url tags are optional, but mutiple are allowed, one per tag -->
-  <!-- Optional attribute type can be: website, bugtracker, or repository -->
-  <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/simple_trajectory_planner</url> -->
 
 
   <!-- Author tags are optional, mutiple are allowed, one per tag -->
@@ -32,6 +28,18 @@
   <!-- Use test_depend for packages you need only for testing: -->
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>tf2</build_depend>
+  <build_depend>tf2_ros</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>servo_msgs</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>tf2</run_depend>
+  <run_depend>tf2_ros</run_depend>
+  <run_depend>geometry_msgs</run_depend>
+  <run_depend>servo_msgs</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

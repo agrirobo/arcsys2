@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(trajectory_planner)
+project(moveit_trajectory_planner)
 
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
