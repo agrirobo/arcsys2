@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>KrsServo</name>
+  <name>krs_servo</name>
   <version>0.0.1</version>
   <description>The KrsServo package</description>
 
