@@ -1,11 +1,20 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(static_frame_broadcaster)
+project(servo_msgs)
 
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  tf2
-  tf2_ros
+  message_generation
+)
+
+## Generate messages in the 'msg' folder
+add_message_files(
+  FILES
+  KrsServoDegree.msg
+)
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+#  DEPENDENCIES
+#  std_msgs
 )
 
 ###################################
@@ -19,8 +28,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES arcrobo_static_frame_broadcaster
-#  CATKIN_DEPENDS roscpp rospy tf2 tf2_ros
+#  LIBRARIES servo_msgs
+#  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 
@@ -34,17 +44,3 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
-
-#############
-## Install ##
-#############
-
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-
-## Mark other files for installation (e.g. launch and bag files, etc.)
-install(FILES
-  launch/static_frame.launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-

@@ -1,11 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(static_frame_broadcaster)
+project(krs_servo)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  rospy
-  tf2
-  tf2_ros
+  servo_msgs
 )
 
 ###################################
@@ -19,9 +17,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES arcrobo_static_frame_broadcaster
-#  CATKIN_DEPENDS roscpp rospy tf2 tf2_ros
-#  DEPENDS system_lib
+#  LIBRARIES KrsServo
+  CATKIN_DEPENDS roscpp servo_msgs
+  DEPENDS system_lib
 )
 
 ###########
@@ -32,19 +30,20 @@ catkin_package(
 ## Your package locations should be listed before other locations
 # include_directories(include)
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
-#############
-## Install ##
-#############
+## Declare a C++ executable
+add_executable(krs_servo_node src/krs_servo_node.cpp)
 
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
+## Add cmake target dependencies of the executable
+## same as for the library above
+add_dependencies(krs_servo_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-install(FILES
-  launch/static_frame.launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+## Specify libraries to link a library or executable target against
+target_link_libraries(krs_servo_node
+  krs_servo_driver
+  ${catkin_LIBRARIES}
 )
 
