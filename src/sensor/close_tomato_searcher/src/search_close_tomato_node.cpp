@@ -118,8 +118,8 @@ public:
     imageProsessing(capture_rgb, binary);
     si_obj.showBinary(binary);
     if (searchTomatoBoundingBox(binary, tomato_box)) {
-      tomato_point.x = tomato_box.x + tomato_box.width/2;
-      tomato_point.y = tomato_box.y + tomato_box.height/2;
+      tomato_point.y = -(tomato_box.x + tomato_box.width/2);
+      tomato_point.z = tomato_box.y + tomato_box.height/2;
       return true;
     }
     return false;
