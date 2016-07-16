@@ -16,8 +16,8 @@ find_package(catkin REQUIRED COMPONENTS ${CATKIN_DEPS})
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES search_close_tomato
-CATKIN_DEPENDS ${CATKIN_DEPS}
+#  LIBRARIES close_tomato_searcher
+  CATKIN_DEPENDS ${CATKIN_DEPS}
 #  DEPENDS system_lib
 )
 
@@ -33,16 +33,16 @@ include_directories(
 )
 
 ## Declare a C++ executable
-add_executable(search_close_tomato_node src/search_close_tomato_node.cpp)
+add_executable(close_tomato_searcher_node src/close_tomato_searcher_node.cpp)
 add_executable(close_tomato_broadcaster src/close_tomato_broadcaster.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(search_close_tomato_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(close_tomato_searcher_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(close_tomato_broadcaster ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(search_close_tomato_node
+target_link_libraries(close_tomato_searcher_node
   ${catkin_LIBRARIES}
 )
 target_link_libraries(close_tomato_broadcaster
