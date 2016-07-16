@@ -56,8 +56,8 @@ public:
   }
 
 private:
-  tf2::Buffer transform_buffer;
-  tf2::TransformListener transform_listener;
+  tf2_ros::Buffer transform_buffer;
+  tf2_ros::TransformListener transform_listener;
 
   geometry_msgs::TransformStamped transform_stamped;
   std::vector<servo_msgs::KrsServoDegree> servo[SERVO_ID_MAX];
