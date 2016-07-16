@@ -6,7 +6,7 @@
 class KrsServoNode {
 public:
   KrsServoNode();
-  KrsServoNode(ros::NodeHandle& nh);
+  explicit KrsServoNode(ros::NodeHandle& nh);
 
 private:
   void krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg);
