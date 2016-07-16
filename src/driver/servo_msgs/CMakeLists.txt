@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 2.8.3)
 project(servo_msgs)
 
 find_package(catkin REQUIRED COMPONENTS
-#  roscpp
-#  std_msgs
   message_generation
 )
 
@@ -32,6 +30,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES servo_msgs
 #  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )
 
