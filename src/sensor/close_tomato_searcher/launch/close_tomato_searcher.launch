@@ -7,6 +7,6 @@
     <param name="camera_frame_id" value="usb_cam" />
     <param name="io_method" value="mmap"/>
   </node>
-  <node name="hand_tomato" pkg="search_close_tomato" type="search_close_tomato_node" />
-  <node pkg="search_close_tomato" type="close_tomato_broadcaster" name="hand_tomato_broadcaster" />
+  <node name="hand_tomato" pkg="close_tomato_searcher" type="close_tomato_searcher_node" />
+  <node pkg="close_tomato_searcher" type="close_tomato_broadcaster" name="hand_tomato_broadcaster" />
 </launch>
