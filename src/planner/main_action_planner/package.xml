@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>main_aciton_planner</name>
+  <name>main_action_planner</name>
   <version>0.0.0</version>
-  <description>The main_aciton_planner package</description>
+  <description>The main_action_planner package</description>
 
   <maintainer email="o111027y@mail.kyutech.jp">Yusuke Doi</maintainer>
 
