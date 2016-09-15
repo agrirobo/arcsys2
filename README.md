@@ -3,7 +3,7 @@
 これをcloneしてきてcatkin_make，setup.shからroslaunchだけで使えるようにするのが目標．
 
 ## catkin_ws化の方法
-cloneしてきたリポジトリを catkin_init することで catkin workspace を構築できます.
+cloneしてきたリポジトリのsrc内でを catkin_init_workspace することで、リポジトリそのものを catkin workspace に構築できます.
 
 ## LICENSE
 This software is released under the MIT License, see LICENSE.txt.
