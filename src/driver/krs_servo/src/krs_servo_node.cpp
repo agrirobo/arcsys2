@@ -1,12 +1,14 @@
 #include "ros/ros.h"
 #include "servo_msgs/KrsServoDegree.h"
 
+#include <string>
+
 #include "krs_servo_driver.hpp"
 
 class KrsServoNode {
 public:
   KrsServoNode();
-  explicit KrsServoNode(ros::NodeHandle& nh);
+  explicit KrsServoNode(ros::NodeHandle& nh, const char* path);
 
 private:
   void krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg);
@@ -19,8 +21,8 @@ KrsServoNode::KrsServoNode()
   : krs()
 {}
 
-KrsServoNode::KrsServoNode(ros::NodeHandle& nh)
-  : krs()
+KrsServoNode::KrsServoNode(ros::NodeHandle& nh, const char* path)
+  : krs(path)
 {
   sub = nh.subscribe("cmd_krs", 16, &KrsServoNode::krsServoDegreeCallback, this);
 }
@@ -34,7 +36,11 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "krs_servo_node");
   ros::NodeHandle nh;
 
-  KrsServoNode ksn(nh);
+  std::string path;
+  if (!nh.getParam("serial_path", path))
+    path = "/dev/ttyUSB0";
+
+  KrsServoNode ksn(nh, path.c_str());
 
   ros::spin();
   return 0;
