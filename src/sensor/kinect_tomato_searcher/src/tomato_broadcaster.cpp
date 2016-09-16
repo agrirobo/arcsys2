@@ -3,6 +3,8 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/Point.h>
 
+int offsetX, offsetY, offsetZ;
+
 void pointCallback(const geometry_msgs::Point::ConstPtr& msg) {
   static tf2_ros::TransformBroadcaster br;
   geometry_msgs::TransformStamped transformStamped;
@@ -10,9 +12,9 @@ void pointCallback(const geometry_msgs::Point::ConstPtr& msg) {
   transformStamped.header.stamp = ros::Time::now();
   transformStamped.header.frame_id = "kinect";
   transformStamped.child_frame_id = "tomato";
-  transformStamped.transform.translation.x = msg->x;
-  transformStamped.transform.translation.y = msg->y;
-  transformStamped.transform.translation.z = msg->z;
+  transformStamped.transform.translation.x = msg->x + offsetX;
+  transformStamped.transform.translation.y = msg->y + offsetY;
+  transformStamped.transform.translation.z = msg->z + offsetZ;
   transformStamped.transform.rotation.x = 0;
   transformStamped.transform.rotation.y = 0;
   transformStamped.transform.rotation.z = 0;
@@ -24,6 +26,11 @@ void pointCallback(const geometry_msgs::Point::ConstPtr& msg) {
 int main(int argc, char** argv){
   ros::init(argc, argv, "tomato_broadcaster");
   ros::NodeHandle node;
+  ros::NodeHandle private_node;
+
+  private_node.getParam("kinect_offset_x", offsetX);
+  private_node.getParam("kinect_offset_y", offsetY);
+  private_node.getParam("kinect_offset_z", offsetZ);
 
   ros::Subscriber sub = node.subscribe("/tomato_point", 1, &pointCallback);
 
