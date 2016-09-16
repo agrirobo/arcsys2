@@ -25,7 +25,7 @@ KrsServoNode::KrsServoNode(ros::NodeHandle& nh)
   sub = nh.subscribe("cmd_krs", 16, &KrsServoNode::krsServoDegreeCallback, this);
 }
 
-inline void KrsServoNode::krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg) {
+void KrsServoNode::krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg) {
   krs.sendAngle(msg->id, msg->angle);
 }
 
