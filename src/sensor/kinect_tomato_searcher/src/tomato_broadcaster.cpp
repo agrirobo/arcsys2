@@ -29,8 +29,8 @@ int main(int argc, char** argv){
   ros::NodeHandle private_node;
 
   private_node.getParam("kinect_offset_x", offsetX);
-  private_node.getPrram("kinect_offset_y", offsetY);
-  private_node.getPrram("kinect_offset_z", offsetZ);
+  private_node.getParam("kinect_offset_y", offsetY);
+  private_node.getParam("kinect_offset_z", offsetZ);
 
   ros::Subscriber sub = node.subscribe("/tomato_point", 1, &pointCallback);
 
