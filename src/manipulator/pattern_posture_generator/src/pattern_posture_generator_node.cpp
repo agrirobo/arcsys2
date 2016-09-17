@@ -28,5 +28,6 @@ PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
 
 bool PatternPostureGenerator::getPostureKey(pattern_posture_generator::PatternKeyPosture::Request&  req,
                                             pattern_posture_generator::PatternKeyPosture::Response& res) {
+  std::copy(posture_datas[req.name].begin(), posture_datas[req.name].end(), std::back_inserter(res.posture));
   return true;
 }
