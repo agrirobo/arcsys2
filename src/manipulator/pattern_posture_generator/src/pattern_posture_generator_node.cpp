@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
   PatternPostureGenerator ppg(nh);
 
-  ROS_INFO("Ready. getPostureKey");
+  ROS_INFO("Ready getPosture and reload service.");
   ros::spin();
   return 0;
 }
@@ -36,14 +36,14 @@ int main(int argc, char* argv[]) {
 PatternPostureGenerator::PatternPostureGenerator(){}
 
 PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) : nh(nh) {
-  key_srv = nh.advertiseService("getPostureKey", &PatternPostureGenerator::getPostureKey, this);
+  key_srv = nh.advertiseService("getPosture", &PatternPostureGenerator::getPosture, this);
   reload_srv = nh.advertiseService("reload", &PatternPostureGenerator::reload, this);
   reload();
 }
 
 bool PatternPostureGenerator::reload() {
   if (!nh.hasParam("pattern_names")) return false;
-  pattern_names.clear();
+  std::string pattern_names;
   nh.getParam("pattern_names", pattern_names);
   dumpVector(pattern_names);
   posture_datas.clear();
@@ -64,8 +64,8 @@ bool PatternPostureGenerator::reload(std_srvs::Empty::Request&  req,
   return reload();
 }
 
-bool PatternPostureGenerator::getPostureKey(pattern_posture_generator::PatternKeyPosture::Request&  req,
-                                            pattern_posture_generator::PatternKeyPosture::Response& res) {
+bool PatternPostureGenerator::getPosture(pattern_posture_generator::PatternPosture::Request&  req,
+                                         pattern_posture_generator::PatternPosture::Response& res) {
   if (posture_datas.find(req.name) == posture_datas.end()) return false;
   std::copy(posture_datas[req.name].begin(), posture_datas[req.name].end(), std::back_inserter(res.posture));
   return true;
