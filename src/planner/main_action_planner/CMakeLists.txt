@@ -20,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+  INCLUDE_DIRS include
 #  LIBRARIES main_action_planner
   CATKIN_DEPENDS roscpp servo_msgs tf2 tf2_ros pattern_posture_generator simple_trajectory_planner
 #  DEPENDS system_lib
