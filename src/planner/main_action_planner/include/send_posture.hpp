@@ -9,10 +9,19 @@ class SendPosture {
 public:
   virtual ~SendPosture(){};
   virtual void sendPosture(std::vector<double>& posture) = 0;
-}
+};
 
-void getSendPosture(std::map<std::string, SendPosture*>& map);
-void delSendPosture(std::map<std::string, SendPosture*>& map);
+class SendPostureFactory {
+private:
+  SendPostureFactory();
+
+public:
+  static const SendPosture* get(const std::string& name);
+
+private:
+  static const SendPosture* create(const std::string& name);
+  static std::map<std::string, SendPosture*> sends;
+};
 
 #endif
 
