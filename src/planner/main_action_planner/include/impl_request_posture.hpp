@@ -5,15 +5,15 @@
 
 class PatternRequestPosture : RequestPosture {
 public:
-  virtual ~RequestPosure();
+  virtual ~PatternRequestPosture();
   virtual void requestPosture(std::vector<double>& posture);
-}
+};
 
 class TrajectoryRequestPosture : RequestPosture {
 public:
-  virtual ~RequestPosure();
+  virtual ~TrajectoryRequestPosture();
   virtual void requestPosture(std::vector<double>& posture);
-}
+};
 
 #endif
 
