@@ -43,7 +43,7 @@ PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) : nh(nh) {
 
 bool PatternPostureGenerator::reload() {
   if (!nh.hasParam("pattern_names")) return false;
-  std::string pattern_names;
+  std::vector<std::string> pattern_names;
   nh.getParam("pattern_names", pattern_names);
   dumpVector(pattern_names);
   posture_datas.clear();
