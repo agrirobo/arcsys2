@@ -3,15 +3,15 @@
 
 #include "request_posture.hpp"
 
-class PatternRequestPosture : RequestPosture {
+class PatternRequestPosture : public RequestPosture {
 public:
-  virtual ~PatternRequestPosture();
+  PatternRequestPosture();
   virtual void requestPosture(std::vector<double>& posture);
 };
 
-class TrajectoryRequestPosture : RequestPosture {
+class TrajectoryRequestPosture : public RequestPosture {
 public:
-  virtual ~TrajectoryRequestPosture();
+  TrajectoryRequestPosture();
   virtual void requestPosture(std::vector<double>& posture);
 };
 
