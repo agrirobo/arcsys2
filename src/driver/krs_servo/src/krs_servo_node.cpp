@@ -37,8 +37,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle nh;
 
   std::string path;
-  if (!nh.getParam("serial_path", path))
-    path = "/dev/ttyUSB0";
+  nh.param<std::string>("serial_path", path, "/dev/ttyUSB0")
 
   KrsServoNode ksn(nh, path.c_str());
 
