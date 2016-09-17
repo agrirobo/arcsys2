@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
 
   PatternPostureGenerator ppg(nh);
 
+  ROS_INFO("Ready. getPostureKey");
   ros::spin();
   return 0;
 }
@@ -16,12 +17,14 @@ PatternPostureGenerator::PatternPostureGenerator(){}
 
 PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
   if (!nh.getParam("pattern", pattern_names)) return;
+  ROS_INFO("Get map of patterns parent");
   for (std::map<std::string, std::string >::iterator it = pattern_names.begin();
        it != pattern_names.end();
        it++) {
     std::vector<double> posture;
     if (!nh.getParam(std::string("pattern/").append(it->second), posture)) return;
     std::copy(posture.begin(), posture.end(), std::back_inserter(posture_datas[it->second]));
+    ROS_INFO(std::string("Found posture of ").append(it->second).c_str());
   }
   key_srv = nh.advertiseService("getPostureKey", &PatternPostureGenerator::getPostureKey, this);
 }
