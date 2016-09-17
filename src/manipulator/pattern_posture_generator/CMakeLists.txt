@@ -12,9 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
 ################################################
 add_service_files(
   FILES
-  PatternKeyPosture.srv
   PatternPosture.srv
-  RequestNum.srv
 )
 
 generate_messages(
