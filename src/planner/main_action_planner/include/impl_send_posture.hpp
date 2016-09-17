@@ -3,9 +3,9 @@
 
 #include "send_posture.hpp"
 
-class KrsSendPosture : SendPosture {
+class KrsSendPosture : public SendPosture {
 public:
-  virtual ~SendPosture();
+  KrsSendPosture();
   virtual void sendPosture(std::vector<double>& posture);
 }
 
