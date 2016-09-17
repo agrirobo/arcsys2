@@ -18,6 +18,7 @@ private:
 
 private:
   ros::ServiceServer key_srv;
+  std::vector<std::string> pattern_names;
   std::map<std::string, std::vector<double> > posture_datas;
 };
 

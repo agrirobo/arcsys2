@@ -38,9 +38,9 @@ int main(int argc, char* argv[]) {
 PatternPostureGenerator::PatternPostureGenerator(){}
 
 PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
-  std::vector<std::string> param_names;
-  nh.getParam("pattern", param_names);
-  dumpVector(param_names);
+  if (!nh.hasParam("pattern_names")) return;
+  nh.getParam("pattern_names", pattern_names);
+  dumpVector(pattern_names);
   /*for (std::map<std::string, std::string>::iterator it = pattern_names.begin(), end_it = pattern_names.end();
        it != end_it;
        it++) {
