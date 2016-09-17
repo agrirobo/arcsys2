@@ -41,15 +41,15 @@ PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
   if (!nh.hasParam("pattern_names")) return;
   nh.getParam("pattern_names", pattern_names);
   dumpVector(pattern_names);
-  /*for (std::map<std::string, std::string>::iterator it = pattern_names.begin(), end_it = pattern_names.end();
+  for (std::vector<std::string>::iterator it = pattern_names.begin(), end_it = pattern_names.end();
        it != end_it;
        it++) {
     std::vector<double> posture;
-    std::string posture_param_name = std::string("pattern/").append(it->second);
-    nh.getParam(posture_param_name, posture);
-    std::copy(posture.begin(), posture.end(), std::back_inserter(posture_datas[it->second]));
-    ROS_INFO("Found posture of [%s]", it->second.c_str());
-  }*/
+    if (!nh.hasParam(*it)) continue;
+    nh.getParam(*it, posture);
+    std::copy(posture.begin(), posture.end(), std::back_inserter(posture_datas[*it]));
+    ROS_INFO("Found posture of [%s]", it->c_str());
+  }
   key_srv = nh.advertiseService("getPostureKey", &PatternPostureGenerator::getPostureKey, this);
 }
 
