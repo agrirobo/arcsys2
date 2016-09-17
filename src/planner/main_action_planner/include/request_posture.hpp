@@ -20,7 +20,7 @@ public:
 
 private:
   static const RequestPosture* create(const std::string& name);
-  static std::map<std::string, RequestPosture*> reqs;
+  static std::map<std::string, const RequestPosture*> reqs;
 };
 
 #endif

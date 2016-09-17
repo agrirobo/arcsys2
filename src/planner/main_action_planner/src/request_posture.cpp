@@ -1,9 +1,9 @@
 #include "impl_request_posture.hpp"
 
-std::map<std::string, RequestPosture*> RequestPostureFactory::reqs;
+std::map<std::string, const RequestPosture*> RequestPostureFactory::reqs;
 
 const RequestPosture* RequestPostureFactory::get(const std::string& name) {
-  std::map<std::string, RequestPosture*>::const_iterator found_it = reqs.find(name);
+  std::map<std::string, const RequestPosture*>::const_iterator found_it = reqs.find(name);
   if (found_it != reqs.end()) return create(name);
   return found_it->second;
 }
