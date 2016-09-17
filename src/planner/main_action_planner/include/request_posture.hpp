@@ -16,9 +16,10 @@ private:
   RequestPostureFactory();
 
 public:
-  static const RequestPosture* get(std::string& name);
+  static const RequestPosture* get(const std::string& name);
 
 private:
+  static const RequestPosture* create(const std::string& name);
   static std::map<std::string, RequestPosture*> reqs;
 };
 
