@@ -2,6 +2,16 @@
 
 #include "pattern_posture_generator_node.hpp"
 
+int main(int argc, char* argv[]) {
+  ros::init(argc, argv, "pattern_posture_generator");
+  ros::NodeHandle nh;
+
+  PatternPostureGenerator ppg(nh);
+
+  ros::spin();
+  return 0;
+}
+
 PatternPostureGenerator::PatternPostureGenerator(){}
 
 PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
@@ -19,8 +29,4 @@ PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
 bool PatternPostureGenerator::getPostureKey(pattern_posture_generator::PatternKeyPosture::Request&  req,
                                             pattern_posture_generator::PatternKeyPosture::Response& res) {
   return true;
-}
-
-int main(int argc, char* argv[]) {
-  return 0;
 }
