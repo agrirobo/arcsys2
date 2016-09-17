@@ -11,8 +11,8 @@ public:
   virtual void requestPosture(std::vector<double>& posture) = 0;
 }
 
-void getRequestPosture(std::map<std::string, RequestPosture*> map);
-void delRequestPosture(std::map<std::string, RequestPosture*> map);
+void getRequestPosture(std::map<std::string, RequestPosture*>& map);
+void delRequestPosture(std::map<std::string, RequestPosture*>& map);
 
 #endif
 

@@ -11,8 +11,8 @@ public:
   virtual void sendPosture(std::vector<double>& posture) = 0;
 }
 
-void getSendPosture(std::map<std::string, SendPosture*> map);
-void delSendPosture(std::map<std::string, SendPosture*> map);
+void getSendPosture(std::map<std::string, SendPosture*>& map);
+void delSendPosture(std::map<std::string, SendPosture*>& map);
 
 #endif
 
