@@ -12,6 +12,7 @@ public:
 }
 
 void getRequestPosture(std::map<std::string, RequestPosture*> map);
+void delRequestPosture(std::map<std::string, RequestPosture*> map);
 
 #endif
 

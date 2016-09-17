@@ -12,6 +12,7 @@ public:
 }
 
 void getSendPosture(std::map<std::string, SendPosture*> map);
+void delSendPosture(std::map<std::string, SendPosture*> map);
 
 #endif
 
