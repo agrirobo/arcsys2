@@ -25,7 +25,6 @@ private:
   ros::NodeHandle nh;
   ros::ServiceServer reload_srv;
   ros::ServiceServer key_srv;
-  std::vector<std::string> pattern_names;
   std::map<std::string, std::vector<double> > posture_datas;
 };
 
