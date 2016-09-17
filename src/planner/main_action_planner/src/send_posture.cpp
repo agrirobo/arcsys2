@@ -1,4 +1,4 @@
-#include "impl_request_posture.hpp"
+#include "impl_send_posture.hpp"
 
 std::map<std::string, const SendPosture*> SendPostureFactory::sends;
 

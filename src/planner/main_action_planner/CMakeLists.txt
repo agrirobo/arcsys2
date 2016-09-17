@@ -34,7 +34,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(main_action_planner_node src/main_action_planner_node.cpp src/request_posture.cpp)
+add_executable(main_action_planner_node src/main_action_planner_node.cpp src/request_posture.cpp src/send_posture.cpp)
 
 add_dependencies(main_action_planner_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 

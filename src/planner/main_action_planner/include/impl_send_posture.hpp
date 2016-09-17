@@ -7,7 +7,7 @@ class KrsSendPosture : public SendPosture {
 public:
   KrsSendPosture();
   virtual void sendPosture(std::vector<double>& posture);
-}
+};
 
 #endif
 

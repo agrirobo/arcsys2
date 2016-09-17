@@ -20,7 +20,7 @@ public:
 
 private:
   static const SendPosture* create(const std::string& name);
-  static std::map<std::string, SendPosture*> sends;
+  static std::map<std::string, const SendPosture*> sends;
 };
 
 #endif
