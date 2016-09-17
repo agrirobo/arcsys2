@@ -8,7 +8,7 @@
 class KrsServoNode {
 public:
   KrsServoNode();
-  explicit KrsServoNode(ros::NodeHandle& nh, const char* path);
+  KrsServoNode(ros::NodeHandle& nh, const char* path);
 
 private:
   void krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg);
