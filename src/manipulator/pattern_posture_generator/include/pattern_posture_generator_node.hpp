@@ -1,11 +1,12 @@
 #ifndef __PATTERN_POSTURE_GENERATOR_NODE_H_INCLUDE__
 #define __PATTERN_POSTURE_GENERATOR_NODE_H_INCLUDE__
 
-#include <vector>
-#include <map>
-
+#include "ros/ros.h"
 #include "pattern_posture_generator/PatternKeyPosture.h"
 #include "std_srvs/Empty.h"
+
+#include <vector>
+#include <map>
 
 class PatternPostureGenerator {
 private:

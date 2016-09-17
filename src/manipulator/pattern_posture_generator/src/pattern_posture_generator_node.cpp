@@ -1,8 +1,6 @@
-#include "ros/ros.h"
+#include "pattern_posture_generator_node.hpp"
 
 #include <sstream>
-
-#include "pattern_posture_generator_node.hpp"
 
 void dumpMap(std::map<std::string, double>& map) {
   std::stringstream map_info;
