@@ -30,6 +30,7 @@ catkin_package(
 ## Build ##
 ###########
 include_directories(
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
