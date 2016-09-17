@@ -24,7 +24,7 @@ void dumpVector(std::vector<std::string> vec) {
 
 int main(int argc, char* argv[]) {
   ros::init(argc, argv, "pattern_posture_generator");
-  ros::NodeHandle nh;
+  ros::NodeHandle nh("~");
 
   PatternPostureGenerator ppg(nh);
 
