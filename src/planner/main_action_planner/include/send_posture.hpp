@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 class SendPosture {
 public:
@@ -10,7 +11,7 @@ public:
   virtual void sendPosture(std::vector<double>& posture) = 0;
 }
 
-SendPosture* getSendPosture(std::string);
+void getSendPosture(std::map<std::string, SendPosture*> map);
 
 #endif
 
