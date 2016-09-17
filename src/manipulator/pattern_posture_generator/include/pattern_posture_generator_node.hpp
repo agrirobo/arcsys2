@@ -16,6 +16,7 @@ public:
 private:
   bool getPostureKey(pattern_posture_generator::PatternKeyPosture::Request&  req,
                      pattern_posture_generator::PatternKeyPosture::Response& res);
+  bool reload();
   bool reload(std_srvs::Empty::Request&  req,
               std_srvs::Empty::Response& res);
 
