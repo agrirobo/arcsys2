@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <map>
 
 class RequestPosture {
 public:
@@ -11,8 +10,14 @@ public:
   virtual void requestPosture(std::vector<double>& posture) = 0;
 }
 
-void getRequestPosture(std::map<std::string, RequestPosture*>& map);
-void delRequestPosture(std::map<std::string, RequestPosture*>& map);
+class RequestPostureFactory {
+private:
+  RequestPostureFactory();
+
+public:
+  static RequestPosture* get(std::string);
+  static std::map<std::string, RequestPosture*> reqs;
+}
 
 #endif
 
