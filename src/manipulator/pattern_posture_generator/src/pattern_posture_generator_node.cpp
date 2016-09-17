@@ -1,16 +1,27 @@
 #include "ros/ros.h"
 
+#include <sstream>
+
 #include "pattern_posture_generator_node.hpp"
 
-void dumpMap(std::map<std::string, std::string>& map) {
-  std::string map_info;
-  for (std::map<std::string, std::string>::iterator it = map.begin(), end_it = map.end();
+void dumpMap(std::map<std::string, double>& map) {
+  std::stringstream map_info;
+  for (std::map<std::string, double>::iterator it = map.begin(), end_it = map.end();
+       it != end_it;
+       it++)
+    map_info << it->second << ':';
+  ROS_INFO("%s", map_info.str().c_str());
+}
+
+void dumpVector(std::vector<std::string> vec) {
+  std::string vec_info;
+  for (std::vector<std::string>::iterator it = vec.begin(), end_it = vec.end();
        it != end_it;
        it++) {
-    map_info.append(it->second);
-    map_info.push_back(':');
+    vec_info.append(*it);
+    vec_info.push_back(':');
   }
-  ROS_INFO("%s", map_info.c_str());
+  ROS_INFO("%s", vec_info.c_str());
 }
 
 int main(int argc, char* argv[]) {
@@ -27,11 +38,10 @@ int main(int argc, char* argv[]) {
 PatternPostureGenerator::PatternPostureGenerator(){}
 
 PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
-  if (!nh.hasParam("pattern")) throw;
-  nh.getParam("pattern", pattern_names);
-  ROS_INFO("Get map of patterns parent");
-  dumpMap(pattern_names);
-  for (std::map<std::string, std::string>::iterator it = pattern_names.begin(), end_it = pattern_names.end();
+  std::vector<std::string> param_names;
+  nh.getParam("pattern", param_names);
+  dumpVector(param_names);
+  /*for (std::map<std::string, std::string>::iterator it = pattern_names.begin(), end_it = pattern_names.end();
        it != end_it;
        it++) {
     std::vector<double> posture;
@@ -39,7 +49,7 @@ PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) {
     nh.getParam(posture_param_name, posture);
     std::copy(posture.begin(), posture.end(), std::back_inserter(posture_datas[it->second]));
     ROS_INFO("Found posture of [%s]", it->second.c_str());
-  }
+  }*/
   key_srv = nh.advertiseService("getPostureKey", &PatternPostureGenerator::getPostureKey, this);
 }
 
