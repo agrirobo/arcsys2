@@ -43,3 +43,4 @@ KrsServoNode::KrsServoNode(ros::NodeHandle& nh, const char* path)
 void KrsServoNode::krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg) {
   krs.sendAngle(msg->id, msg->angle);
 }
+
