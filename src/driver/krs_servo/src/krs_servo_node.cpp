@@ -17,6 +17,19 @@ private:
   KrsServoDriver krs;
 };
 
+int main(int argc, char** argv) {
+  ros::init(argc, argv, "krs_servo_node");
+  ros::NodeHandle nh;
+
+  std::string path;
+  nh.param<std::string>("serial_path", path, "/dev/ttyUSB0");
+
+  KrsServoNode ksn(nh, path.c_str());
+
+  ros::spin();
+  return 0;
+}
+
 KrsServoNode::KrsServoNode()
   : krs()
 {}
@@ -29,19 +42,4 @@ KrsServoNode::KrsServoNode(ros::NodeHandle& nh, const char* path)
 
 void KrsServoNode::krsServoDegreeCallback(const servo_msgs::KrsServoDegree::ConstPtr& msg) {
   krs.sendAngle(msg->id, msg->angle);
-}
-
-
-int main(int argc, char** argv) {
-  ros::init(argc, argv, "krs_servo_node");
-  ros::NodeHandle nh;
-
-  std::string path;
-  if (!nh.getParam("serial_path", path))
-    path = "/dev/ttyUSB0";
-
-  KrsServoNode ksn(nh, path.c_str());
-
-  ros::spin();
-  return 0;
 }
