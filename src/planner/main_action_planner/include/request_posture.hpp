@@ -16,6 +16,8 @@ private:
 
 public:
   static RequestPosture* get(std::string);
+
+private:
   static std::map<std::string, RequestPosture*> reqs;
 }
 
