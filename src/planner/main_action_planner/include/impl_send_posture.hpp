@@ -10,6 +10,7 @@ public:
 private:
   ros::NodeHandle nh;
   ros::Publisher pub;
+  std::vector<int32_t> id_vec;
 };
 
 #endif

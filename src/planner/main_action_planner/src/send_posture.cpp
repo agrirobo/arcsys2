@@ -20,6 +20,7 @@ const SendPosture* SendPostureFactory::create(const std::string& name, ros::Node
 
 KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) : nh(nh) {
   pub = nh.advertise<servo_msgs::KrsServoDegree>("cmd_krs", 16);
+  nh.getParam("id_vec", id_vec);
 }
 
 void KrsSendPosture::sendPosture(std::vector<double>& posture) {
