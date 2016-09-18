@@ -3,6 +3,7 @@
 
 #include "ros/ros.h"
 
-#include "pattern_posture_generator/PatternPosture.h"
+#include "request_posture.hpp"
+#include "send_posture.hpp"
 
 #endif
