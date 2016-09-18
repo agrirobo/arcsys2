@@ -1,5 +1,7 @@
 #include "impl_send_posture.hpp"
 
+#include "algorithm"
+
 #include "servo_msgs/KrsServoDegree.h"
 
 std::map<std::string, const SendPosture*> SendPostureFactory::sends;
@@ -24,6 +26,12 @@ KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) : nh(nh) {
 }
 
 void KrsSendPosture::sendPosture(std::vector<double>& posture) {
-  
+  servo_msgs::KrsServoDegree msg;
+  std::vector<double>::size_type length = std::min(posture.size(), id_vec.size());
+  for (std::vector<double>::size_type i = 0; i < length; i++) {
+    msg.id = id_vec[i];
+    msg.angle = posture[i];
+    pub.publish(msg);
+  }
 }
 
