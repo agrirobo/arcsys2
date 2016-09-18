@@ -5,15 +5,15 @@
 #include "servo_msgs/KrsServoDegree.h"
 #include "std_srvs/Empty.h"
 
-std::map<std::string, const SendPosture*> SendPostureFactory::sends;
+std::map<std::string, SendPosture*> SendPostureFactory::sends;
 
-const SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
-  std::map<std::string, const SendPosture*>::const_iterator found_it = sends.find(name);
+SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
+  std::map<std::string, SendPosture*>::const_iterator found_it = sends.find(name);
   if (found_it != sends.end()) return create(name, nh);
   return found_it->second;
 }
 
-const SendPosture* SendPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
+SendPosture* SendPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
   if (name == "krs") {
     sends["krs"] = new KrsSendPosture(nh);
     return sends.at("krs");

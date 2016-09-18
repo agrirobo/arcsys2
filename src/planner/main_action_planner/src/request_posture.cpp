@@ -1,14 +1,14 @@
 #include "impl_request_posture.hpp"
 
-std::map<std::string, const RequestPosture*> RequestPostureFactory::reqs;
+std::map<std::string, RequestPosture*> RequestPostureFactory::reqs;
 
-const RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
-  std::map<std::string, const RequestPosture*>::const_iterator found_it = reqs.find(name);
+RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
+  std::map<std::string, RequestPosture*>::const_iterator found_it = reqs.find(name);
   if (found_it != reqs.end()) return create(name, nh);
   return found_it->second;
 }
 
-const RequestPosture* RequestPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
+RequestPosture* RequestPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
   if (name == "pattern") {
     reqs["pattern"] = new PatternRequestPosture(nh);
     return reqs.at("pattern");

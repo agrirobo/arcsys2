@@ -18,11 +18,11 @@ private:
   RequestPostureFactory();
 
 public:
-  static const RequestPosture* get(const std::string& name, ros::NodeHandle& nh);
+  static RequestPosture* get(const std::string& name, ros::NodeHandle& nh);
 
 private:
-  static const RequestPosture* create(const std::string& name, ros::NodeHandle& nh);
-  static std::map<std::string, const RequestPosture*> reqs;
+  static RequestPosture* create(const std::string& name, ros::NodeHandle& nh);
+  static std::map<std::string, RequestPosture*> reqs;
 };
 
 #endif

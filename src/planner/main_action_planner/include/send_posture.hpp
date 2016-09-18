@@ -18,11 +18,11 @@ private:
   SendPostureFactory();
 
 public:
-  static const SendPosture* get(const std::string& name, ros::NodeHandle& nh);
+  static SendPosture* get(const std::string& name, ros::NodeHandle& nh);
 
 private:
-  static const SendPosture* create(const std::string& name, ros::NodeHandle& nh);
-  static std::map<std::string, const SendPosture*> sends;
+  static SendPosture* create(const std::string& name, ros::NodeHandle& nh);
+  static std::map<std::string, SendPosture*> sends;
 };
 
 #endif
