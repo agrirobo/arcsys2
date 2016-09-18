@@ -5,8 +5,10 @@
 
 class KrsSendPosture : public SendPosture {
 public:
-  KrsSendPosture();
+  KrsSendPosture(ros::NodeHandle& nh);
   virtual void sendPosture(std::vector<double>& posture);
+private:
+  ros::NodeHandle nh;
 };
 
 #endif

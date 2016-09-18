@@ -2,25 +2,25 @@
 
 std::map<std::string, const RequestPosture*> RequestPostureFactory::reqs;
 
-const RequestPosture* RequestPostureFactory::get(const std::string& name) {
+const RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
   std::map<std::string, const RequestPosture*>::const_iterator found_it = reqs.find(name);
-  if (found_it != reqs.end()) return create(name);
+  if (found_it != reqs.end()) return create(name, nh);
   return found_it->second;
 }
 
-const RequestPosture* RequestPostureFactory::create(const std::string& name) {
+const RequestPosture* RequestPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
   if (name == "pattern") {
-    reqs["pattern"] = new PatternRequestPosture;
+    reqs["pattern"] = new PatternRequestPosture(nh);
     return reqs.at("pattern");
   }
   if (name == "torajectory") {
-    reqs["torajectory"] = new TrajectoryRequestPosture;
+    reqs["torajectory"] = new TrajectoryRequestPosture(nh);
     return reqs.at("torajectory");
   }
   return NULL;
 }
 
-PatternRequestPosture::PatternRequestPosture() {
+PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh) {
   
 }
 
@@ -28,7 +28,7 @@ void PatternRequestPosture::requestPosture(std::vector<double>& posture) {
   
 }
 
-TrajectoryRequestPosture::TrajectoryRequestPosture() {
+TrajectoryRequestPosture::TrajectoryRequestPosture(ros::NodeHandle& nh) {
 
 }
 
