@@ -9,6 +9,7 @@ public:
   virtual void sendPosture(std::vector<double>& posture);
 private:
   ros::NodeHandle nh;
+  ros::Publisher pub;
 };
 
 #endif

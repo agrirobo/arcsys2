@@ -1,5 +1,7 @@
 #include "impl_send_posture.hpp"
 
+#include "servo_msgs/KrsServoDegree.h"
+
 std::map<std::string, const SendPosture*> SendPostureFactory::sends;
 
 const SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
@@ -16,8 +18,8 @@ const SendPosture* SendPostureFactory::create(const std::string& name, ros::Node
   return NULL;
 }
 
-KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) {
-  
+KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) : nh(nh) {
+  pub = nh.advertise<servo_msgs::KrsServoDegree>("cmd_krs", 16);
 }
 
 void KrsSendPosture::sendPosture(std::vector<double>& posture) {
