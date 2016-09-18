@@ -3,6 +3,7 @@
 #include "algorithm"
 
 #include "servo_msgs/KrsServoDegree.h"
+#include "std_srvs/Empty.h"
 
 std::map<std::string, const SendPosture*> SendPostureFactory::sends;
 
@@ -22,7 +23,8 @@ const SendPosture* SendPostureFactory::create(const std::string& name, ros::Node
 
 KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) : nh(nh) {
   pub = nh.advertise<servo_msgs::KrsServoDegree>("cmd_krs", 16);
-  nh.getParam("id_vec", id_vec);
+  reload_srv = nh.advertiseService("reload_id_vec", &KrsSendPosture::reload, this);
+  reload();
 }
 
 void KrsSendPosture::sendPosture(std::vector<double>& posture) {
@@ -35,3 +37,14 @@ void KrsSendPosture::sendPosture(std::vector<double>& posture) {
   }
 }
 
+bool KrsSendPosture::reload() {
+  if (!nh.hasParam("id_vec")) return false;
+  id_vec.clear();
+  nh.getParam("id_vec", id_vec);
+  return true;
+}
+
+bool KrsSendPosture::reload(std_srvs::Empty::Request&  req,
+                            std_srvs::Empty::Response& res) {
+  return reload();
+}
