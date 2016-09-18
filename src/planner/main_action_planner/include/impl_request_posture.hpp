@@ -5,7 +5,7 @@
 
 class PatternRequestPosture : public RequestPosture {
 public:
-  PatternRequestPosture(ros::NodeHandle& nh);
+  explicit PatternRequestPosture(ros::NodeHandle& nh);
   virtual void requestPosture(std::vector<double>& posture);
 private:
   ros::NodeHandle nh;
@@ -13,7 +13,7 @@ private:
 
 class TrajectoryRequestPosture : public RequestPosture {
 public:
-  TrajectoryRequestPosture(ros::NodeHandle& nh);
+  explicit TrajectoryRequestPosture(ros::NodeHandle& nh);
   virtual void requestPosture(std::vector<double>& posture);
 private:
   ros::NodeHandle nh;
