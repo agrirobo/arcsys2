@@ -31,11 +31,11 @@ RequestPosture* RequestPostureFactory::create(const std::string& name, ros::Node
 }
 
 PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh, std::string state) : state(state) {
-  client = nh.serviceClient<pattern_posture_generator::PatternPosture>("/getPosture");
+  client = nh.serviceClient<pattern_posture_generator::PatternPosture>("getPosture");
 }
 
 PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh) : state("normal") {
-  client = nh.serviceClient<pattern_posture_generator::PatternPosture>("/getPosture");
+  client = nh.serviceClient<pattern_posture_generator::PatternPosture>("getPosture");
 }
 
 void PatternRequestPosture::requestPosture(std::vector<double>& posture) {
