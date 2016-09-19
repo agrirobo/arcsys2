@@ -20,8 +20,12 @@ RequestPosture* RequestPostureFactory::create(const std::string& name, ros::Node
   return NULL;
 }
 
-PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh) {
+PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh, std::string state) : state(state) {
   
+}
+
+PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh) : state("normal") {
+    
 }
 
 void PatternRequestPosture::requestPosture(std::vector<double>& posture) {
