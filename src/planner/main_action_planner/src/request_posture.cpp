@@ -15,6 +15,14 @@ RequestPosture* RequestPostureFactory::create(const std::string& name, ros::Node
     reqs["pattern"] = new PatternRequestPosture(nh);
     return reqs.at("pattern");
   }
+  if (name == "pattern_normal") {
+    reqs["pattern_normal"] = new PatternRequestPosture(nh, "normal");
+    return reqs.at("pattern_normal");
+  }
+  if (name == "pattern_harvest") {
+    reqs["pattern_harvest"] = new PatternRequestPosture(nh, "harvest");
+    return reqs.at("pattern_harvest");
+  }
   if (name == "torajectory") {
     reqs["torajectory"] = new TrajectoryRequestPosture(nh);
     return reqs.at("torajectory");
