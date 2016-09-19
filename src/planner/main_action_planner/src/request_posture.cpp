@@ -31,7 +31,13 @@ PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh) : state("norma
 }
 
 void PatternRequestPosture::requestPosture(std::vector<double>& posture) {
-  
+  pattern_posture_generator::PatternPosture srv;
+  srv.request.name = state;
+  if (client.call(srv)) {
+    ROS_INFO("Error call: No response by Request [%s] PatternPosture", state.c_str());
+    return;
+  }
+  std::copy(srv.response.posture.begin(), srv.response.posture.end(), std::back_inserter(posture));
 }
 
 TrajectoryRequestPosture::TrajectoryRequestPosture(ros::NodeHandle& nh) {
