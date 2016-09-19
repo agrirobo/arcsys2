@@ -10,6 +10,7 @@ public:
   virtual void requestPosture(std::vector<double>& posture);
 private:
   ros::NodeHandle nh;
+  ros::ServiceClient client;
   std::string state;
 };
 
