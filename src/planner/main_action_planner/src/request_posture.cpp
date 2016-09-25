@@ -2,11 +2,22 @@
 
 #include "pattern_posture_generator/PatternPosture.h"
 
-std::map<std::string, RequestPosture*> RequestPostureFactory::reqs;
+RequestPostureFactory RequestPostureFactory::unique;
+
+RequestPostureFactory::RequestPostureFactory() : reqs() {}
+
+RequestPostureFactory::~RequestPostureFactory() {
+  for (std::map<std::string, RequestPosture*>::iterator it = reqs.begin(), end_it = reqs.end();
+       it != end_it;
+       it++) {
+    delete it->second;
+    it->second = NULL;
+  }
+}
 
 RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
-  std::map<std::string, RequestPosture*>::const_iterator found_it = reqs.find(name);
-  if (found_it == reqs.end()) return create(name, nh);
+  std::map<std::string, RequestPosture*>::const_iterator found_it = unique.reqs.find(name);
+  if (found_it == unique.reqs.end()) return unique.create(name, nh);
   return found_it->second;
 }
 
