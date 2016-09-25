@@ -5,7 +5,18 @@
 #include "servo_msgs/KrsServoDegree.h"
 #include "std_srvs/Empty.h"
 
-std::map<std::string, SendPosture*> SendPostureFactory::sends;
+SendPostureFactory SendPostureFactory::unique;
+
+SendPostureFactory::SendPostureFactory() : sends() {}
+
+SendPostureFactory::~SendPostureFactory() {
+  for (std::map<std::string, SendPosture*>::iterator it = sends.begin(), end_it = sends.end();
+       it != end_it;
+       it++) {
+    delete it->second;
+    it->second = NULL;
+  }
+}
 
 SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
   std::map<std::string, SendPosture*>::const_iterator found_it = sends.find(name);

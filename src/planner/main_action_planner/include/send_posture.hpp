@@ -14,15 +14,20 @@ public:
 };
 
 class SendPostureFactory {
+public:
+  SendPosture* get(const std::string& name, ros::NodeHandle& nh);
+
 private:
   SendPostureFactory();
+  SendPostureFactory(const SendPostureFactory& other);
+  ~SendPostureFactory();
+  SendPostureFactory& operator=(const SendPostureFactory& other);
 
-public:
-  static SendPosture* get(const std::string& name, ros::NodeHandle& nh);
+  SendPosture* create(const std::string& name, ros::NodeHandle& nh);
 
-private:
-  static SendPosture* create(const std::string& name, ros::NodeHandle& nh);
-  static std::map<std::string, SendPosture*> sends;
+  std::map<std::string, SendPosture*> sends;
+
+  static SendPostureFactory unique;
 };
 
 #endif
