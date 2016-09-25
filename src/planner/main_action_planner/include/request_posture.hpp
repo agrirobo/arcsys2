@@ -14,15 +14,20 @@ public:
 };
 
 class RequestPostureFactory {
+public:
+  RequestPosture* get(const std::string& name, ros::NodeHandle& nh);
+
 private:
   RequestPostureFactory();
+  RequestPostureFactory(const RequestPostureFactory& other);
+  ~RequestPostureFactory();
+  RequestPostureFactory& operator=(const RequestPostureFactory& other);
 
-public:
-  static RequestPosture* get(const std::string& name, ros::NodeHandle& nh);
+  RequestPosture* create(const std::string& name, ros::NodeHandle& nh);
 
-private:
-  static RequestPosture* create(const std::string& name, ros::NodeHandle& nh);
-  static std::map<std::string, RequestPosture*> reqs;
+  std::map<std::string, RequestPosture*> reqs;
+
+  static RequestPostureFactory unique;
 };
 
 #endif
