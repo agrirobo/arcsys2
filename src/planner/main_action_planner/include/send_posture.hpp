@@ -15,7 +15,7 @@ public:
 
 class SendPostureFactory {
 public:
-  SendPosture* get(const std::string& name, ros::NodeHandle& nh);
+  static SendPosture* get(const std::string& name, ros::NodeHandle& nh);
 
 private:
   SendPostureFactory();

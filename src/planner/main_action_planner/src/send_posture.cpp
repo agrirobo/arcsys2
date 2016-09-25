@@ -19,8 +19,8 @@ SendPostureFactory::~SendPostureFactory() {
 }
 
 SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
-  std::map<std::string, SendPosture*>::const_iterator found_it = sends.find(name);
-  if (found_it == sends.end()) return create(name, nh);
+  std::map<std::string, SendPosture*>::const_iterator found_it = unique.sends.find(name);
+  if (found_it == unique.sends.end()) return unique.create(name, nh);
   return found_it->second;
 }
 
