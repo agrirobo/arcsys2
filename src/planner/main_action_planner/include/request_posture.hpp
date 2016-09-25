@@ -15,7 +15,7 @@ public:
 
 class RequestPostureFactory {
 public:
-  RequestPosture* get(const std::string& name, ros::NodeHandle& nh);
+  static RequestPosture* get(const std::string& name, ros::NodeHandle& nh);
 
 private:
   RequestPostureFactory();

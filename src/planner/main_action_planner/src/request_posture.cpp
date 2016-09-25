@@ -16,8 +16,8 @@ RequestPostureFactory::~RequestPostureFactory() {
 }
 
 RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
-  std::map<std::string, RequestPosture*>::const_iterator found_it = reqs.find(name);
-  if (found_it == reqs.end()) return create(name, nh);
+  std::map<std::string, RequestPosture*>::const_iterator found_it = unique.reqs.find(name);
+  if (found_it == unique.reqs.end()) return unique.create(name, nh);
   return found_it->second;
 }
 
