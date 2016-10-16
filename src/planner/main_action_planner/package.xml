@@ -18,6 +18,7 @@
   <depend>tf2_ros</depend>
   <depend>pattern_posture_generator</depend>
   <depend>simple_trajectory_planner</depend>
+  <depend>state_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
