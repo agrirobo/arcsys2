@@ -5,5 +5,6 @@
 
 #include "request_posture.hpp"
 #include "send_posture.hpp"
+#include "state.hpp"
 
 #endif
