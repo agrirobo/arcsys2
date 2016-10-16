@@ -4,22 +4,20 @@
 #include <map>
 
 #include "ros/ros.h"
-#include "state_pub/States.h"
+#include "state_msgs/State.h"
 
 class StateChecker {
 public:
-  enum class States : std::string {
-    FOUND_TARGET = "foundTarget",
-    NEAR_TARGET = "nearTarget",
-    HOLD = "hold",
-    CAN_RELEASE = "canRelease"
-  };
+  static const std::string FOUND_TARGET;
+  static const std::string NEAR_TARGET;
+  static const std::string HOLD;
+  static const std::string CAN_RELEASE;
 
   StateChecker(ros::NodeHandle&);
-  bool get(States);
+  bool get(std::string);
 private:
-  void update(state_msgs::State::ConstPtr&);
-  std::map<States, bool> status;
+  void update(const state_msgs::State::ConstPtr&);
+  std::map<std::string, bool> status;
   ros::Subscriber sub;
 };
 
