@@ -2,6 +2,7 @@
 #define __STATE_CHECKER_H_INCLUDE__
 
 #include <map>
+#include <vector>
 
 #include "ros/ros.h"
 #include "state_msgs/State.h"
@@ -14,7 +15,7 @@ public:
   static const std::string CAN_RELEASE;
 
   StateChecker(ros::NodeHandle&);
-  bool get(std::string);
+  std::vector<std::string> getPostureKey() noexcept;
 private:
   void update(const state_msgs::State::ConstPtr&);
   std::map<std::string, bool> status;
