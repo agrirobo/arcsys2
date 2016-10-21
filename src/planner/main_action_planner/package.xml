@@ -12,11 +12,13 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
+  <depend>std_srvs</depend>
   <depend>servo_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
   <depend>pattern_posture_generator</depend>
-
+  <depend>simple_trajectory_planner</depend>
+  <depend>state_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
