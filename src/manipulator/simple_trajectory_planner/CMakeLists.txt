@@ -16,7 +16,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES simple_trajectory_planner
   CATKIN_DEPENDS roscpp tf2 tf2_ros geometry_msgs servo_msgs
-  DEPENDS system_lib
+#  DEPENDS system_lib
 )
 
 ###########
