@@ -1,2 +1,2 @@
 uint8 id
-int16 angle
+float64 angle

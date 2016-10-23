@@ -2,7 +2,7 @@
 
 #include "algorithm"
 
-#include "servo_msgs/KrsServoDegree.h"
+#include "servo_msgs/IdBased.h"
 #include "std_srvs/Empty.h"
 
 SendPostureFactory SendPostureFactory::unique;
@@ -33,13 +33,13 @@ SendPosture* SendPostureFactory::create(const std::string& name, ros::NodeHandle
 }
 
 KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) : nh(nh) {
-  pub = nh.advertise<servo_msgs::KrsServoDegree>("cmd_krs", 16);
+  pub = nh.advertise<servo_msgs::IdBased>("cmd_krs", 16);
   reload_srv = nh.advertiseService("reload_id_vec", &KrsSendPosture::reload, this);
   reload();
 }
 
 void KrsSendPosture::sendPosture(std::vector<double>& posture) {
-  servo_msgs::KrsServoDegree msg;
+  servo_msgs::IdBased msg;
   std::vector<double>::size_type length = std::min(posture.size(), id_vec.size());
   for (std::vector<double>::size_type i = 0; i < length; i++) {
     msg.id = id_vec[i];
