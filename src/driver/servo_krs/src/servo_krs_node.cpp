@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "servo_krs_node");
   ros::NodeHandle n {};
   ros::NodeHandle pn {"~"};
-  std::string path {"ttyUSB0"};
+  std::string path {"/dev/ttyUSB0"};
   pn.param<std::string>("path", path, path);
   try {
     ics::ICS3 ics {path.c_str()};
