@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  KrsServoDegree.msg
+  IdBased.msg
 )
 
 ## Generate added messages and services with any dependencies listed here
