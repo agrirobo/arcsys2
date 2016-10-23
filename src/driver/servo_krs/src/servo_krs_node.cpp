@@ -6,12 +6,10 @@ ics::ICS3* driver {nullptr};
 ros::Publisher pub;
 
 void move(const servo_msgs::IdBased::ConstPtr& msg) {
-  auto degree = ics::Angle::newDegree(msg->angle);
+  servo_msgs::IdBased result;
+  result.id = msg->id;
   try {
-    auto nowpos = driver->move(msg->id, degree);
-    servo_msgs::IdBased result;
-    result.id = msg->id;
-    result.angle = nowpos;
+    result.angle = driver->move(msg->id, ics::Angle::newDegree(msg->angle));
     pub.publish(result);
   } catch (std::runtime_error e) {
     ROS_INFO("Communicate error: %s", e.what());
