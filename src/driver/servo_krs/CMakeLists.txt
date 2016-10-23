@@ -17,7 +17,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ${PACKAGE_NAME}
   CATKIN_DEPENDS roscpp servo_msgs
-  DEPENDS ics3
+#  DEPENDS ics3
 )
 
 ###########
