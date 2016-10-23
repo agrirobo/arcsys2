@@ -3,11 +3,15 @@
 #include<servo_msgs/IdBased.h>
 
 ics::ICS3* driver {nullptr};
+ros::Publisher pub;
 
 void move(const servo_msgs::IdBased::ConstPtr& msg) {
   auto degree = ics::Angle::newDegree(msg->angle);
   auto nowpos = driver->move(msg->id, degree);
-  // TODO: publish now pos
+  servo_msgs::IdBased result;
+  result.id = msg->id;
+  result.angle = nowpos;
+  pub.publish(result);
 }
   
 
@@ -26,6 +30,7 @@ int main(int argc, char** argv) {
     return -1;
   }
   ros::Subscriber sub = n.subscribe("cmd_krs", 100, move);
+  pub = n.advertise<servo_msgs::IdBased>("pose_krs", 10);
   ros::spin();
   return 0;
 }
