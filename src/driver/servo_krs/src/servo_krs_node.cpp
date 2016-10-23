@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
     ROS_INFO("I tried open [%s]", path.c_str());
     return -1;
   }
-  ros::Subscriber sub = n.subscribe("krs", 100, move);
+  ros::Subscriber sub = n.subscribe("cmd_krs", 100, move);
   ros::spin();
   return 0;
 }
