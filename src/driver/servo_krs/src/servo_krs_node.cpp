@@ -22,14 +22,8 @@ int main(int argc, char** argv) {
   ros::NodeHandle pn {"~"};
   std::string path {"/dev/ttyUSB0"};
   pn.param<std::string>("path", path, path);
-  try {
-    ics::ICS3 ics {path.c_str()};
-    driver = &ics;
-  } catch (std::runtime_error e) {
-    ROS_INFO("Error: Cannot make ICS3 instance [%s]", e.what());
-    ROS_INFO("I tried open [%s]", path.c_str());
-    return -1;
-  }
+  ics::ICS3 ics {path.c_str()};
+  driver = &ics;
   ros::Subscriber sub = n.subscribe("cmd_krs", 100, move);
   pub = n.advertise<servo_msgs::IdBased>("pose_krs", 10);
   ros::spin();
