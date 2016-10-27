@@ -14,7 +14,7 @@ RequestPostureFactory RequestPostureFactory::unique;
 RequestPostureFactory::RequestPostureFactory() : reqs() {}
 
 RequestPostureFactory::~RequestPostureFactory() {
-  for (std::map<std::string, RequestPosture*>::iterator it = reqs.begin(), end_it = reqs.end();
+  for (auto it = reqs.begin(), end_it = reqs.end();
        it != end_it;
        it++) {
     delete it->second;

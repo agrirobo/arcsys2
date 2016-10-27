@@ -10,7 +10,7 @@ SendPostureFactory SendPostureFactory::unique;
 SendPostureFactory::SendPostureFactory() : sends() {}
 
 SendPostureFactory::~SendPostureFactory() {
-  for (std::map<std::string, SendPosture*>::iterator it = sends.begin(), end_it = sends.end();
+  for (auto it = sends.begin(), end_it = sends.end();
        it != end_it;
        it++) {
     delete it->second;
@@ -19,7 +19,7 @@ SendPostureFactory::~SendPostureFactory() {
 }
 
 SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& nh) {
-  std::map<std::string, SendPosture*>::const_iterator found_it = unique.sends.find(name);
+  const auto& found_it = unique.sends.find(name);
   if (found_it == unique.sends.end()) return unique.create(name, nh);
   return found_it->second;
 }
