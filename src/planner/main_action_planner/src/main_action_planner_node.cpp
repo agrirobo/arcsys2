@@ -2,7 +2,7 @@
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "test_action_planner_node");
-  ros::NodeHandle nh {"~"};
+  ros::NodeHandle nh {};
   StateChecker status {nh};
 
   while (ros::ok()) {
