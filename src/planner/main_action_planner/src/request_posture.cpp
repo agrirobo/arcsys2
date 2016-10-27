@@ -31,6 +31,7 @@ RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHan
 RequestPosture* RequestPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
   if (name == move2release) return reqs[move2release] = new PatternRequestPosture {nh, "release"};
   if (name == ik) return reqs[ik] = new TrajectoryRequestPosture {nh};
+  if (name == move2find) return reqs[move2find] = new PatternRequestPosture {nh, "normal"}; // for debug
   return nullptr;
 }
 
