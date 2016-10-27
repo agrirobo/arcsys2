@@ -34,7 +34,9 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh, ros::NodeHandle& pnh) : pnh(pnh) {
+PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh, ros::NodeHandle& pnh)
+  : pnh(pnh)
+{
   key_srv = nh.advertiseService("getPosture", &PatternPostureGenerator::getPosture, this);
   reload_srv = pnh.advertiseService("reload", &PatternPostureGenerator::reload, this);
   reload();
