@@ -38,9 +38,7 @@ KrsSendPosture::KrsSendPosture(ros::NodeHandle& nh) : nh(nh) {
 
 void KrsSendPosture::sendPosture(std::vector<double>& posture) {
   servo_msgs::IdBased msg;
-  std::cout << posture.size() << ':' << id_vec.size() << std::endl;
   std::vector<double>::size_type length = std::min(posture.size(), id_vec.size());
-  std::cout << length << std::endl;
   for (std::vector<double>::size_type i = 0; i < length; i++) {
     msg.id = id_vec[i];
     msg.angle = posture[i];
