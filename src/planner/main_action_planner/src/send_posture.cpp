@@ -25,10 +25,7 @@ SendPosture* SendPostureFactory::get(const std::string& name, ros::NodeHandle& n
 }
 
 SendPosture* SendPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
-  if (name == "krs") {
-    sends["krs"] = new KrsSendPosture(nh);
-    return sends.at("krs");
-  }
+  if (name == "krs") return sends["krs"] = new KrsSendPosture(nh);
   return NULL;
 }
 
