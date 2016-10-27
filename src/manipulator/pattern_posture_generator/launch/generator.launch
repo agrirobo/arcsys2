@@ -1,0 +1,7 @@
+<launch>
+  <node pkg="pattern_posture_generator" type="pattern_posture_generator_node" name="PPG_node">
+    <param name="pattern_names" value="[release, normal]" />
+    <param name="release" value="[100, -100, 0]" />
+    <param name="normal" value="[0,0,0]" />
+  </node>
+</launch>
