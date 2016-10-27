@@ -24,35 +24,34 @@ void dumpVector(std::vector<std::string> vec) {
 
 int main(int argc, char* argv[]) {
   ros::init(argc, argv, "pattern_posture_generator");
-  ros::NodeHandle nh("~");
+  ros::NodeHandle nh;
+  ros::NodeHandle pnh("~");
 
-  PatternPostureGenerator ppg(nh);
+  PatternPostureGenerator ppg(nh, pnh);
 
   ROS_INFO("Ready getPosture and reload service.");
   ros::spin();
   return 0;
 }
 
-PatternPostureGenerator::PatternPostureGenerator(){}
-
-PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh) : nh(nh) {
+PatternPostureGenerator::PatternPostureGenerator(ros::NodeHandle& nh, ros::NodeHandle& pnh) : pnh(pnh) {
   key_srv = nh.advertiseService("getPosture", &PatternPostureGenerator::getPosture, this);
-  reload_srv = nh.advertiseService("reload", &PatternPostureGenerator::reload, this);
+  reload_srv = pnh.advertiseService("reload", &PatternPostureGenerator::reload, this);
   reload();
 }
 
 bool PatternPostureGenerator::reload() {
-  if (!nh.hasParam("pattern_names")) return false;
+  if (!pnh.hasParam("pattern_names")) return false;
   std::vector<std::string> pattern_names;
-  nh.getParam("pattern_names", pattern_names);
+  pnh.getParam("pattern_names", pattern_names);
   dumpVector(pattern_names);
   posture_datas.clear();
   for (std::vector<std::string>::iterator it = pattern_names.begin(), end_it = pattern_names.end();
        it != end_it;
        it++) {
-    if (!nh.hasParam(*it)) continue;
+    if (!pnh.hasParam(*it)) continue;
     std::vector<double> posture;
-    nh.getParam(*it, posture);
+    pnh.getParam(*it, posture);
     std::copy(posture.begin(), posture.end(), std::back_inserter(posture_datas[*it]));
     ROS_INFO("Found posture of [%s]", it->c_str());
   }

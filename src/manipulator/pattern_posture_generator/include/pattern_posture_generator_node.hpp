@@ -9,10 +9,8 @@
 #include <map>
 
 class PatternPostureGenerator {
-private:
-  PatternPostureGenerator();
 public:
-  explicit PatternPostureGenerator(ros::NodeHandle& nh);
+  explicit PatternPostureGenerator(ros::NodeHandle& nh, ros::NodeHandle& pnh);
 
 private:
   bool getPosture(pattern_posture_generator::PatternPosture::Request&  req,
@@ -22,7 +20,7 @@ private:
               std_srvs::Empty::Response& res);
 
 private:
-  ros::NodeHandle nh;
+  ros::NodeHandle& pnh;
   ros::ServiceServer reload_srv;
   ros::ServiceServer key_srv;
   std::map<std::string, std::vector<double> > posture_datas;
