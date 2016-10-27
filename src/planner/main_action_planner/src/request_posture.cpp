@@ -18,7 +18,7 @@ RequestPostureFactory::~RequestPostureFactory() {
        it != end_it;
        it++) {
     delete it->second;
-    it->second = NULL;
+    it->second = nullptr;
   }
 }
 
@@ -48,11 +48,11 @@ PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh)
 void PatternRequestPosture::requestPosture(std::vector<double>& posture) {
   pattern_posture_generator::PatternPosture srv;
   srv.request.name = state;
-  if (client.call(srv)) {
+  if (!client.call(srv)) {
     ROS_INFO("Error call: No response by Request [%s] PatternPosture", state.c_str());
     return;
   }
-  std::copy(srv.response.posture.begin(), srv.response.posture.end(), std::back_inserter(posture));
+  posture = srv.response.posture;
 }
 
 TrajectoryRequestPosture::TrajectoryRequestPosture(ros::NodeHandle& nh) {
