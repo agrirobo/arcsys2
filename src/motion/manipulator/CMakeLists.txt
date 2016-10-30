@@ -24,10 +24,10 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  INCLUDE_DIR    include
-  CATKIN_DEPENDS ${PROJECT_NAME}_DEPENDS
-                 ${PROJECT_NAME}_BUILD_DEPENDS
-                 ${PROJECT_NAME}_RUN_DEPENDS
+  INCLUDE_DIR    ${PROJECT_SOURCE_DIR}/include
+  CATKIN_DEPENDS ${${PROJECT_NAME}_DEPENDS}
+                 ${${PROJECT_NAME}_BUILD_DEPENDS}
+                 ${${PROJECT_NAME}_RUN_DEPENDS}
   DEPENDS        system_lib
 )
 
