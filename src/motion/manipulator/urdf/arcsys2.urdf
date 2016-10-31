@@ -20,7 +20,7 @@
 
   <link name="main_shaft">
     <visual>
-      <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 1.5"/>
+      <origin xyz="0.0 0.0 1.5" rpy="0.0 0.0 0.0"/>
       <geometry> <box size="0.3 0.3 1.0"/> </geometry>
       <material name="blue"/>
     </visual>
