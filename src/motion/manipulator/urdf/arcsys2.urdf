@@ -19,8 +19,8 @@
 
   <link name="main_shaft">
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.1"/>
-      <geometry> <box size="0.1 0.1 0.2"/> </geometry>
+      <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 1.5"/>
+      <geometry> <box size="0.3 0.3 1.0"/> </geometry>
       <material name="red"> <color rgba="1 0 0 1"/> </material>
     </visual>
   </link>
