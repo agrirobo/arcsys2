@@ -12,7 +12,7 @@
     </visual>
   </link>
 
-  <joint name="fixed_base2shaft" type="fixed">
+  <joint name="base2shaft" type="fixed">
     <parent link="base_link"/>
     <child link="main_shaft"/>
   </joint>
