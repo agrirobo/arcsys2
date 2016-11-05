@@ -7,9 +7,9 @@ ros::Publisher pub;
 
 void move(const servo_msgs::IdBased::ConstPtr& msg) {
   servo_msgs::IdBased result;
-  result.id = msg->id;
   try {
     result.angle = driver->move(msg->id, ics::Angle::newDegree(msg->angle));
+    result.id = msg->id;
     pub.publish(result);
   } catch (std::runtime_error e) {
     ROS_INFO("Communicate error: %s", e.what());
