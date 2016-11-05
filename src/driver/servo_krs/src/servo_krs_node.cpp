@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle pn {"~"};
   std::string path {"/dev/ttyUSB0"};
   pn.param<std::string>("path", path, path);
+  ROS_INFO("Open servo motor path: %s", path.c_str());
   ics::ICS3 ics {std::move(path)};
   driver = &ics;
   ros::NodeHandle n {};
