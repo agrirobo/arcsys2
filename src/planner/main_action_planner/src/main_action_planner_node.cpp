@@ -19,11 +19,10 @@ int main(int argc, char** argv) {
       return -1;
     }
 
+    ros::spinOnce();
     std::vector<double> angles;
     rp_p->requestPosture(angles);
     sp_p->sendPosture(angles);
-
-    ros::spinOnce();
   }
   return 0;
 }
