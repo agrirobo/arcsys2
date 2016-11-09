@@ -1,4 +1,5 @@
 #include"ros/ros.h"
+#include"arm_msgs/ArmAnglesDegree.h"
 #include"controller_manager/controller_manager.h"
 #include"hardware_interface/joint_command_interface.h"
 #include"hardware_interface/joint_state_interface.h"
@@ -70,6 +71,7 @@ inline Arcsys2HW::Arcsys2HW()
 
   // for real move
   ros::NodeHandle nh;
+  arm_motor_pub = nh.advertise<arm_msgs::ArmAnglesDegree>("arm_roll", 3);
 }
 
 inline void Arcsys2HW::read() {
