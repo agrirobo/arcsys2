@@ -9,7 +9,7 @@ void move(const servo_msgs::IdBased::ConstPtr& msg) {
   servo_msgs::IdBased result;
   try {
     auto&& now_pos = driver->move(msg->id, ics::Angle::newDegree(msg->angle));
-    result.angle = std::move(std::move(now_pos)); // now_pos is universal reference, but now use after code it. use move
+    result.angle = std::move(now_pos); // now_pos is universal reference, but now use after code it. use move
     result.id = msg->id;
     pub.publish(std::move(result));
   } catch (std::runtime_error e) {
