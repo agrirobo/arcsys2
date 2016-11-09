@@ -13,8 +13,7 @@ std::vector<int>::size_type length; // cache of id_vec length
 int main(int argc, char* argv[]) {
   ros::init(argc, argv, "arm_id_based_node");
   ros::NodeHandle pnh("~");
-  pnh.getParam("id", id_vec);
-  if (id_vec.empty()) {
+  if (!pnh.getParam("id", id_vec)) {
     ROS_ERROR("I need id parameter: id is int vector");
     return 1;
   }
