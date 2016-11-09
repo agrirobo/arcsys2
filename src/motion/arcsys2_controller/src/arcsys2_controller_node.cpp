@@ -79,6 +79,10 @@ inline void Arcsys2HW::read() {
 }
 
 inline void Arcsys2HW::write() {
+  arm_msgs::ArmAnglesDegree arm_msg;
+  arm_msg.angles.push_back(servo_cmd[0]);
+  arm_msg.angles.push_back(servo_cmd[1]);
+  arm_motor_pub.publish(arm_msg);
   // TODO: write base motor
   // TODO: receive KRS angles
 }
