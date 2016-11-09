@@ -19,21 +19,21 @@
     <origin xyz="0 0 ${rail_height/2}" rpy="0 0 0"/>
   </xacro:LINK>
 
-  <xacro:PRISMATIC_JOINT parent="rail" child="base" x="1" lower="-5.0" upper="5.0"/>
+  <xacro:PRISMATIC_JOINT parent="rail" child="shaft" x="1" lower="-5.0" upper="5.0"/>
 
-  <xacro:property name="base_thickness" value="0.1"/>
-  <xacro:property name="base_height" value="2.0"/>
-  <xacro:LINK name="base" width="${base_thickness}" depth="${base_thickness}" height="${base_height}" color="red">
-    <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
+  <xacro:property name="shaft_thickness" value="0.1"/>
+  <xacro:property name="shaft_height" value="2.0"/>
+  <xacro:LINK name="shaft" width="${shaft_thickness}" depth="${shaft_thickness}" height="${shaft_height}" color="red">
+    <origin xyz="0 0 ${shaft_height/2}" rpy="0 0 0"/>
   </xacro:LINK>
 
-  <xacro:PRISMATIC_JOINT parent="base" child="arm0" z="1" lower="-0.5" upper="0.5"/>
+  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.5" upper="0.5"/>
 
   <xacro:property name="arm_width" value="0.1"/>
   <xacro:property name="arm_depth" value="0.5"/>
   <xacro:property name="arm_height" value="${arm_width}"/>
   <xacro:LINK name="arm0" width="${arm_width}" depth="${arm_depth}" height="${arm_height}" color="red">
-    <origin xyz="0 ${base_thickness} ${base_height*0.75}" rpy="0 0 0"/>
+    <origin xyz="0 ${shaft_thickness} ${shaft_height*0.75}" rpy="0 0 0"/>
   </xacro:LINK>
 
 
