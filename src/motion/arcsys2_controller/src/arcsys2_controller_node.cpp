@@ -1,4 +1,5 @@
 #include"ros/ros.h"
+#include"controller_manager/controller_manager.h"
 #include"hardware_interface/joint_command_interface.h"
 #include"hardware_interface/joint_state_interface.h"
 #include"hardware_interface/robot_hw.h"
@@ -11,12 +12,15 @@ public:
   ros::Time getTime() const;
   ros::Duration getPeriod() const;
 private:
+  // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
   hardware_interface::PositionJointInterface jntPosInterface;
-  double cmd[2];
-  double pos[2];
-  double vel[2];
-  double eff[2];
+  double servo_cmd[2];
+  double servo_pos[2];
+  double servo_vel[2];
+  double servo_eff[2];
+  // for real move
+  ros::Publisher arm_motor_pub;
 };
 
 int main(int argc, char *argv[]) {
@@ -41,24 +45,31 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-inline Arcsys2HW::Arcsys2HW() {
+inline Arcsys2HW::Arcsys2HW()
+: jntStateInterface(),
+  jntPosInterface(),
+  arm_motor_pub()
+{
   // [input] connect and register the joint state interface
-  hardware_interface::JointStateHandle stateHandle0to1("arm0->arm1", &pos[0], &vel[0], &eff[0]);
+  hardware_interface::JointStateHandle stateHandle0to1("arm0->arm1", &servo_pos[0], &servo_vel[0], &servo_eff[0]);
   jntStateInterface.registerHandle(stateHandle0to1);
 
-  hardware_interface::JointStateHandle stateHandle1to2("arm1->arm2", &pos[1], &vel[1], &eff[1]);
+  hardware_interface::JointStateHandle stateHandle1to2("arm1->arm2", &servo_pos[1], &servo_vel[1], &servo_eff[1]);
   jntStateInterface.registerHandle(stateHandle1to2);
 
   registerInterface(&jntStateInterface);
 
   // [output] connect and register the joint position interface
-  hardware_interface::JointHandle posHandle0to1(jntStateInterface.getHandle("arm0->arm1"), &cmd[0]);
+  hardware_interface::JointHandle posHandle0to1(jntStateInterface.getHandle("arm0->arm1"), &servo_cmd[0]);
   jntPosInterface.registerHandle(posHandle0to1);
 
-  hardware_interface::JointHandle posHandle1to2(jntStateInterface.getHandle("arm1->arm2"), &cmd[1]);
+  hardware_interface::JointHandle posHandle1to2(jntStateInterface.getHandle("arm1->arm2"), &servo_cmd[1]);
   jntPosInterface.registerHandle(posHandle1to2);
 
   registerInterface(&jntPosInterface);
+
+  // for real move
+  ros::NodeHandle nh;
 }
 
 inline void Arcsys2HW::read() {
@@ -66,7 +77,7 @@ inline void Arcsys2HW::read() {
 }
 
 inline void Arcsys2HW::write() {
-  // TODO: write KRS servo and base motor
+  // TODO: write base motor
   // TODO: receive KRS angles
 }
 
