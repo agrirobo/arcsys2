@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 2.8.3)
 project(arcsys2_controller)
 
 find_package(catkin REQUIRED COMPONENTS
-  hardware_interface
   roscpp
+  arm_msgs
   controller_manager
+  hardware_interface
 )
 
 ###################################
@@ -19,7 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES arcsys2_controller
-  CATKIN_DEPENDS hardware_interface roscpp controller_manager
+  CATKIN_DEPENDS roscpp arm_msgs controller_manager hardware_interface
 #  DEPENDS system_lib
 )
 

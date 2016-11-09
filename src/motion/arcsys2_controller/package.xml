@@ -11,9 +11,10 @@
   <author email="o111027y@mail.kyutech.jp">Doi Yusuke</author>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <depend>hardware_interface</depend>
   <depend>roscpp</depend>
+  <depend>arm_msgs</depend>
   <depend>controller_manager</depend>
+  <depend>hardware_interface</depend>
 
   <export>
   </export>
