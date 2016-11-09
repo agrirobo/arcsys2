@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="arm_id_based" type="arm_id_based_node" name="arm_id_based">
+    <rosparam file="$(find arm_id_based)/parameter/example.yaml" />
+  </node>
+</launch>
