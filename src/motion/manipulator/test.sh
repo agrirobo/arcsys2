@@ -5,7 +5,7 @@ pkgdir=$(cd "$(dirname $0)"; pwd)
 
 rosrun xacro xacro.py ${pkgdir}/urdf/${src}.xacro > ${pkgdir}/urdf/${src}.urdf || exit 1
 
-if [ check_urdf ${pkgdir}/urdf/${src}.urdf ]; then
+if check_urdf ${pkgdir}/urdf/${src}.urdf; then
   echo "launch? [y/n]" && read yn;
 else
   exit 1;

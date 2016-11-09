@@ -9,25 +9,27 @@
 
 
   <xacro:LINK name="world">
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:LINK>
 
   <xacro:FIXED_JOINT parent="world" child="rail"/>
 
-  <xacro:LINK name="rail" width="10.0" depth="0.3" height="0.1" color="blue">
-    <origin xyz="0.0 0.0 0.05" rpy="0.0 0.0 0.0"/>
+  <xacro:property name="rail_height" value="0.1"/>
+  <xacro:LINK name="rail" width="10.0" depth="0.3" height="${rail_height}" color="blue">
+    <origin xyz="0 0 ${rail_height/2}" rpy="0 0 0"/>
   </xacro:LINK>
 
   <xacro:PRISMATIC_JOINT parent="rail" child="base" x="1" lower="-5.0" upper="5.0"/>
 
-  <xacro:LINK name="base" width="0.3" depth="0.3" height="1.0" color="red">
-    <origin xyz="0.0 0.0 0.75" rpy="0.0 0.0 0.0"/>
+  <xacro:property name="base_height" value="2.0"/>
+  <xacro:LINK name="base" width="0.1" depth="0.1" height="${base_height}" color="red">
+    <origin xyz="0 0 ${base_height/2}" rpy="0 0 0"/>
   </xacro:LINK>
 
   <xacro:PRISMATIC_JOINT parent="base" child="arm0" z="1" lower="-0.5" upper="0.5"/>
 
   <xacro:LINK name="arm0" width="0.2" depth="0.5" height="0.2" color="red">
-    <origin xyz="0.0 0.15 1.5" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0 0.15 1.5" rpy="0 0 0"/>
   </xacro:LINK>
 
 
@@ -53,6 +55,7 @@
 
   <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower upper">
     <joint name="${parent}->${child}" type="prismatic">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
       <axis xyz="${x} ${y} ${z}"/>
