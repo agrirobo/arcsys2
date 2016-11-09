@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="arm_id_based" type="arm_id_based_node" name="arm_id_based">
+    <param name="id" value="[0, 1, 2]" />
+  </node>
+</launch>
