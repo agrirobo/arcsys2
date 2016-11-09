@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>arm_id_based</name>
+  <version>0.1.0</version>
+  <description>The arm_id_based package</description>
+
+  <maintainer email="o111027y@mail.kyutech.jp">Doi Yusuke</maintainer>
+  <license>BSD</license>
+
+  <author email="o111027y@mail.kyutech.jp">Doi Yusuke</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>arm_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>servo_msgs</depend>
+  <!-- Use test_depend for packages you need only for testing: -->
+  <!--   <test_depend>gtest</test_depend> -->
+
+  <export>
+  </export>
+</package>
