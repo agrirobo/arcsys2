@@ -12,14 +12,7 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:LINK>
 
-  <xacro:FIXED_JOINT parent="world" child="rail"/>
-
-  <xacro:property name="rail_height" value="0.1"/>
-  <xacro:LINK name="rail" width="10.0" depth="0.3" height="${rail_height}" color="blue">
-    <origin xyz="0 0 ${rail_height/2}" rpy="0 0 0"/>
-  </xacro:LINK>
-
-  <xacro:PRISMATIC_JOINT parent="rail" child="shaft" x="1" lower="-5.0" upper="5.0"/>
+  <xacro:PRISMATIC_JOINT parent="world" child="shaft" x="1" lower="-5.0" upper="5.0"/>
 
   <xacro:property name="shaft_thickness" value="0.1"/>
   <xacro:property name="shaft_height" value="2.0"/>
