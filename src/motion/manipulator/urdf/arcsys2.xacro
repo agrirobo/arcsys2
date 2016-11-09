@@ -12,21 +12,28 @@
     <origin xyz="0 0 0" rpy="0 0 0"/>
   </xacro:LINK>
 
-  <xacro:PRISMATIC_JOINT parent="world" child="shaft" x="1" lower="-5.0" upper="5.0"/>
+  <xacro:LIMITED_JOINT parent="world" child="shaft" type="prismatic" x="1" lower="-5.0" upper="5.0"/>
 
   <xacro:property name="shaft_thickness" value="0.1"/>
   <xacro:property name="shaft_height" value="2.0"/>
-  <xacro:LINK name="shaft" width="${shaft_thickness}" depth="${shaft_thickness}" height="${shaft_height}" color="red">
+  <xacro:LINK name="shaft" width="${shaft_thickness}" depth="${shaft_thickness}" height="${shaft_height}" color="black">
     <origin xyz="0 0 ${shaft_height/2}" rpy="0 0 0"/>
   </xacro:LINK>
 
-  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.5" upper="0.5"/>
+  <xacro:LIMITED_JOINT parent="shaft" child="arm0" type="prismatic" z="1" lower="-0.5" upper="0.5"/>
 
   <xacro:property name="arm_width" value="0.1"/>
   <xacro:property name="arm_depth" value="0.5"/>
   <xacro:property name="arm_height" value="${arm_width}"/>
-  <xacro:LINK name="arm0" width="${arm_width}" depth="${arm_depth}" height="${arm_height}" color="red">
+  <xacro:LINK name="arm0" width="${arm_width}" depth="${arm_depth}" height="${arm_height}">
     <origin xyz="0 ${shaft_thickness} ${shaft_height*0.75}" rpy="0 0 0"/>
+  </xacro:LINK>
+
+  <xacro:property name="pi" value="3.1415"/>
+  <xacro:LIMITED_JOINT parent="arm0" child="arm1" type="revolute" z="1" lower="${-pi}" upper="${pi}"/>
+
+  <xacro:LINK name="arm1" width="${arm_width}" depth="${arm_depth}" height="${arm_height}" color="black">
+    <origin xyz="0 ${shaft_thickness+arm_depth} ${shaft_height*0.75}" rpy="0 0 0"/>
   </xacro:LINK>
 
 
@@ -42,17 +49,17 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="FIXED_JOINT" params="parent child">
+  <!--xacro:macro name="FIXED_JOINT" params="parent child">
     <joint name="${parent}->${child}" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
     </joint>
-  </xacro:macro>
+  </xacro:macro-->
 
-  <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower upper">
-    <joint name="${parent}->${child}" type="prismatic">
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+  <xacro:macro name="LIMITED_JOINT" params="parent child type x:=0 y:=0 z:=0 lower upper *origin">
+    <joint name="${parent}->${child}" type="${type}">
+      <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
       <axis xyz="${x} ${y} ${z}"/>
