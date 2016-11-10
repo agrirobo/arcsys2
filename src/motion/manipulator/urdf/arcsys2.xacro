@@ -23,13 +23,13 @@
 
   <xacro:PLAIN_LINK name="world"/>
 
-  <xacro:JOINT name="world->shaft" type="prismatic" y="1" lower="-5.0" upper="5.0">
+  <xacro:PRISMATIC_JOINT name="world->shaft" y="1" lower="-5.0" upper="5.0">
     <origin xyz="0 0 ${shaft_height/2}"/>
   </xacro:JOINT>
 
   <xacro:PLAIN_LINK name="shaft" length="${shaft_thickness}" width="${shaft_thickness}" height="${shaft_height}" color="red"/>
 
-  <xacro:JOINT name="shaft->arm0" type="prismatic" z="1" lower="-0.5" upper="0.5">
+  <xacro:PRISMATIC_JOINT name="shaft->arm0" z="1" lower="-0.5" upper="0.5">
     <origin xyz="${shaft_thickness/2} 0 ${shaft_height/4}"/>
   </xacro:JOINT>
 
@@ -68,8 +68,8 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="JOINT" params="name type x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin">
-    <joint name="${name}" type="${type}">
+  <xacro:macro name="PRISMATIC_JOINT" params="name x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin">
+    <joint name="${name}" type="prismatic">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
