@@ -21,17 +21,13 @@
   <xacro:property name="arm2_length" value="0.5"/>
 
 
-  <xacro:LINK name="world">
-    <origin xyz="0 0 0" />
-  </xacro:LINK>
+  <xacro:PLAIN_LINK name="world"/>
 
   <xacro:JOINT parent="world" child="shaft" type="prismatic" y="1" lower="-5.0" upper="5.0">
     <origin xyz="0 0 ${shaft_height/2}"/>
   </xacro:JOINT>
 
-  <xacro:LINK name="shaft" width="${shaft_thickness}" length="${shaft_thickness}" height="${shaft_height}" color="red">
-    <origin xyz="0 0 0"/>
-  </xacro:LINK>
+  <xacro:PLAIN_LINK name="shaft" length="${shaft_thickness}" width="${shaft_thickness}" height="${shaft_height}" color="red"/>
 
   <xacro:JOINT parent="shaft" child="arm0" type="prismatic" z="1" lower="-0.5" upper="0.5">
     <origin xyz="${shaft_thickness/2} 0 ${shaft_height/4}"/>
@@ -41,18 +37,12 @@
     <origin xyz="${arm0_length/2} 0 0"/>
   </xacro:LINK>
 
-  <!--xacro:JOINT parent="arm0" child="arm1" type="revolute" z="1">
-    <origin xyz="${arm0_length} 0 0"/>
-  </xacro:JOINT-->
   <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_length="${arm0_length}"/>
 
   <xacro:LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue">
     <origin xyz="${arm1_length/2} 0 0"/>
   </xacro:LINK>
 
-  <!--xacro:JOINT parent="arm1" child="arm2" type="revolute" z="1">
-    <origin xyz="${arm1_length} 0 0"/>
-  </xacro:JOINT-->
   <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_length="${arm1_length}"/>
 
   <xacro:LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red">
@@ -64,6 +54,18 @@
     <link name="${name}">
       <visual>
         <xacro:insert_block name="origin"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="PLAIN_LINK" params="name width:=0 length:=0 height:=0 color:=white">
+    <link name="${name}">
+      <origin xyz="0 0 0"/>
+      <visual>
         <geometry>
           <box size="${length} ${width} ${height}"/>
         </geometry>
