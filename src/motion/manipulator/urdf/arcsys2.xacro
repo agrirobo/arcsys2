@@ -8,21 +8,18 @@
   <material name="blue">  <color rgba="${  0/255} ${  0/255} ${255/255} 1.0" /> </material>
 
 
-  <xacro:property name="pi" value="3.1415"/>
-
+<!-- Property -->
+  <xacro:property name="pi" value="3.1415926535897931" />
   <xacro:property name="default_size" value="0.1"/>
 
-  <xacro:property name="shaft_height" value="2.0"/>
-  <!--xacro:property name="shaft_thickness" value="0.1"/-->
-
-  <!--xacro:property name="arm_width" value="0.1"/-->
-  <!--xacro:property name="arm_height" value="${arm_width}"/-->
-
-  <xacro:property name="arm0_length" value="0.1"/>
-  <xacro:property name="arm1_length" value="0.5"/>
-  <xacro:property name="arm2_length" value="0.5"/>
+  <xacro:property name="shaft_height"    value="2.0"/>
+  <xacro:property name="arm0_length"     value="0.1"/>
+  <xacro:property name="arm1_length"     value="0.5"/>
+  <xacro:property name="arm2_length"     value="0.5"/>
+  <xacro:property name="effector_length" value="0.5"/>
 
 
+<!-- LINK and JOINT -->
   <xacro:PLAIN_LINK name="world"/>
 
   <xacro:PRISMATIC_JOINT parent="world" child="shaft" y="1" lower="-5.0" upper="5.0">
@@ -45,7 +42,12 @@
 
   <xacro:SCARA_LINK name="arm2" length="${arm2_length}" color="red"/>
 
+  <xacro:SCARA_JOINT parent="arm2" child="effector" parent_length="${arm2_length}"/>
 
+  <xacro:SCARA_LINK name="effector" length="${effector_length}" color="green"/>
+
+
+<!-- Macro Definition -->
   <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
     <link name="${name}">
       <origin xyz="0 0 0"/>
