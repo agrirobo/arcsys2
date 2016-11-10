@@ -26,15 +26,15 @@
   </xacro:LINK>
 
   <xacro:JOINT parent="world" child="shaft" type="prismatic" y="1" lower="-5.0" upper="5.0">
-    <origin xyz="0 0 ${shaft_height/2}" rpy="0 0 0" />
+    <origin xyz="0 0 ${shaft_height/2}"/>
   </xacro:JOINT>
 
   <xacro:LINK name="shaft" width="${shaft_thickness}" length="${shaft_thickness}" height="${shaft_height}" color="red">
-    <origin xyz="0 0 0" />
+    <origin xyz="0 0 0"/>
   </xacro:LINK>
 
   <xacro:JOINT parent="shaft" child="arm0" type="prismatic" z="1" lower="-0.5" upper="0.5">
-    <origin xyz="${shaft_thickness/2 + arm0_length/2} 0 ${shaft_height/4}" rpy="0 0 0"/>
+    <origin xyz="${shaft_thickness/2 + arm0_length/2} 0 ${shaft_height/4}"/>
   </xacro:JOINT>
 
   <xacro:LINK name="arm0" width="${arm_width}" length="${arm0_length}" height="${arm_height}" color="green">
@@ -42,19 +42,19 @@
   </xacro:LINK>
 
   <xacro:JOINT parent="arm0" child="arm1" type="revolute" z="1">
-    <origin xyz="${arm0_length/2} 0 0" rpy="0 0 0"/>
+    <origin xyz="${arm0_length/2} 0 0"/>
   </xacro:JOINT>
 
   <xacro:LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue">
-    <origin xyz="${arm1_length/2} 0 0" />
+    <origin xyz="${arm1_length/2} 0 0"/>
   </xacro:LINK>
 
   <xacro:JOINT parent="arm1" child="arm2" type="revolute" z="1">
-    <origin xyz="${arm1_length} 0 0" rpy="0 0 0"/>
+    <origin xyz="${arm1_length} 0 0"/>
   </xacro:JOINT>
 
   <xacro:LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red">
-    <origin xyz="${arm2_length/2} 0 0" />
+    <origin xyz="${arm2_length/2} 0 0"/>
   </xacro:LINK>
 
 
