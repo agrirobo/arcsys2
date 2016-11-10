@@ -10,11 +10,13 @@
 
   <xacro:property name="pi" value="3.1415"/>
 
-  <xacro:property name="shaft_height" value="2.0"/>
-  <xacro:property name="shaft_thickness" value="0.1"/>
+  <xacro:property name="default_size" value="0.1"/>
 
-  <xacro:property name="arm_width" value="0.1"/>
-  <xacro:property name="arm_height" value="${arm_width}"/>
+  <xacro:property name="shaft_height" value="2.0"/>
+  <!--xacro:property name="shaft_thickness" value="0.1"/-->
+
+  <!--xacro:property name="arm_width" value="0.1"/-->
+  <!--xacro:property name="arm_height" value="${arm_width}"/-->
 
   <xacro:property name="arm0_length" value="0.1"/>
   <xacro:property name="arm1_length" value="0.5"/>
@@ -23,28 +25,28 @@
 
   <xacro:PLAIN_LINK name="world"/>
 
-  <xacro:PRISMATIC_JOINT name="world->shaft" y="1" lower="-5.0" upper="5.0">
+  <xacro:PRISMATIC_JOINT parent="world" child="shaft" y="1" lower="-5.0" upper="5.0">
     <origin xyz="0 0 ${shaft_height/2}"/>
-  </xacro:JOINT>
+  </xacro:PRISMATIC_JOINT>
 
-  <xacro:PLAIN_LINK name="shaft" length="${shaft_thickness}" width="${shaft_thickness}" height="${shaft_height}" color="red"/>
+  <xacro:PLAIN_LINK name="shaft" height="${shaft_height}" color="red"/>
 
-  <xacro:PRISMATIC_JOINT name="shaft->arm0" z="1" lower="-0.5" upper="0.5">
-    <origin xyz="${shaft_thickness/2} 0 ${shaft_height/4}"/>
-  </xacro:JOINT>
+  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.5" upper="0.5">
+    <origin xyz="${default_size/2} 0 ${shaft_height/4}"/>
+  </xacro:PRISMATIC_JOINT>
 
-  <xacro:SCARA_LINK name="arm0" width="${arm_width}" length="${arm0_length}" height="${arm_height}" color="green"/>
+  <xacro:SCARA_LINK name="arm0" length="${arm0_length}" color="green"/>
 
-  <xacro:SCARA_JOINT name="arm0->arm1" parent_length="${arm0_length}"/>
+  <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_length="${arm0_length}"/>
 
-  <xacro:SCARA_LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue"/>
+  <xacro:SCARA_LINK name="arm1" length="${arm1_length}" color="blue"/>
 
-  <xacro:SCARA_JOINT name="arm1->arm2" parent_length="${arm1_length}"/>
+  <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_length="${arm1_length}"/>
 
-  <xacro:SCARA_LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red"/>
+  <xacro:SCARA_LINK name="arm2" length="${arm2_length}" color="red"/>
 
 
-  <xacro:macro name="PLAIN_LINK" params="name width:=0 length:=0 height:=0 color:=white">
+  <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
     <link name="${name}">
       <origin xyz="0 0 0"/>
       <visual>
@@ -56,7 +58,7 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="SCARA_LINK" params="name width:=0 length:=0 height:=0 color:=white">
+  <xacro:macro name="SCARA_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
     <link name="${name}">
       <visual>
         <origin xyz="${length/2} 0 0"/>
@@ -68,8 +70,8 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="PRISMATIC_JOINT" params="name x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin">
-    <joint name="${name}" type="prismatic">
+  <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin">
+    <joint name="${parent}->${child}" type="prismatic">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
@@ -78,8 +80,8 @@
     </joint>
   </xacro:macro>
 
-  <xacro:macro name="SCARA_JOINT" params="parent_length lower:=${-pi/2} upper:=${pi/2}">
-    <joint name="${name}" type="revolute">
+  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
+    <joint name="${parent}->${child}" type="revolute">
       <origin xyz="${parent_length} 0 0"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
