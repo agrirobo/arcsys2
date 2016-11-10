@@ -33,21 +33,24 @@
     <origin xyz="${shaft_thickness/2} 0 ${shaft_height/4}"/>
   </xacro:JOINT>
 
-  <xacro:LINK name="arm0" width="${arm_width}" length="${arm0_length}" height="${arm_height}" color="green">
+  <!--xacro:LINK name="arm0" width="${arm_width}" length="${arm0_length}" height="${arm_height}" color="green">
     <origin xyz="${arm0_length/2} 0 0"/>
-  </xacro:LINK>
+  </xacro:LINK-->
+  <xacro:SCARA_LINK name="arm0" width="${arm_width}" length="${arm0_length}" height="${arm_height}" color="green"/>
 
   <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_length="${arm0_length}"/>
 
-  <xacro:LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue">
+  <!--xacro:LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue">
     <origin xyz="${arm1_length/2} 0 0"/>
-  </xacro:LINK>
+  </xacro:LINK-->
+  <xacro:SCARA_LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue"/>
 
   <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_length="${arm1_length}"/>
 
-  <xacro:LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red">
+  <!--xacro:LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red">
     <origin xyz="${arm2_length/2} 0 0"/>
-  </xacro:LINK>
+  </xacro:LINK-->
+  <xacro:SCARA_LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red"/>
 
 
   <xacro:macro name="LINK" params="name width:=0 length:=0 height:=0 color:=white *origin">
@@ -66,6 +69,18 @@
     <link name="${name}">
       <origin xyz="0 0 0"/>
       <visual>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="SCARA_LINK" params="name width:=0 length:=0 height:=0 color:=white">
+    <link name="${name}">
+      <visual>
+        <origin xyz="${length/2} 0 0"/>
         <geometry>
           <box size="${length} ${width} ${height}"/>
         </geometry>
