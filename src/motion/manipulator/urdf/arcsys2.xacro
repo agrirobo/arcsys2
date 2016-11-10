@@ -34,24 +34,26 @@
   </xacro:LINK>
 
   <xacro:JOINT parent="shaft" child="arm0" type="prismatic" z="1" lower="-0.5" upper="0.5">
-    <origin xyz="${shaft_thickness/2 + arm0_length/2} 0 ${shaft_height/4}"/>
+    <origin xyz="${shaft_thickness/2} 0 ${shaft_height/4}"/>
   </xacro:JOINT>
 
   <xacro:LINK name="arm0" width="${arm_width}" length="${arm0_length}" height="${arm_height}" color="green">
-    <origin xyz="0 0 0"/>
+    <origin xyz="${arm0_length/2} 0 0"/>
   </xacro:LINK>
 
-  <xacro:JOINT parent="arm0" child="arm1" type="revolute" z="1">
-    <origin xyz="${arm0_length/2} 0 0"/>
-  </xacro:JOINT>
+  <!--xacro:JOINT parent="arm0" child="arm1" type="revolute" z="1">
+    <origin xyz="${arm0_length} 0 0"/>
+  </xacro:JOINT-->
+  <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_length="${arm0_length}"/>
 
   <xacro:LINK name="arm1" width="${arm_width}" length="${arm1_length}" height="${arm_height}" color="blue">
     <origin xyz="${arm1_length/2} 0 0"/>
   </xacro:LINK>
 
-  <xacro:JOINT parent="arm1" child="arm2" type="revolute" z="1">
+  <!--xacro:JOINT parent="arm1" child="arm2" type="revolute" z="1">
     <origin xyz="${arm1_length} 0 0"/>
-  </xacro:JOINT>
+  </xacro:JOINT-->
+  <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_length="${arm1_length}"/>
 
   <xacro:LINK name="arm2" width="${arm_width}" length="${arm2_length}" height="${arm_height}" color="red">
     <origin xyz="${arm2_length/2} 0 0"/>
@@ -76,6 +78,16 @@
       <parent link="${parent}"/>
       <child link="${child}"/>
       <axis xyz="${x} ${y} ${z}"/>
+      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
+    <joint name="${parent}->${child}" type="revolute">
+      <origin xyz="${parent_length} 0 0"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="0 0 1"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
   </xacro:macro>
