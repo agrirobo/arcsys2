@@ -8,37 +8,43 @@
   <material name="blue">  <color rgba="${  0/255} ${  0/255} ${255/255} 1.0" /> </material>
 
 
+  <xacro:property name="pi" value="3.1415"/>
+
+  <xacro:property name="shaft_height" value="2.0"/>
+  <xacro:property name="shaft_thickness" value="0.1"/>
+
+  <xacro:property name="arm_width" value="0.1"/>
+  <xacro:property name="arm_height" value="${arm_width}"/>
+
+  <xacro:property name="arm0_depth" value="0.1"/>
+  <xacro:property name="arm1_depth" value="0.5"/>
+  <xacro:property name="arm2_depth" value="0.5"/>
+
+
   <xacro:LINK name="world">
     <origin xyz="0 0 0" />
   </xacro:LINK>
 
-  <xacro:property name="shaft_height" value="2.0"/>
   <xacro:JOINT parent="world" child="shaft" type="prismatic" y="1" lower="-5.0" upper="5.0">
     <origin xyz="0 0 ${shaft_height/2}" rpy="0 0 0" />
   </xacro:JOINT>
 
-  <xacro:property name="shaft_thickness" value="0.1"/>
   <xacro:LINK name="shaft" width="${shaft_thickness}" depth="${shaft_thickness}" height="${shaft_height}" color="red">
     <origin xyz="0 0 0" />
   </xacro:LINK>
 
-  <xacro:property name="arm0_depth" value="0.1"/>
   <xacro:JOINT parent="shaft" child="arm0" type="prismatic" z="1" lower="-0.5" upper="0.5">
     <origin xyz="${shaft_thickness/2 + arm0_depth/2} 0 ${shaft_height/4}" rpy="0 0 0"/>
   </xacro:JOINT>
 
-  <xacro:property name="arm_width" value="0.1"/>
-  <xacro:property name="arm_height" value="${arm_width}"/>
   <xacro:LINK name="arm0" width="${arm_width}" depth="${arm0_depth}" height="${arm_height}" color="green">
     <origin xyz="0 0 0"/>
   </xacro:LINK>
 
-  <xacro:property name="pi" value="3.1415"/>
   <xacro:JOINT parent="arm0" child="arm1" type="revolute" z="1">
     <origin xyz="${arm0_depth/2} 0 0" rpy="0 0 0"/>
   </xacro:JOINT>
 
-  <xacro:property name="arm1_depth" value="0.5"/>
   <xacro:LINK name="arm1" width="${arm_width}" depth="${arm1_depth}" height="${arm_height}" color="blue">
     <origin xyz="${arm1_depth/2} 0 0" />
   </xacro:LINK>
@@ -47,7 +53,6 @@
     <origin xyz="${arm1_depth} 0 0" rpy="0 0 0"/>
   </xacro:JOINT>
 
-  <xacro:property name="arm2_depth" value="0.5"/>
   <xacro:LINK name="arm2" width="${arm_width}" depth="${arm2_depth}" height="${arm_height}" color="red">
     <origin xyz="${arm2_depth/2} 0 0" />
   </xacro:LINK>
