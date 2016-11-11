@@ -9,11 +9,11 @@
 #include<string>
 #include<utility>
 
-constexpr std::size_t krsCount = 4;
-
 class Arcsys2HW : public hardware_interface::RobotHW {
 public:
-  Arcsys2HW(const std::string&);
+  static constexpr std::size_t krsCount = 4;
+  using IdContainer = std::array<int, krsCount>;
+  Arcsys2HW(const std::string&, const IdContainer&);
   void read();
   void write();
   ros::Time getTime() const;
@@ -21,6 +21,7 @@ public:
 private:
   // for real move
   ics::ICS3 krs_driver;
+  IdContainer krs_ids;
   // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
   hardware_interface::PositionJointInterface jntPosInterface;
@@ -34,10 +35,25 @@ int main(int argc, char *argv[]) {
   ros::init(argc, argv, "arcsys2_control_node");
 
   ros::NodeHandle pnh {"~"};
-  std::string krs_path {"/dev/ttyUSB0"};
+  std::vector<int> armJointIds {};
+  if (!pnh.getParam("arm_id", armJointIds)) {
+    ROS_ERROR("Need arm_id(aka vector<int>) parameter");
+    return 1;
+  }
+  constexpr std::vector<int>::size_type armJointCount = 3;
+  if (armJointIds.size() != armJointCount) {
+    ROS_ERROR("I have 3 joint of arm. you specify count is %lu", armJointIds.size());
+    return 1;
+  }
+  int eefId;
+  if (!pnh.getParam("eff_id", eefId)) {
+    ROS_ERROR("Need eff_id(aka int) parameter");
+    return 1;
+  }
+  std::string krs_path {"/dev/ttyUSB0", };
   pnh.param<std::string>("krs_path", krs_path, krs_path);
-
-  Arcsys2HW robot {std::move(krs_path)};
+  Arcsys2HW robot {std::move(krs_path),
+                   Arcsys2HW::IdContainer {armJointIds[0], armJointIds[1], armJointIds[2], eefId}};
   controller_manager::ControllerManager cm {&robot};
 
   ros::Rate rate(1.0 / robot.getPeriod().toSec());
@@ -55,8 +71,9 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-inline Arcsys2HW::Arcsys2HW(const std::string& krs_path)
+inline Arcsys2HW::Arcsys2HW(const std::string& krs_path, const IdContainer& krs_ids)
 : krs_driver {krs_path},
+  krs_ids(krs_ids), // for ubuntu 14.04; call copy constructor
   jntStateInterface {},
   jntPosInterface {}
 {
