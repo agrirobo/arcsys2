@@ -1,9 +1,13 @@
 #include"ros/ros.h"
-#include"arm_msgs/ArmAnglesDegree.h"
+#include"arm_msgs/ArmAnglesRadian.h"
 #include"controller_manager/controller_manager.h"
 #include"hardware_interface/joint_command_interface.h"
 #include"hardware_interface/joint_state_interface.h"
 #include"hardware_interface/robot_hw.h"
+
+enum {
+  ARM_LENGTH = 2
+};
 
 class Arcsys2HW : public hardware_interface::RobotHW {
 public:
@@ -12,6 +16,7 @@ public:
   void write();
   ros::Time getTime() const;
   ros::Duration getPeriod() const;
+  void armCb(const arm_msgs::ArmAnglesRadian::ConstPtr&);
 private:
   // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
@@ -22,6 +27,7 @@ private:
   double arm_eff[2];
   // for real move
   ros::Publisher arm_pub;
+  ros::Subscriber arm_sub;
 };
 
 int main(int argc, char *argv[]) {
@@ -49,7 +55,8 @@ int main(int argc, char *argv[]) {
 inline Arcsys2HW::Arcsys2HW()
 : jntStateInterface(),
   jntPosInterface(),
-  arm_pub()
+  arm_pub(),
+  arm_sub()
 {
   // [input] connect and register the joint state interface
   hardware_interface::JointStateHandle stateHandle0to1("arm0->arm1", &arm_pos[0], &arm_vel[0], &arm_eff[0]);
@@ -71,7 +78,8 @@ inline Arcsys2HW::Arcsys2HW()
 
   // for real move
   ros::NodeHandle nh;
-  arm_pub = nh.advertise<arm_msgs::ArmAnglesDegree>("arm_roll", 3);
+  arm_pub = nh.advertise<arm_msgs::ArmAnglesRadian>("arm_roll", 3);
+  arm_sub = nh.subscribe("arm_pos", 3, &Arcsys2HW::armCb, this);
 }
 
 inline void Arcsys2HW::read() {
@@ -79,7 +87,7 @@ inline void Arcsys2HW::read() {
 }
 
 inline void Arcsys2HW::write() {
-  arm_msgs::ArmAnglesDegree arm_msg;
+  arm_msgs::ArmAnglesRadian arm_msg;
   arm_msg.angles.push_back(arm_cmd[0]);
   arm_msg.angles.push_back(arm_cmd[1]);
   arm_pub.publish(arm_msg);
@@ -93,4 +101,8 @@ inline ros::Time Arcsys2HW::getTime() const {
 
 inline ros::Duration Arcsys2HW::getPeriod() const {
   return ros::Duration(0.01);
+}
+
+inline void Arcsys2HW::armCb(const arm_msgs::ArmAnglesRadian::ConstPtr& msg) {
+  for (std::size_t i = 0; i < ARM_LENGTH; i++) arm_pos[i] = msg->angles[i];
 }
