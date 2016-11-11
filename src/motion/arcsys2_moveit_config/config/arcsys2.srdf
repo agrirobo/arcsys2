@@ -12,15 +12,15 @@
     <group name="arcsys2">
         <link name="world" />
         <link name="shaft" />
-        <link name="arm1" />
         <link name="arm0" />
         <link name="arm2" />
+        <link name="arm1" />
         <link name="effector" />
-        <joint name="world_shaft" />
-        <joint name="shaft_arm0" />
-        <joint name="arm0_arm1" />
-        <joint name="arm1_arm2" />
-        <joint name="arm2_effector" />
+        <joint name="world_to_shaft" />
+        <joint name="shaft_to_arm0" />
+        <joint name="arm0_to_arm1" />
+        <joint name="arm1_to_arm2" />
+        <joint name="arm2_to_effector" />
         <chain base_link="world" tip_link="effector" />
     </group>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->

@@ -1,8 +1,8 @@
 controller_list:
   - name: fake_arcsys2_controller
     joints:
-      - world_shaft
-      - shaft_arm0
-      - arm0_arm1
-      - arm1_arm2
-      - arm2_effector
+      - world_to_shaft
+      - shaft_to_arm0
+      - arm0_to_arm1
+      - arm1_to_arm2
+      - arm2_to_effector
