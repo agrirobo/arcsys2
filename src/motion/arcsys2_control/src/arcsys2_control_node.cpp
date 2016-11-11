@@ -22,10 +22,10 @@ private:
   // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
   hardware_interface::PositionJointInterface jntPosInterface;
-  double krs_cmd[2];
-  double krs_pos[2];
-  double krs_vel[2];
-  double krs_eff[2];
+  double krs_cmd[4];
+  double krs_pos[4];
+  double krs_vel[4];
+  double krs_eff[4];
 };
 
 int main(int argc, char *argv[]) {
