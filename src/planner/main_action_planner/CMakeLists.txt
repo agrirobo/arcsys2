@@ -7,8 +7,6 @@ find_package(catkin REQUIRED COMPONENTS
   servo_msgs
   tf2
   tf2_ros
-  pattern_posture_generator
-  simple_trajectory_planner
   state_msgs
 )
 
@@ -36,7 +34,7 @@ endif()
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES main_action_planner
-  CATKIN_DEPENDS roscpp std_srvs servo_msgs tf2 tf2_ros pattern_posture_generator simple_trajectory_planner state_msgs
+  CATKIN_DEPENDS roscpp std_srvs servo_msgs tf2 tf2_ros state_msgs
 #  DEPENDS system_lib
 )
 
