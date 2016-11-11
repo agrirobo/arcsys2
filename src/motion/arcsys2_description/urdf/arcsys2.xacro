@@ -57,6 +57,11 @@
         </geometry>
         <material name="${color}"/>
       </visual>
+      <collision>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
     </link>
   </xacro:macro>
 
@@ -69,6 +74,11 @@
         </geometry>
         <material name="${color}"/>
       </visual>
+      <collision>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
     </link>
   </xacro:macro>
 
