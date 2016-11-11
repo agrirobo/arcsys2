@@ -11,9 +11,9 @@
 
 class Arcsys2HW : public hardware_interface::RobotHW {
 public:
-  static constexpr std::size_t krsCount = 4;
+  static constexpr std::size_t krsCount {4};
   using IdContainer = std::array<int, krsCount>;
-  Arcsys2HW(const std::string&, const IdContainer&);
+  Arcsys2HW(std::string&&, IdContainer&&);
   void read();
   void write();
   ros::Time getTime() const;
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     ROS_ERROR("Need arm_id(aka vector<int>) parameter");
     return 1;
   }
-  constexpr std::vector<int>::size_type armJointCount = 3;
+  constexpr std::vector<int>::size_type armJointCount {3};
   if (armJointIds.size() != armJointCount) {
     ROS_ERROR("I have 3 joint of arm. you specify count is %lu", armJointIds.size());
     return 1;
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
     ROS_ERROR("Need eff_id(aka int) parameter");
     return 1;
   }
-  std::string krs_path {"/dev/ttyUSB0", };
+  std::string krs_path {"/dev/ttyUSB0"};
   pnh.param<std::string>("krs_path", krs_path, krs_path);
   Arcsys2HW robot {std::move(krs_path),
                    Arcsys2HW::IdContainer {armJointIds[0], armJointIds[1], armJointIds[2], eefId}};
@@ -71,11 +71,15 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-inline Arcsys2HW::Arcsys2HW(const std::string& krs_path, const IdContainer& krs_ids)
-: krs_driver {krs_path},
-  krs_ids(krs_ids), // for ubuntu 14.04; call copy constructor
+inline Arcsys2HW::Arcsys2HW(std::string&& krs_path, IdContainer&& krs_ids)
+: krs_driver {std::move(krs_path)},
+  krs_ids(std::move(krs_ids)), // call copy (or move) constructor
   jntStateInterface {},
-  jntPosInterface {}
+  jntPosInterface {},
+  krs_cmd {},
+  krs_pos {},
+  krs_vel {},
+  krs_eff {}
 {
   // [input] connect and register the joint state interface
   hardware_interface::JointStateHandle stateHandle0to1 {"arm0->arm1", &krs_pos[0], &krs_vel[0], &krs_eff[0]};
