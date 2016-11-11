@@ -3,16 +3,17 @@ project(arcsys2_control)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  arm_msgs
   controller_manager
   hardware_interface
 )
+
+find_package(ics3)
 
 ###################################
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  CATKIN_DEPENDS roscpp arm_msgs controller_manager hardware_interface
+  CATKIN_DEPENDS roscpp controller_manager hardware_interface
 )
 
 ###########
@@ -20,8 +21,9 @@ catkin_package(
 ###########
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${ics3_INCLUDE_DIRS}
 )
 
 add_executable(arcsys2_control_node src/arcsys2_control_node.cpp)
-add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES})
+add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS} ${ics3_EXPORTED_TARGETS})
+target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES} ${ics3_LIBRARIES})
