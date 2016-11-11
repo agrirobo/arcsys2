@@ -1,0 +1,16 @@
+<launch>
+  <rosparam file="$(find arcsys2_control)/config/arcsys2_control.yaml" command="load" ns="/arcsys2" />
+
+  <node name="arcsys2_control" pkg="arcsys2_control" type="arcsys2_control_node"
+        output="screen" ns="/arcsys2" />
+
+  <node name="controller_spawner" pkg="controller_manager"
+        type="spawner" respawn="false"
+	      output="screen" ns="/arcsys2"
+        args="joint_state_controller joint1_position_controller" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" 
+        type="robot_state_publisher" respawn="false" output="screen">
+    <remap from="/joint_states" to="/arcsys2/joint_states" />
+  </node>
+</launch>
