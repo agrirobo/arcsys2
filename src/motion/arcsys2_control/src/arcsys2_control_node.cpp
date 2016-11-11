@@ -82,19 +82,19 @@ inline Arcsys2HW::Arcsys2HW(std::string&& krs_path, IdContainer&& krs_ids)
   krs_eff {}
 {
   // [input] connect and register the joint state interface
-  hardware_interface::JointStateHandle stateHandle0to1 {"arm0->arm1", &krs_pos[0], &krs_vel[0], &krs_eff[0]};
+  hardware_interface::JointStateHandle stateHandle0to1 {"arm0_to_arm1", &krs_pos[0], &krs_vel[0], &krs_eff[0]};
   jntStateInterface.registerHandle(stateHandle0to1);
 
-  hardware_interface::JointStateHandle stateHandle1to2 {"arm1->arm2", &krs_pos[1], &krs_vel[1], &krs_eff[1]};
+  hardware_interface::JointStateHandle stateHandle1to2 {"arm1_to_arm2", &krs_pos[1], &krs_vel[1], &krs_eff[1]};
   jntStateInterface.registerHandle(stateHandle1to2);
 
   registerInterface(&jntStateInterface);
 
   // [output] connect and register the joint position interface
-  hardware_interface::JointHandle posHandle0to1 {jntStateInterface.getHandle("arm0->arm1"), &krs_cmd[0]};
+  hardware_interface::JointHandle posHandle0to1 {jntStateInterface.getHandle("arm0_to_arm1"), &krs_cmd[0]};
   jntPosInterface.registerHandle(posHandle0to1);
 
-  hardware_interface::JointHandle posHandle1to2 {jntStateInterface.getHandle("arm1->arm2"), &krs_cmd[1]};
+  hardware_interface::JointHandle posHandle1to2 {jntStateInterface.getHandle("arm1_to_arm2"), &krs_cmd[1]};
   jntPosInterface.registerHandle(posHandle1to2);
 
   registerInterface(&jntPosInterface);
