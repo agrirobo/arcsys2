@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<package format="2">
+  <name> manipulator </name>
+  <version> 0.0.1 </version>
+  <maintainer email="httperror@404-notfound.jp"> Yamasaki Tatsuya </maintainer>
+  <license> MIT </license>
+
+  <description>
+    The manipulator package.
+  </description>
+
+  <buildtool_depend> catkin </buildtool_depend>
+
+  <depend> roscpp </depend>
+</package>

@@ -1,3 +1,0 @@
-<launch>
-  <node name="krs_servo" pkg="krs_servo" type="krs_servo_node" />
-</launch>

@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(krs_servo)
+project(arcsys2_controller)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  servo_msgs
+  arm_msgs
+  controller_manager
+  hardware_interface
 )
 
 ###################################
@@ -17,33 +19,27 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES KrsServo
-  CATKIN_DEPENDS roscpp servo_msgs
-  DEPENDS system_lib
+#  LIBRARIES arcsys2_controller
+  CATKIN_DEPENDS roscpp arm_msgs controller_manager hardware_interface
+#  DEPENDS system_lib
 )
 
 ###########
 ## Build ##
 ###########
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
-  include
+#  include
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ executable
-add_executable(krs_servo_node src/krs_servo_node.cpp)
+add_executable(arcsys2_controller_node src/arcsys2_controller_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(krs_servo_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(arcsys2_controller_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(krs_servo_node
-  krs_servo_driver
+target_link_libraries(arcsys2_controller_node
   ${catkin_LIBRARIES}
 )
-

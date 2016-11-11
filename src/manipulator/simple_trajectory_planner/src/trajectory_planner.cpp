@@ -5,7 +5,7 @@
 #include "tf2_ros/transform_listener.h"
 #include "geometry_msgs/TransformStamped.h"
 
-#include "servo_msgs/KrsServoDegree.h"
+#include "servo_msgs/IdBased.h"
 
 class TargetPlanner {
 public:
@@ -59,7 +59,7 @@ public:
     return true;
   }
 
-  servo_msgs::KrsServoDegree getServoDegree(unsigned int id) {
+  servo_msgs::IdBased getServoDegree(unsigned int id) {
     return servo[id];
   }
 
@@ -67,14 +67,14 @@ private:
   tf2_ros::Buffer transform_buffer;
   tf2_ros::TransformListener transform_listener;
   geometry_msgs::TransformStamped transform_stamped;
-  std::vector<servo_msgs::KrsServoDegree> servo;
+  std::vector<servo_msgs::IdBased> servo;
   double frame_length;
 };
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "trajectory_planner");
   ros::NodeHandle node_handle;
-  ros::Publisher publisher = node_handle.advertise<servo_msgs::KrsServoDegree>("krs_servo", 16);
+  ros::Publisher publisher = node_handle.advertise<servo_msgs::IdBased>("krs_servo", 16);
 
   ros::Rate rate(10.0);
 

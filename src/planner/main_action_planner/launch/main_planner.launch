@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="main_action_planner" type="main_action_planner_node" name="MAP_node">
+    <param name="id_vec" value="[0, 1, 2]" />
+  </node>
+</launch>

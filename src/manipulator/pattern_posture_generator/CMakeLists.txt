@@ -3,6 +3,7 @@ project(pattern_posture_generator)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  std_srvs
   message_generation
 )
 
@@ -12,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   PatternPosture.srv
-  RequestNum.srv
 )
 
 generate_messages(
@@ -45,7 +45,7 @@ include_directories(
 
 add_executable(pattern_posture_generator_node src/pattern_posture_generator_node.cpp)
 
-add_dependencies(pattern_posture_generator_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(pattern_posture_generator_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencpp)
 
 target_link_libraries(pattern_posture_generator_node
   ${catkin_LIBRARIES}
