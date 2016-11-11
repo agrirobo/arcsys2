@@ -1,4 +1,0 @@
-pattern_posture_generator:
-  minimum: [100, -100, 0]
-  normal: [0, 0, 0]
-  pattern_names: [normal, minimum]

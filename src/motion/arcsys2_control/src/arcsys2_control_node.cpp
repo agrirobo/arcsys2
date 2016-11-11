@@ -31,7 +31,7 @@ private:
 };
 
 int main(int argc, char *argv[]) {
-  ros::init(argc, argv, "arcsys2_controller_node");
+  ros::init(argc, argv, "arcsys2_control_node");
   ros::NodeHandle nh;
 
   Arcsys2HW robot;

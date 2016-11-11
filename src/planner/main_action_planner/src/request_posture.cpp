@@ -1,6 +1,5 @@
 #include "impl_request_posture.hpp"
 
-#include "pattern_posture_generator/PatternPosture.h"
 const std::string RequestPostureFactory::release = "release";
 const std::string RequestPostureFactory::move2release = "pattern_relese";
 const std::string RequestPostureFactory::harvest = "harvest";
@@ -29,37 +28,5 @@ RequestPosture* RequestPostureFactory::get(const std::string& name, ros::NodeHan
 }
 
 RequestPosture* RequestPostureFactory::create(const std::string& name, ros::NodeHandle& nh) {
-  if (name == move2release) return reqs[move2release] = new PatternRequestPosture {nh, "release"};
-  if (name == ik) return reqs[ik] = new TrajectoryRequestPosture {nh};
-  if (name == move2find) return reqs[move2find] = new PatternRequestPosture {nh, "normal"}; // for debug
   return nullptr;
 }
-
-PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh, std::string state)
-: state {state},
-  client {nh.serviceClient<pattern_posture_generator::PatternPosture>("getPosture")}
-{}
-
-PatternRequestPosture::PatternRequestPosture(ros::NodeHandle& nh)
-: state {"normal"},
-  client {nh.serviceClient<pattern_posture_generator::PatternPosture>("getPosture")}
-{}
-
-void PatternRequestPosture::requestPosture(std::vector<double>& posture) {
-  pattern_posture_generator::PatternPosture srv;
-  srv.request.name = state;
-  if (!client.call(srv)) {
-    ROS_INFO("Error call: No response by Request [%s] PatternPosture", state.c_str());
-    return;
-  }
-  posture = srv.response.posture;
-}
-
-TrajectoryRequestPosture::TrajectoryRequestPosture(ros::NodeHandle& nh) {
-
-}
-
-void TrajectoryRequestPosture::requestPosture(std::vector<double>& posture) {
-
-}
-
