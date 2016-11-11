@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
 )
 
+find_package(ics3)
+
 ###################################
 ## catkin specific configuration ##
 ###################################
@@ -19,8 +21,9 @@ catkin_package(
 ###########
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${ics3_INCLUDE_DIRS}
 )
 
 add_executable(arcsys2_control_node src/arcsys2_control_node.cpp)
-add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES})
+add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS} ${ics3_EXPORTED_TARGETS})
+target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES} ${ics3_LIBRARIES})

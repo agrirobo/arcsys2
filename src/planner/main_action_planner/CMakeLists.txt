@@ -4,7 +4,6 @@ project(main_action_planner)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_srvs
-  servo_msgs
   tf2
   tf2_ros
   state_msgs
@@ -34,7 +33,7 @@ endif()
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES main_action_planner
-  CATKIN_DEPENDS roscpp std_srvs servo_msgs tf2 tf2_ros state_msgs
+  CATKIN_DEPENDS roscpp std_srvs tf2 tf2_ros state_msgs
 #  DEPENDS system_lib
 )
 
