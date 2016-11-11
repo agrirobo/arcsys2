@@ -83,7 +83,7 @@
   </xacro:macro>
 
   <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin">
-    <joint name="${parent}_${child}" type="prismatic">
+    <joint name="${parent}_to_${child}" type="prismatic">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
@@ -93,7 +93,7 @@
   </xacro:macro>
 
   <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
-    <joint name="${parent}_${child}" type="revolute">
+    <joint name="${parent}_to_${child}" type="revolute">
       <origin xyz="${parent_length} 0 0"/>
       <parent link="${parent}"/>
       <child link="${child}"/>
