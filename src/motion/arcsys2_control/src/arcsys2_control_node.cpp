@@ -9,7 +9,7 @@
 #include<string>
 #include<utility>
 
-constexpr std::size_t armJointCount = 4;
+constexpr std::size_t krsCount = 4;
 
 class Arcsys2HW : public hardware_interface::RobotHW {
 public:
@@ -24,10 +24,10 @@ private:
   // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
   hardware_interface::PositionJointInterface jntPosInterface;
-  double krs_cmd[armJointCount];
-  double krs_pos[armJointCount];
-  double krs_vel[armJointCount];
-  double krs_eff[armJointCount];
+  double krs_cmd[krsCount];
+  double krs_pos[krsCount];
+  double krs_vel[krsCount];
+  double krs_eff[krsCount];
 };
 
 int main(int argc, char *argv[]) {
@@ -36,6 +36,7 @@ int main(int argc, char *argv[]) {
   ros::NodeHandle pnh {"~"};
   std::string krs_path {"/dev/ttyUSB0"};
   pnh.param<std::string>("krs_path", krs_path, krs_path);
+
   Arcsys2HW robot {std::move(krs_path)};
   controller_manager::ControllerManager cm {&robot};
 
