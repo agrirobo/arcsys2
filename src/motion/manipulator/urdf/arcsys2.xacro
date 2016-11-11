@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="arcsys2">
+
+  <material name="white"> <color rgba="${255/255} ${255/255} ${255/255} 1.0" /> </material>
+  <material name="red">   <color rgba="${255/255} ${  0/255} ${  0/255} 1.0" /> </material>
+  <material name="green"> <color rgba="${  0/255} ${255/255} ${  0/255} 1.0" /> </material>
+  <material name="blue">  <color rgba="${  0/255} ${  0/255} ${255/255} 1.0" /> </material>
+
+
+<!-- Property -->
+  <xacro:property name="pi" value="3.1415926535897931" />
+  <xacro:property name="default_size" value="0.1"/>
+
+  <xacro:property name="shaft_height"    value="2.0"/>
+  <xacro:property name="arm0_length"     value="0.1"/>
+  <xacro:property name="arm1_length"     value="0.5"/>
+  <xacro:property name="arm2_length"     value="0.5"/>
+  <xacro:property name="effector_length" value="0.5"/>
+
+
+<!-- LINK and JOINT -->
+  <xacro:PLAIN_LINK name="world"/>
+
+  <xacro:PRISMATIC_JOINT parent="world" child="shaft" y="1" lower="-5.0" upper="5.0">
+    <origin xyz="0 0 ${shaft_height/2}"/>
+  </xacro:PRISMATIC_JOINT>
+
+  <xacro:PLAIN_LINK name="shaft" height="${shaft_height}" color="red"/>
+
+  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.5" upper="0.5">
+    <origin xyz="${default_size/2} 0 ${shaft_height/4}"/>
+  </xacro:PRISMATIC_JOINT>
+
+  <xacro:SCARA_LINK name="arm0" length="${arm0_length}" color="green"/>
+
+  <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_length="${arm0_length}"/>
+
+  <xacro:SCARA_LINK name="arm1" length="${arm1_length}" color="blue"/>
+
+  <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_length="${arm1_length}"/>
+
+  <xacro:SCARA_LINK name="arm2" length="${arm2_length}" color="red"/>
+
+  <xacro:SCARA_JOINT parent="arm2" child="effector" parent_length="${arm2_length}"/>
+
+  <xacro:SCARA_LINK name="effector" length="${effector_length}" color="green"/>
+
+
+<!-- Macro Definition -->
+  <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
+    <link name="${name}">
+      <origin xyz="0 0 0"/>
+      <visual>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="SCARA_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
+    <link name="${name}">
+      <visual>
+        <origin xyz="${length/2} 0 0"/>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="${color}"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin">
+    <joint name="${parent}->${child}" type="prismatic">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="${x} ${y} ${z}"/>
+      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
+    <joint name="${parent}->${child}" type="revolute">
+      <origin xyz="${parent_length} 0 0"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
+    </joint>
+  </xacro:macro>
+
+</robot>
