@@ -46,8 +46,8 @@ int main(int argc, char *argv[]) {
     return 1;
   }
   int eefId;
-  if (!pnh.getParam("eff_id", eefId)) {
-    ROS_ERROR("Need eff_id(aka int) parameter");
+  if (!pnh.getParam("eef_id", eefId)) {
+    ROS_ERROR("Need eef_id(aka int) parameter");
     return 1;
   }
   std::string krs_path {"/dev/ttyUSB0"};
