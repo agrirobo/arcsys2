@@ -3,7 +3,6 @@ project(arcsys2_control)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  arm_msgs
   controller_manager
   hardware_interface
 )
@@ -12,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  CATKIN_DEPENDS roscpp arm_msgs controller_manager hardware_interface
+  CATKIN_DEPENDS roscpp controller_manager hardware_interface
 )
 
 ###########
