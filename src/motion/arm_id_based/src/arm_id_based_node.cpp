@@ -1,11 +1,11 @@
 #include"ros/ros.h"
-#include"arm_msgs/ArmAnglesDegree.h"
+#include"arm_msgs/ArmAnglesRadian.h"
 #include"servo_msgs/IdBased.h"
 
 #include<vector>
 #include<algorithm>
 
-void armMsgCb(const arm_msgs::ArmAnglesDegree::ConstPtr& msg);
+void armMsgCb(const arm_msgs::ArmAnglesRadian::ConstPtr& msg);
 void nowPosCb(const servo_msgs::IdBased::ConstPtr& msg);
 
 ros::Publisher move_pub;
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
   now_pos.resize(length);
   ros::NodeHandle nh;
   move_pub = nh.advertise<servo_msgs::IdBased>("cmd_krs", 10);
-  pos_pub = nh.advertise<arm_msgs::ArmAnglesDegree>("arm_pos", 3);
+  pos_pub = nh.advertise<arm_msgs::ArmAnglesRadian>("arm_pos", 3);
   ros::Subscriber move_sub = nh.subscribe("arm_roll", 5, armMsgCb);
   ros::Subscriber pos_sub = nh.subscribe("pose_krs", 5, nowPosCb);
   ros::spin();
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
   return 0;
 }
 
-void armMsgCb(const arm_msgs::ArmAnglesDegree::ConstPtr& msg) {
+void armMsgCb(const arm_msgs::ArmAnglesRadian::ConstPtr& msg) {
   if (msg->angles.size() != length) {
     ROS_ERROR("Receive length not equal id vector's: receive [%lu] / id_vec [%lu]", msg->angles.size(), id_vec.size());
     return;
@@ -57,7 +57,7 @@ void nowPosCb(const servo_msgs::IdBased::ConstPtr& msg) {
     return;
   }
   now_pos[receive - id_begin_it] = msg->angle;
-  arm_msgs::ArmAnglesDegree send;
+  arm_msgs::ArmAnglesRadian send;
   for (std::size_t i = 0; i < length; i++) send.angles.push_back(now_pos[i]);
   pos_pub.publish(send);
 }
