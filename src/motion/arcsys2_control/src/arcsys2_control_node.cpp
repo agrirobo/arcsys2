@@ -9,6 +9,8 @@
 #include<string>
 #include<utility>
 
+constexpr std::size_t armJointCount = 4;
+
 class Arcsys2HW : public hardware_interface::RobotHW {
 public:
   Arcsys2HW(const std::string&);
@@ -22,10 +24,10 @@ private:
   // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
   hardware_interface::PositionJointInterface jntPosInterface;
-  double krs_cmd[4];
-  double krs_pos[4];
-  double krs_vel[4];
-  double krs_eff[4];
+  double krs_cmd[armJointCount];
+  double krs_pos[armJointCount];
+  double krs_vel[armJointCount];
+  double krs_eff[armJointCount];
 };
 
 int main(int argc, char *argv[]) {
