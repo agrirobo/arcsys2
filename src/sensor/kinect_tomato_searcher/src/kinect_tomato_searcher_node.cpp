@@ -1,12 +1,12 @@
 #include <ros/ros.h>
-#include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <geometry_msgs/Point.h>
+#include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/video/video.hpp>
 #include <pthread.h>
-#include <geometry_msgs/Point.h>
+#include <sensor_msgs/image_encodings.h>
 
 static const std::string RGB_WINDOW_NAME = "RGB image";
 static const std::string DEPTH_WINDOW_NAME = "Depth image";

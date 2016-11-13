@@ -7,17 +7,16 @@
   <maintainer email="o111027y@mail.kyutech.jp">Yusuke Doi</maintainer>
 
   <license>MIT</license>
-
   <author email="o111027y@mail.kyutech.jp">Yusuke Doi</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>cv_bridge</depend>
-  <depend>image_transport</depend>
   <depend>roscpp</depend>
+  <depend>cv_bridge</depend>
+  <depend>geometry_msgs</depend>
+  <depend>image_transport</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
-  <depend>geometry_msgs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 </package>

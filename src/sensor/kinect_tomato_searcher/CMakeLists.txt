@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 2.8.3)
 project(kinect_tomato_searcher)
 
 find_package(catkin REQUIRED COMPONENTS
-  cv_bridge
-  image_transport
   roscpp
+  cv_bridge
+  geometry_msgs
+  image_transport
   sensor_msgs
   std_msgs
-  geometry_msgs
   tf2
   tf2_ros
 )
@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   #  INCLUDE_DIRS include
   #  LIBRARIES kinect_tomato_search
-  CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs geometry_msgs tf2 tf2_ros
+  CATKIN_DEPENDS roscpp cv_bridge geometry_msgs image_transport sensor_msgs std_msgs tf2 tf2_ros
   #  DEPENDS system_lib
 )
 
