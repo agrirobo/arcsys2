@@ -1,7 +1,5 @@
 #include "impl_send_posture.hpp"
 
-#include "std_srvs/Empty.h"
-
 #include<algorithm>
 
 SendPostureFactory SendPostureFactory::unique;

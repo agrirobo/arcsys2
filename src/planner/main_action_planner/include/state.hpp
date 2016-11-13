@@ -1,11 +1,11 @@
 #ifndef __STATE_CHECKER_H_INCLUDE__
 #define __STATE_CHECKER_H_INCLUDE__
 
-#include <map>
-#include <vector>
-
 #include "ros/ros.h"
 #include "state_msgs/State.h"
+
+#include <map>
+#include <vector>
 
 class StateChecker {
 public:
