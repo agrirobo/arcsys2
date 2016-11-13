@@ -7,7 +7,7 @@
   <license> MIT </license>
 
   <description>
-    The manipulator package.
+    The arcsys2_description package.
   </description>
 
   <buildtool_depend> catkin </buildtool_depend>
