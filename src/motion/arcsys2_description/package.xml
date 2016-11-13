@@ -11,6 +11,4 @@
   </description>
 
   <buildtool_depend> catkin </buildtool_depend>
-
-  <depend> roscpp </depend>
 </package>
