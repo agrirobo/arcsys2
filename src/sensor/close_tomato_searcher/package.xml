@@ -4,11 +4,11 @@
   <version>0.1.0</version>
   <description>The search_close_tomato package</description>
 
-  <maintainer email="o111027y@mail.kyutech.jp">Yusuke Doi</maintainer>
+  <maintainer email="o111027y@mail.kyutech.jp">Doi Yusuke</maintainer>
 
   <license>MIT</license>
 
-  <author email="o111027y@mail.kyutech.jp">Yusuke Doi</author>
+  <author email="o111027y@mail.kyutech.jp">Doi Yusuke</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>

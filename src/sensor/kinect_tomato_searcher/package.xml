@@ -4,10 +4,10 @@
   <version>0.2.0</version>
   <description>The kinect_tomato_searcher package</description>
 
-  <maintainer email="o111027y@mail.kyutech.jp">Yusuke Doi</maintainer>
+  <maintainer email="o111027y@mail.kyutech.jp">Doi Yusuke</maintainer>
 
   <license>MIT</license>
-  <author email="o111027y@mail.kyutech.jp">Yusuke Doi</author>
+  <author email="o111027y@mail.kyutech.jp">Doi Yusuke</author>
 
   <buildtool_depend>catkin</buildtool_depend>
 
