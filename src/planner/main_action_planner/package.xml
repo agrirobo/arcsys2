@@ -1,25 +1,21 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>main_action_planner</name>
-  <version>0.0.0</version>
+  <version>0.1.0</version>
   <description>The main_action_planner package</description>
 
-  <maintainer email="o111027y@mail.kyutech.jp">Yusuke Doi</maintainer>
+  <maintainer email="o111027y@mail.kyutech.jp">Doi Yusuke</maintainer>
 
   <license>MIT</license>
-
-  <author email="o111027y@mail.kyutech.jp">Yusuke Doi</author>
+  <author email="o111027y@mail.kyutech.jp">Doi Yusuke</author>
 
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
+  <depend>state_msgs</depend>
   <depend>std_srvs</depend>
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
-  <depend>state_msgs</depend>
 
-  <!-- The export tag contains other, unspecified, tags -->
   <export>
-    <!-- Other tools can request additional information be placed here -->
-
   </export>
 </package>

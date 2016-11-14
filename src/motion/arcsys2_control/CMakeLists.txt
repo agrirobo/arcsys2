@@ -20,16 +20,10 @@ ELSE()
   MESSAGE(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 ENDIF()
 
-###################################
-## catkin specific configuration ##
-###################################
 catkin_package(
   CATKIN_DEPENDS roscpp controller_manager hardware_interface
 )
 
-###########
-## Build ##
-###########
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${ics3_INCLUDE_DIRS}

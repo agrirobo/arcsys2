@@ -3,9 +3,9 @@
 
 #include "ros/ros.h"
 
-#include <vector>
-#include <string>
 #include <map>
+#include <string>
+#include <vector>
 
 class SendPosture {
 public:
