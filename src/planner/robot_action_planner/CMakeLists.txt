@@ -5,6 +5,13 @@ set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
 set(${PROJECT_NAME}_DEPENDS
   roscpp
+  moveit_ros_planning_interface
+  geometry_msgs
+  moveit_msgs
+)
+
+file(GLOB ${PROJECT_NAME}_SOURCES
+  ${PROJECT_SOURCE_DIR}/src/*.cpp
 )
 
 find_package(catkin REQUIRED COMPONENTS
@@ -12,7 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  INCLUDE_DIR    ${PROJECT_SOURCE_DIR}/include
+  #INCLUDE_DIR    ${PROJECT_SOURCE_DIR}/include
   CATKIN_DEPENDS ${${PROJECT_NAME}_DEPENDS}
   DEPENDS        system_lib
 )

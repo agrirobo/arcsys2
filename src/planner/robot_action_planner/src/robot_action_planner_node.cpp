@@ -1,7 +1,5 @@
-#include <iostream>
-
 #include <ros/ros.h>
-#include <move_group.h>
+#include <moveit/move_group_interface/move_group.h>
 
 #include <geometry_msgs/Pose.h>
 #include <moveit_msgs/DisplayTrajectory.h>
@@ -21,7 +19,7 @@ class MoveGroupPlanner {
 public:
   MoveGroupPlanner(const std::string& group)
     : move_group { group },
-      publisher  { nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true) },
+      display_publisher  { nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true) },
       subscriber { nh.subscribe<geometry_msgs::Pose>("topic", 10, callback) }
   {
     ROS_INFO("Reference frame: %s", move_group.getPlanningFrame().c_str());
@@ -51,6 +49,8 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "robot_action_planner_node");
 
   MoveGroupPlanner planner {"arcsys2"};
+
+  ros::spin();
 
   return 0;
 }
