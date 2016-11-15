@@ -7,8 +7,6 @@ find_package(catkin REQUIRED COMPONENTS
   hardware_interface
 )
 
-find_package(ics3)
-
 INCLUDE(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
@@ -26,9 +24,8 @@ catkin_package(
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${ics3_INCLUDE_DIRS}
 )
 
 add_executable(arcsys2_control_node src/arcsys2_control_node.cpp)
-add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS} ${ics3_EXPORTED_TARGETS})
-target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES} ${ics3_LIBRARIES})
+add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS})
+target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES} ics3)
