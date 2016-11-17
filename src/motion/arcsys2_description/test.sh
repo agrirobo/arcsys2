@@ -12,6 +12,6 @@ else
 fi
 
 case $yn in
-  "y") roslaunch manipulator manipulator.launch ;;
+  "y") roslaunch arcsys2_description arcsys2_description.launch ;;
   *) exit 0 ;;
 esac
