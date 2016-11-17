@@ -17,7 +17,7 @@ class MoveGroupPlanner {
 public:
   MoveGroupPlanner(const std::string& name)
     : pub   { nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true) },
-      sub   { nh.subscribe<geometry_msgs::Pose>("/arcsys2/tomapo", 1, &MoveGroupPlanner::callback, this) },
+      sub   { nh.subscribe<geometry_msgs::Pose>("sub_topic", 1, &MoveGroupPlanner::callback, this) },
       group { name }
   {
     ROS_INFO_STREAM("Reference frame: " << group.getPlanningFrame());
