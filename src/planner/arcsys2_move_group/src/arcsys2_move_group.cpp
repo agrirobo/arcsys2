@@ -12,7 +12,9 @@ class MoveGroupPlanner {
   ros::Subscriber sub;
 
   moveit::planning_interface::MoveGroup group;
-//   moveit::planning_interface::MoveGroup::Plan plan;
+  moveit::planning_interface::MoveGroup::Plan plan;
+
+  moveit_msgs::DisplayTrajectory dpy;
 
 public:
   MoveGroupPlanner(const std::string& name)
@@ -30,19 +32,18 @@ public:
                     "  msg.position.x: " << (*msg).position.x << std::endl <<
                     "  msg.position.y: " << (*msg).position.y << std::endl <<
                     "  msg.position.z: " << (*msg).position.z << std::endl);
-//     group.setPoseTarget(target_pose);
 
-//     if (bool success = group.plan(plan)) {
-//       ROS_INFO("Visualizing plan (pose goal) %s", success ? "" : "FAILED");
-//       sleep(5.0);
-//     }
-// 
-//     ROS_INFO("Visualizing plan (again)");
-//     display_trajectory.trajectory_start = plan.start_state_;
-//     display_trajectory.trajectory.push_back(plan.trajectory_);
-//     pub.publish(display_trajectory);
-//     sleep(5.0);
-// 
+    group.setPoseTarget(*msg);
+
+    ROS_INFO_STREAM("Visualizing plan " << (group.plan(plan) ? "" : "failed") << std::endl);
+
+    dpy.trajectory_start = plan.start_state_;
+    dpy.trajectory.push_back(plan.trajectory_);
+
+    pub.publish(dpy);
+
+    sleep(5.0);
+
 //     group.move();
   }
 };
