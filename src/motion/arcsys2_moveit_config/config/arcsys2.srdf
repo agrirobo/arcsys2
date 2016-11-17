@@ -10,33 +10,38 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="arcsys2">
-        <link name="world" />
+        <link name="rail" />
         <link name="shaft" />
         <link name="arm0" />
-        <link name="arm2" />
         <link name="arm1" />
+        <link name="arm2" />
         <link name="effector" />
-        <joint name="world_to_shaft" />
+        <joint name="virtual_fix_joint" />
+        <joint name="rail_to_shaft" />
         <joint name="shaft_to_arm0" />
         <joint name="arm0_to_arm1" />
         <joint name="arm1_to_arm2" />
         <joint name="arm2_to_effector" />
-        <chain base_link="world" tip_link="effector" />
+        <chain base_link="rail" tip_link="effector" />
     </group>
+    <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
+    <end_effector name="effector" parent_link="arm2" group="arcsys2" />
+    <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
+    <virtual_joint name="world_to_rail" type="fixed" parent_frame="world" child_link="rail" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="arm0" link2="arm1" reason="Adjacent" />
     <disable_collisions link1="arm0" link2="arm2" reason="Never" />
     <disable_collisions link1="arm0" link2="effector" reason="Never" />
+    <disable_collisions link1="arm0" link2="rail" reason="Never" />
     <disable_collisions link1="arm0" link2="shaft" reason="Adjacent" />
-    <disable_collisions link1="arm0" link2="world" reason="Never" />
     <disable_collisions link1="arm1" link2="arm2" reason="Adjacent" />
     <disable_collisions link1="arm1" link2="effector" reason="Never" />
+    <disable_collisions link1="arm1" link2="rail" reason="Never" />
     <disable_collisions link1="arm1" link2="shaft" reason="Default" />
-    <disable_collisions link1="arm1" link2="world" reason="Never" />
     <disable_collisions link1="arm2" link2="effector" reason="Adjacent" />
+    <disable_collisions link1="arm2" link2="rail" reason="Never" />
     <disable_collisions link1="arm2" link2="shaft" reason="Never" />
-    <disable_collisions link1="arm2" link2="world" reason="Never" />
+    <disable_collisions link1="effector" link2="rail" reason="Never" />
     <disable_collisions link1="effector" link2="shaft" reason="Never" />
-    <disable_collisions link1="effector" link2="world" reason="Never" />
-    <disable_collisions link1="shaft" link2="world" reason="Adjacent" />
+    <disable_collisions link1="rail" link2="shaft" reason="Adjacent" />
 </robot>
