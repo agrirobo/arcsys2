@@ -12,6 +12,7 @@
   <xacro:property name="pi" value="3.1415926535897931" />
   <xacro:property name="default_size" value="0.1"/>
 
+  <xacro:property name="rail_length"     value="10.0" />
   <xacro:property name="shaft_height"    value="2.0"/>
   <xacro:property name="arm0_length"     value="0.1"/>
   <xacro:property name="arm1_length"     value="0.5"/>
@@ -20,9 +21,9 @@
 
 
 <!-- LINK and JOINT -->
-  <xacro:PLAIN_LINK name="world"/>
+  <xacro:PLAIN_LINK width="${rail_length}" name="rail"/>
 
-  <xacro:PRISMATIC_JOINT parent="world" child="shaft" y="1" lower="-5.0" upper="5.0">
+  <xacro:PRISMATIC_JOINT parent="rail" child="shaft" y="1" lower="${-1*rail_length/2}" upper="${rail_length/2}">
     <origin xyz="0 0 ${shaft_height/2}"/>
   </xacro:PRISMATIC_JOINT>
 
