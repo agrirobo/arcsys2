@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <package format="2">
-  <name> robot_action_planner </name>
+  <name> arcsys2_move_group </name>
   <version> 0.0.1 </version>
 
   <maintainer email="httperror@404-notfound.jp">
@@ -11,7 +11,7 @@
   <license> MIT </license>
 
   <description>
-    The robot_action_planner package.
+    The arcsys2_move_group package.
   </description>
 
   <buildtool_depend> catkin </buildtool_depend>

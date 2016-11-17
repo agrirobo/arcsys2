@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(robot_action_planner CXX)
+project(arcsys2_move_group CXX)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 
