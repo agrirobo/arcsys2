@@ -16,28 +16,39 @@ class MoveGroupPlanner {
   moveit::planning_interface::MoveGroup::Plan        plan;
   moveit::planning_interface::PlanningSceneInterface scene;
 
+  geometry_msgs::Pose initial_pose;
+
   moveit_msgs::DisplayTrajectory dpy;
 
 public:
   MoveGroupPlanner(const std::string& name)
     : pub   { nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true) },
       sub   { nh.subscribe<geometry_msgs::Pose>("sub_topic", 1, &MoveGroupPlanner::callback, this) },
-      group { name }
+      group { name },
+      initial_pose { group.getCurrentPose().pose }
   {
-    ROS_INFO_STREAM("Reference frame: " << group.getPlanningFrame());
-    ROS_INFO_STREAM("Reference frame: " << group.getEndEffectorLink());
+    // ROS_INFO_STREAM("reference frame: " << group.getPlanningFrame());
+    // ROS_INFO_STREAM("reference frame: " << group.getEndEffectorLink());
+    ROS_INFO_STREAM("initial pose: " << initial_pose);
+
+    group.setPlannerId("RRTConnectkConfigDefault");
   }
 
-  void callback(const geometry_msgs::Pose::ConstPtr& msg) {
-    ROS_INFO_STREAM("Received message "                       << std::endl <<
-                    "geometry_msgs::Pose msg"                 << std::endl <<
-                    "  msg.position.x: " << (*msg).position.x << std::endl <<
-                    "  msg.position.y: " << (*msg).position.y << std::endl <<
-                    "  msg.position.z: " << (*msg).position.z                );
+  void callback(const geometry_msgs::Pose::ConstPtr& target_pose) {
+    // ROS_INFO_STREAM("message received but don't use this for test");
 
-    group.setPoseTarget(*msg);
+    // geometry_msgs::Pose random_pose = group.getRandomPose().pose;
+    // ROS_INFO_STREAM("random_pose:"                                          << std::endl <<
+    //                 "  random_pose.position.x: " << random_pose.position.x  << std::endl <<
+    //                 "  random_pose.position.y: " << random_pose.position.y  << std::endl <<
+    //                 "  random_pose.position.z: " << random_pose.position.z  << std::endl);
 
-    ROS_INFO_STREAM("Visualizing plan " << (group.plan(plan) ? "" : "failed"));
+    // ROS_INFO_STREAM(group.getCurrentPose());
+    // ROS_INFO_STREAM(group.getGoalPositionTolerance());
+
+    group.setPoseTarget(*target_pose, group.getEndEffectorLink());
+
+    if (!group.plan(plan)) ROS_FATAL_STREAM("unable to plan");
 
     sleep(3.0);
   }
