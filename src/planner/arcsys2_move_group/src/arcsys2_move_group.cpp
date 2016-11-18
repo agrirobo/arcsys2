@@ -46,6 +46,9 @@ public:
 int main(int argc, char** argv) {
   ros::init(argc, argv, "robot_action_planner_node");
 
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
+
   MoveGroupPlanner planner {"arcsys2"};
 
   while (ros::ok()) {
