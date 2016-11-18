@@ -31,11 +31,11 @@ public:
                     "geometry_msgs::Pose msg"                 << std::endl <<
                     "  msg.position.x: " << (*msg).position.x << std::endl <<
                     "  msg.position.y: " << (*msg).position.y << std::endl <<
-                    "  msg.position.z: " << (*msg).position.z << std::endl);
+                    "  msg.position.z: " << (*msg).position.z                );
 
     group.setPoseTarget(*msg);
 
-    ROS_INFO_STREAM("Visualizing plan " << (group.plan(plan) ? "" : "failed") << std::endl);
+    ROS_INFO_STREAM("Visualizing plan " << (group.plan(plan) ? "" : "failed"));
 
     dpy.trajectory_start = plan.start_state_;
     dpy.trajectory.push_back(plan.trajectory_);
