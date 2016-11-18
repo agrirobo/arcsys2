@@ -2,6 +2,7 @@
 
 #include <ros/ros.h>
 #include <moveit/move_group_interface/move_group.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
 
 #include <geometry_msgs/Pose.h>
 #include <moveit_msgs/DisplayTrajectory.h>
@@ -11,8 +12,9 @@ class MoveGroupPlanner {
   ros::Publisher  pub;
   ros::Subscriber sub;
 
-  moveit::planning_interface::MoveGroup group;
-  moveit::planning_interface::MoveGroup::Plan plan;
+  moveit::planning_interface::MoveGroup              group;
+  moveit::planning_interface::MoveGroup::Plan        plan;
+  moveit::planning_interface::PlanningSceneInterface scene;
 
   moveit_msgs::DisplayTrajectory dpy;
 
@@ -37,14 +39,7 @@ public:
 
     ROS_INFO_STREAM("Visualizing plan " << (group.plan(plan) ? "" : "failed"));
 
-    dpy.trajectory_start = plan.start_state_;
-    dpy.trajectory.push_back(plan.trajectory_);
-
-    pub.publish(dpy);
-
-    sleep(5.0);
-
-//     group.move();
+    sleep(3.0);
   }
 };
 
