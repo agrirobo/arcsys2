@@ -5,6 +5,4 @@ controller_list:
       - shaft_to_arm0
       - arm0_to_arm1
       - arm1_to_arm2
-  - name: fake_endeffector_controller
-    joints:
       - arm2_to_effector
