@@ -1,10 +1,10 @@
 <launch>
 <!-- LAUNCH JOINT STATE PUBLISHER AND ROBOT STATE PUBLISHER -->
-  <arg name="model" default="$(find arcsys2_description)/urdf/arcsys2.urdf" />
-  <arg name="gui"   default="false" />
+  <!--arg name="model" default="$(find arcsys2_description)/urdf/arcsys2.urdf" />
+  <arg name="gui"   default="false" /-->
 
-  <param name="robot_description" textfile="$(arg model)" />
-  <param name="use_gui" value="$(arg gui)" />
+  <param name="robot_description" textfile="$(find arcsys2_description)/urdf/arcsys2.urdf" />
+  <param name="use_gui" value="false" />
 
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
