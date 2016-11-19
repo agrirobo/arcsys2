@@ -17,10 +17,7 @@ class MoveGroupPlanner {
   const std::string group_name;
 
   moveit::planning_interface::MoveGroup              move_group;
-  moveit::planning_interface::MoveGroup::Plan        plan;
   moveit::planning_interface::PlanningSceneInterface scene;
-
-  moveit_msgs::DisplayTrajectory dpy;
 
 public:
   MoveGroupPlanner(const std::string& name)
@@ -52,7 +49,9 @@ public:
 
     ROS_INFO_STREAM("BREAK POINT #3");
 
+    moveit::planning_interface::MoveGroup::Plan plan;
     if (move_group.plan(plan)) {
+      moveit_msgs::DisplayTrajectory dpy;
       dpy.trajectory_start = plan.start_state_;
       dpy.trajectory.push_back(plan.trajectory_);
       publisher.publish(dpy);
@@ -79,12 +78,63 @@ private:
 int main(int argc, char** argv) {
   ros::init(argc, argv, "robot_action_planner_node");
 
+  ros::NodeHandle nh;
+
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
-  MoveGroupPlanner planner {"arcsys2"};
+  if (1) {
+    moveit::planning_interface::MoveGroup move_group {"arcsys2"};
+    ros::Publisher publisher = nh.advertise<moveit_msgs::DisplayTrajectory>("/move_group/display_planned_path", 1, true);
 
-  ros::waitForShutdown();
+    geometry_msgs::Pose target_pose;
+    target_pose.position.x = 1.0;
+    target_pose.position.y = 1.0;
+    target_pose.position.z = 1.5;
+    target_pose.orientation.w = 1.0;
+
+    move_group.setPoseTarget(target_pose);
+
+    moveit::planning_interface::MoveGroup::Plan plan;
+    if (move_group.plan(plan)) {
+      moveit_msgs::DisplayTrajectory dpy;
+      dpy.trajectory_start = plan.start_state_;
+      dpy.trajectory.push_back(plan.trajectory_);
+      publisher.publish(dpy);
+
+      sleep(5.0);
+
+      move_group.move();
+    }
+
+    sleep(10.0);
+
+    //geometry_msgs::Pose target_pose;
+    target_pose.position.x = 1.0;
+    target_pose.position.y = -1.0;
+    target_pose.position.z = 1.5;
+    target_pose.orientation.w = 1.0;
+
+    move_group.setPoseTarget(target_pose);
+
+    //moveit::planning_interface::MoveGroup::Plan plan;
+    if (move_group.plan(plan)) {
+      moveit_msgs::DisplayTrajectory dpy;
+      dpy.trajectory_start = plan.start_state_;
+      dpy.trajectory.push_back(plan.trajectory_);
+      publisher.publish(dpy);
+
+      sleep(5.0);
+
+      move_group.move();
+    }
+  }
+
+  ros::spin();
+
+  //MoveGroupPlanner planner {"arcsys2"};
+
+  // ros::waitForShutdown();
 
   return 0;
 }
