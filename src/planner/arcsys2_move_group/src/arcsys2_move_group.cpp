@@ -56,15 +56,17 @@ public:
       dpy.trajectory_start = plan.start_state_;
       dpy.trajectory.push_back(plan.trajectory_);
       publisher.publish(dpy);
+
+      ROS_INFO_STREAM("BREAK POINT #4");
+
+      sleep(3.0);
+
+      ROS_INFO_STREAM("BREAK POINT #5");
+
+      move_group.move();
+    } else {
+      ROS_INFO_STREAM("BREAK POINT #6");
     }
-
-    ROS_INFO_STREAM("BREAK POINT #4");
-
-    move_group.move();
-
-    ROS_INFO_STREAM("BREAK POINT #5");
-
-    sleep(3.0);
   }
 
 private:
