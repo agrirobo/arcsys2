@@ -43,9 +43,13 @@
 
   <xacro:SCARA_LINK name="arm2" length="${arm2_length}" color="red"/>
 
-  <xacro:SCARA_JOINT parent="arm2" child="effector" parent_length="${arm2_length}"/>
+  <xacro:SCARA_JOINT parent="arm2" child="effector_base" parent_length="${arm2_length}"/>
 
-  <xacro:SCARA_LINK name="effector" length="${effector_length}" color="green"/>
+  <xacro:SCARA_LINK name="effector_base" length="${effector_length/2}" color="green"/>
+
+  <xacro:WRIST_JOINT parent="effector_base" child="effector_end" parent_length="${effector_length/2}" />
+
+  <xacro:SCARA_LINK name="effector_end" length="${effector_length/2}" color="blue" />
 
 
 <!-- Macro Definition -->
@@ -99,6 +103,16 @@
       <parent link="${parent}"/>
       <child link="${child}"/>
       <axis xyz="0 0 1"/>
+      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="WRIST_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
+    <joint name="${parent}_to_${child}" type="revolute">
+      <origin xyz="${parent_length} 0 0"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="1 0 0"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
   </xacro:macro>
