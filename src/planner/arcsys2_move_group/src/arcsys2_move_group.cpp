@@ -30,6 +30,12 @@ public:
       move_group { group_name }
   {
     move_group.setPlannerId("RRTConnectkConfigDefault");
+
+    ROS_INFO_STREAM("end effector link: " << move_group.getEndEffectorLink());
+    ROS_INFO_STREAM("current pose: "                   << std::endl
+                    << getPartitionString('=', 40)     << std::endl
+                    << move_group.getCurrentPose().pose
+                    << getPartitionString('=', 40)     << std::endl);
   }
 
   void callback(const geometry_msgs::Pose::ConstPtr& target_pose) {
