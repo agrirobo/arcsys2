@@ -39,14 +39,18 @@ public:
   }
 
   void callback(const geometry_msgs::Pose::ConstPtr& target_pose) {
-    move_group.setStartStateToCurrentState();
+    ROS_INFO_STREAM("BREAK POINT #1");
+
+    move_group.setPoseTarget(*target_pose, move_group.getEndEffectorLink());
+
+    ROS_INFO_STREAM("BREAK POINT #2");
 
     ROS_INFO_STREAM("target pose received"             << std::endl
                     << getPartitionString('=', 40)     << std::endl
                     << move_group.getPoseTarget().pose
                     << getPartitionString('=', 40)     << std::endl);
 
-    move_group.setPoseTarget(*target_pose, move_group.getEndEffectorLink());
+    ROS_INFO_STREAM("BREAK POINT #3");
 
     if (move_group.plan(plan)) {
       dpy.trajectory_start = plan.start_state_;
@@ -54,7 +58,11 @@ public:
       publisher.publish(dpy);
     }
 
+    ROS_INFO_STREAM("BREAK POINT #4");
+
     move_group.move();
+
+    ROS_INFO_STREAM("BREAK POINT #5");
 
     sleep(3.0);
   }
