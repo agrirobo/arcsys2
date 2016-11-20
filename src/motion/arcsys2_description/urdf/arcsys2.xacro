@@ -12,6 +12,7 @@
   <xacro:property name="pi" value="3.1415926535897931" />
   <xacro:property name="default_size" value="0.1"/>
 
+  <xacro:property name="rail_length"     value="10.0" />
   <xacro:property name="shaft_height"    value="2.0"/>
   <xacro:property name="arm0_length"     value="0.1"/>
   <xacro:property name="arm1_length"     value="0.5"/>
@@ -20,9 +21,9 @@
 
 
 <!-- LINK and JOINT -->
-  <xacro:PLAIN_LINK name="world"/>
+  <xacro:PLAIN_LINK width="${rail_length}" name="rail"/>
 
-  <xacro:PRISMATIC_JOINT parent="world" child="shaft" y="1" lower="-5.0" upper="5.0">
+  <xacro:PRISMATIC_JOINT parent="rail" child="shaft" y="1" lower="${-1*rail_length/2}" upper="${rail_length/2}">
     <origin xyz="0 0 ${shaft_height/2}"/>
   </xacro:PRISMATIC_JOINT>
 
@@ -42,9 +43,13 @@
 
   <xacro:SCARA_LINK name="arm2" length="${arm2_length}" color="red"/>
 
-  <xacro:SCARA_JOINT parent="arm2" child="effector" parent_length="${arm2_length}"/>
+  <xacro:SCARA_JOINT parent="arm2" child="effector_base" parent_length="${arm2_length}"/>
 
-  <xacro:SCARA_LINK name="effector" length="${effector_length}" color="green"/>
+  <xacro:SCARA_LINK name="effector_base" length="${effector_length/2}" color="green"/>
+
+  <xacro:WRIST_JOINT parent="effector_base" child="effector_end" parent_length="${effector_length/2}" />
+
+  <xacro:SCARA_LINK name="effector_end" length="${effector_length/2}" color="blue" />
 
 
 <!-- Macro Definition -->
@@ -98,6 +103,16 @@
       <parent link="${parent}"/>
       <child link="${child}"/>
       <axis xyz="0 0 1"/>
+      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="WRIST_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
+    <joint name="${parent}_to_${child}" type="revolute">
+      <origin xyz="${parent_length} 0 0"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+      <axis xyz="1 0 0"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
   </xacro:macro>
