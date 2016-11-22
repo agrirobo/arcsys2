@@ -1,9 +1,9 @@
 controller_list:
   - name: fake_arcsys2_controller
     joints:
-      - rail_to_shaft
-      - shaft_to_arm0
-      - arm0_to_arm1
-      - arm1_to_arm2
-      - arm2_to_effector_base
-      - effector_base_to_effector_end
+      - rail_to_shaft_joint
+      - shaft_to_arm0_joint
+      - arm0_to_arm1_joint
+      - arm1_to_arm2_joint
+      - arm2_to_effector_base_joint
+      - effector_base_to_effector_end_joint
