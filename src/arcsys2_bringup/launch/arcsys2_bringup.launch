@@ -1,0 +1,15 @@
+<launch>
+
+  <include file="$(find arcsys2_moveit_config)/launch/move_group.launch">
+    <arg name="info" value="true" />
+  </include>
+
+  <include file="$(find arcsys2_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true" />
+    <arg name="debug"  value="false" />
+  </include>
+
+  <include file="$(find arcsys2_control)/launch/arcsys2_joint_controller.launch" />
+  <include file="$(find arcsys2_control)/launch/joint_state_controller.launch" />
+
+</launch>
