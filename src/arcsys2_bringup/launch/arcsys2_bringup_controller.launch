@@ -1,0 +1,8 @@
+<launch>
+
+  <include file="$(find arcsys2_gazebo)/launch/arcsys2_gazebo.launch" />
+
+  <include file="$(find arcsys2_control)/launch/arcsys2_joint_controller.launch" />
+  <include file="$(find arcsys2_control)/launch/joint_state_controller.launch" />
+
+</launch>
