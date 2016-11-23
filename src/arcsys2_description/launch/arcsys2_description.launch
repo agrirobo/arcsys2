@@ -1,11 +1,10 @@
 <launch>
-  <arg name="model" default="$(find arcsys2_description)/urdf/arcsys2.urdf"/>
-  <param name="robot_description" textfile="$(arg model)"/>
 
-  <arg name="gui" default="true"/>
-  <param name="use_gui" value="$(arg gui)"/>
+  <param name="robot_description" command="$(find xacro)/xacro.py $(find arcsys2_description)/urdf/arcsys2.xacro" />
 
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher"/>
-  <!--node name="rviz" pkg="rviz" type="rviz"/-->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="true" />
+  </node>
+
 </launch>
