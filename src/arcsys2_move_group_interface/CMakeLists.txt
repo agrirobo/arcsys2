@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(arcsys2_move_group CXX)
+project(arcsys2_move_group_interface CXX)
 
 set(CMAKE_CXX_FLAGS "-std=c++11 -Wall")
 

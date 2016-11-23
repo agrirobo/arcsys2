@@ -76,7 +76,7 @@ private:
 };
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "robot_action_planner_node");
+  ros::init(argc, argv, "move_group_interface_node");
 
   ros::NodeHandle nh;
 
