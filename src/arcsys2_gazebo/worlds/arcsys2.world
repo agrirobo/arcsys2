@@ -4,11 +4,14 @@
   <world name="default">
     <physics type="simbody">
       <simbody>
-        <accuracy>0.001</accuracy>
+        <accuracy>
+          0.001
+        </accuracy>
       </simbody>
     </physics>
+
     <include>
-    	<uri>model://ground_plane</uri>
+      <uri>model://ground_plane</uri>
     </include>
 
     <include>
