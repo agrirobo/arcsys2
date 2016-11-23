@@ -1,9 +1,7 @@
-controller_manager_ns: controller_manager
 controller_list:
-  - name: arcsys2/arcsys2_joint_controller
+  - name: "arcsys2/arcsys2_joint_controller"
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
-    default: true
     joints:
       - rail_to_shaft_joint
       - shaft_to_arm0_joint
