@@ -1,23 +1,23 @@
-#include"ros/ros.h"
-#include"controller_manager/controller_manager.h"
-#include"hardware_interface/joint_command_interface.h"
-#include"hardware_interface/joint_state_interface.h"
-#include"hardware_interface/robot_hw.h"
+#include <string>
+#include <utility>
 
-#include"ics3/ics"
+#include <ros/ros.h>
+#include <controller_manager/controller_manager.h>
+#include <hardware_interface/joint_command_interface.h>
+#include <hardware_interface/joint_state_interface.h>
+#include <hardware_interface/robot_hw.h>
 
-#include<string>
-#include<utility>
+#include "ics3/ics"
 
 class Arcsys2HW : public hardware_interface::RobotHW {
 public:
-  static constexpr std::size_t krsCount {4};
-  using IdContainer = std::array<int, krsCount>;
+  static constexpr std::size_t device_count {4};
+  using IdContainer = std::array<int, device_count>;
   Arcsys2HW(std::string&&, IdContainer&&);
   void read();
   void write();
-  ros::Time getTime() const;
-  ros::Duration getPeriod() const;
+  inline ros::Time getTime() const { return ros::Time::now(); };
+  inline ros::Duration getPeriod() const { return ros::Duration(0.01); };
 private:
   // for real move
   ics::ICS3 krs_driver;
@@ -25,10 +25,10 @@ private:
   // for RobotHW
   hardware_interface::JointStateInterface jntStateInterface;
   hardware_interface::PositionJointInterface jntPosInterface;
-  double krs_cmd[krsCount];
-  double krs_pos[krsCount];
-  double krs_vel[krsCount];
-  double krs_eff[krsCount];
+  double krs_cmd[device_count];
+  double krs_pos[device_count];
+  double krs_vel[device_count];
+  double krs_eff[device_count];
 };
 
 int main(int argc, char *argv[]) {
@@ -108,12 +108,4 @@ inline void Arcsys2HW::write() {
   // TODO: write krs servo moveing
   // TODO: write base motor
   // TODO: receive KRS angles
-}
-
-inline ros::Time Arcsys2HW::getTime() const {
-  return ros::Time::now();
-}
-
-inline ros::Duration Arcsys2HW::getPeriod() const {
-  return ros::Duration(0.01);
 }
