@@ -1,5 +1,5 @@
 arcsys2:
-  arcsys2_joint_controller:
+  joint_trajectory_controller:
     type: "position_controllers/JointTrajectoryController"
     joints:
       - rail_to_shaft_joint

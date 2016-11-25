@@ -16,8 +16,8 @@ public:
   Arcsys2HW(std::string&&, IdContainer&&);
   void read();
   void write();
-  inline ros::Time getTime() const { return ros::Time::now(); };
-  inline ros::Duration getPeriod() const { return ros::Duration(0.01); };
+  inline ros::Time getTime() const { return ros::Time::now(); }
+  inline ros::Duration getPeriod() const { return ros::Duration(0.01); }
 private:
   // for real move
   ics::ICS3 krs_driver;
@@ -72,14 +72,14 @@ int main(int argc, char *argv[]) {
 }
 
 inline Arcsys2HW::Arcsys2HW(std::string&& krs_path, IdContainer&& krs_ids)
-: krs_driver {std::move(krs_path)},
-  krs_ids(std::move(krs_ids)), // call copy (or move) constructor
-  jntStateInterface {},
-  jntPosInterface {},
-  krs_cmd {},
-  krs_pos {},
-  krs_vel {},
-  krs_eff {}
+  : krs_driver {std::move(krs_path)},
+    krs_ids(std::move(krs_ids)), // call copy (or move) constructor
+    jntStateInterface {},
+    jntPosInterface {},
+    krs_cmd {},
+    krs_pos {},
+    krs_vel {},
+    krs_eff {}
 {
   // [input] connect and register the joint state interface
   hardware_interface::JointStateHandle stateHandle0to1 {"arm0_to_arm1", &krs_pos[0], &krs_vel[0], &krs_eff[0]};
