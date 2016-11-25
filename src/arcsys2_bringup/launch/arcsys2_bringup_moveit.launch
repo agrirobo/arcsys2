@@ -27,7 +27,7 @@
   <!--       ノード側が [name]/[action_ns]/action_topic を生成した                    -->
   <!--       名前空間を綺麗にしたいため，controller.yamlの name を空白（""）とする    -->
   <group ns="/arcsys2_controller">
-    <node name="arcsys2_control_node" pkg="arcsys2_control" type="arcsys2_control_node" />
+    <node name="arcsys2_action_server_node" pkg="arcsys2_control" type="arcsys2_action_server_node" />
   </group>
 
 
