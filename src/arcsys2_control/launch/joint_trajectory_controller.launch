@@ -1,8 +1,8 @@
 <launch>
 
   <rosparam file="$(find arcsys2_control)/config/joint_trajectory_controller.yaml" command="load" />
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-        respawn="false" output="screen" ns="/arcsys2"
+  <node name="joint_trajectory_controller_spawner" pkg="controller_manager" type="spawner"
+        respawn="false" output="screen"
         args="joint_trajectory_controller" />
 
 </launch>
