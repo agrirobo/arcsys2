@@ -1,111 +1,49 @@
 #include <string>
-#include <utility>
+
+#include <boost/bind.hpp>
 
 #include <ros/ros.h>
-#include <controller_manager/controller_manager.h>
-#include <hardware_interface/joint_command_interface.h>
-#include <hardware_interface/joint_state_interface.h>
-#include <hardware_interface/robot_hw.h>
+#include <actionlib/server/simple_action_server.h>
 
-#include "ics3/ics"
+#include <control_msgs/FollowJointTrajectoryAction.h>
+#include <trajectory_msgs/JointTrajectory.h>
 
-class Arcsys2HW : public hardware_interface::RobotHW {
+class Arcsys2ActionServer {
+  ros::NodeHandle node_handle_;
+  ros::Publisher publisher;
+
+  actionlib::SimpleActionServer<control_msgs::FollowJointTrajectoryAction> action_server_;
+
+  trajectory_msgs::JointTrajectory trajectory_to_goal_;
+
 public:
-  static constexpr std::size_t device_count {4};
-  using IdContainer = std::array<int, device_count>;
-  Arcsys2HW(std::string&&, IdContainer&&);
-  void read();
-  void write();
-  inline ros::Time getTime() const { return ros::Time::now(); }
-  inline ros::Duration getPeriod() const { return ros::Duration(0.01); }
-private:
-  // for real move
-  ics::ICS3 krs_driver;
-  IdContainer krs_ids;
-  // for RobotHW
-  hardware_interface::JointStateInterface jntStateInterface;
-  hardware_interface::PositionJointInterface jntPosInterface;
-  double krs_cmd[device_count];
-  double krs_pos[device_count];
-  double krs_vel[device_count];
-  double krs_eff[device_count];
+  Arcsys2ActionServer(const std::string& node_name)
+    : action_server_ {node_handle_, node_name, false},
+      publisher {node_handle_.advertise<trajectory_msgs::JointTrajectory>("/arcsys2_controller/joint_path_command", 1, this)}
+  {
+    action_server_.registerGoalCallback(boost::bind(&Arcsys2ActionServer::goalCallback, this));
+    action_server_.registerPreemptCallback(boost::bind(&Arcsys2ActionServer::preemptCallback, this));
+    action_server_.start();
+  }
+
+  void goalCallback() {
+    ROS_INFO_STREAM("received: " << (trajectory_to_goal_ = action_server_.acceptNewGoal()->trajectory));
+    publisher.publish(trajectory_to_goal_);
+  }
+
+  void preemptCallback() {
+    ROS_INFO_STREAM("preempted");
+    action_server_.setPreempted();
+  }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_control_node");
 
-  ros::NodeHandle pnh {"~"};
-  std::vector<int> armJointIds {};
-  if (!pnh.getParam("arm_id", armJointIds)) {
-    ROS_ERROR("Need arm_id(aka vector<int>) parameter");
-    return 1;
-  }
-  constexpr std::vector<int>::size_type armJointCount {3};
-  if (armJointIds.size() != armJointCount) {
-    ROS_ERROR("I have 3 joint of arm. you specify count is %lu", armJointIds.size());
-    return 1;
-  }
-  int eefId;
-  if (!pnh.getParam("eef_id", eefId)) {
-    ROS_ERROR("Need eef_id(aka int) parameter");
-    return 1;
-  }
-  std::string krs_path {"/dev/ttyUSB0"};
-  pnh.param<std::string>("krs_path", krs_path, krs_path);
-  Arcsys2HW robot {std::move(krs_path),
-                   Arcsys2HW::IdContainer {armJointIds[0], armJointIds[1], armJointIds[2], eefId}};
-  controller_manager::ControllerManager cm {&robot};
+  // Arcsys2ActionServer action_server {ros::this_node::getName()};
+  Arcsys2ActionServer action_server {"follow_joint_trajectory"};
 
-  ros::Rate rate(1.0 / robot.getPeriod().toSec());
-  ros::AsyncSpinner spinner {1};
-  spinner.start();
-
-  while(ros::ok()) {
-    robot.read();
-    cm.update(robot.getTime(), robot.getPeriod());
-    robot.write();
-    rate.sleep();
-  }
-  spinner.stop();
+  ros::spin();
 
   return 0;
-}
-
-inline Arcsys2HW::Arcsys2HW(std::string&& krs_path, IdContainer&& krs_ids)
-  : krs_driver {std::move(krs_path)},
-    krs_ids(std::move(krs_ids)), // call copy (or move) constructor
-    jntStateInterface {},
-    jntPosInterface {},
-    krs_cmd {},
-    krs_pos {},
-    krs_vel {},
-    krs_eff {}
-{
-  // [input] connect and register the joint state interface
-  hardware_interface::JointStateHandle stateHandle0to1 {"arm0_to_arm1", &krs_pos[0], &krs_vel[0], &krs_eff[0]};
-  jntStateInterface.registerHandle(stateHandle0to1);
-
-  hardware_interface::JointStateHandle stateHandle1to2 {"arm1_to_arm2", &krs_pos[1], &krs_vel[1], &krs_eff[1]};
-  jntStateInterface.registerHandle(stateHandle1to2);
-
-  registerInterface(&jntStateInterface);
-
-  // [output] connect and register the joint position interface
-  hardware_interface::JointHandle posHandle0to1 {jntStateInterface.getHandle("arm0_to_arm1"), &krs_cmd[0]};
-  jntPosInterface.registerHandle(posHandle0to1);
-
-  hardware_interface::JointHandle posHandle1to2 {jntStateInterface.getHandle("arm1_to_arm2"), &krs_cmd[1]};
-  jntPosInterface.registerHandle(posHandle1to2);
-
-  registerInterface(&jntPosInterface);
-}
-
-inline void Arcsys2HW::read() {
-  // TODO: read encoder
-}
-
-inline void Arcsys2HW::write() {
-  // TODO: write krs servo moveing
-  // TODO: write base motor
-  // TODO: receive KRS angles
 }
