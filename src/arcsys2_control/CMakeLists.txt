@@ -1,31 +1,51 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(arcsys2_control)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
+set(${PROJECT_NAME}_DEPENDS
+  actionlib
+  actionlib_msgs
+  control_msgs
   controller_manager
   hardware_interface
+  roscpp
+  trajectory_msgs
 )
 
-INCLUDE(CheckCXXCompilerFlag)
+include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
-IF(COMPILER_SUPPORTS_CXX11)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-ELSEIF(COMPILER_SUPPORTS_CXX0X)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-ELSE()
-  MESSAGE(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
-ENDIF()
+if(COMPILER_SUPPORTS_CXX11)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+elseif(COMPILER_SUPPORTS_CXX0X)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+else()
+  message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
+endif()
+
+find_package(catkin REQUIRED COMPONENTS
+  ${${PROJECT_NAME}_DEPENDS}
+)
 
 catkin_package(
-  CATKIN_DEPENDS roscpp controller_manager hardware_interface
+  # INCLUDE_DIRS   include
+  CATKIN_DEPENDS ${${PROJECT_NAME}_DEPENDS}
 )
 
 include_directories(
+  # include
   ${catkin_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
 )
 
-add_executable(arcsys2_control_node src/arcsys2_control_node.cpp)
-add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES} ics3)
+add_executable(arcsys2_control_node
+  src/arcsys2_control_node.cpp
+)
+
+add_dependencies(arcsys2_control_node
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(arcsys2_control_node
+  ${catkin_LIBRARIES}
+  ics3
+)
