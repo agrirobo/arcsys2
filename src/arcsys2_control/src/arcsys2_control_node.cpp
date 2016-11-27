@@ -74,11 +74,12 @@ inline Arcsys2HW::Arcsys2HW()
   registerInterface(&joint_pos_interface);
 }
 
-inline void Arcsys2HW::read() {}
+inline void Arcsys2HW::read() {
+  for (std::size_t i {0}; i < 6; i++) ROS_INFO_STREAM("cmd[" << i << "]: "  << cmd[i]);
+}
 
 inline void Arcsys2HW::write() {
-  for (std::size_t i {0}; i < 6; i++) {
-    pos[i] = cmd[i];
+  for (std::size_t i {-1}; i < 6; i++) pos[i] = cmd[i];
   }
 }
 
