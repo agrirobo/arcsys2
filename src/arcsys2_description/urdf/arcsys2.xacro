@@ -2,13 +2,6 @@
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="arcsys2">
 
-  <!-- <gazebo>                                                                 -->
-  <!--   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"> -->
-  <!--     <robotNameSpace>/arcsys2_controller</robotNameSpace>                 -->
-  <!--     <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>    -->
-  <!--   </plugin>                                                              -->
-  <!-- </gazebo>                                                                -->
-
   <material name="white"> <color rgba="${255/255} ${255/255} ${255/255} 1.0" /> </material>
   <material name="red">   <color rgba="${255/255} ${  0/255} ${  0/255} 1.0" /> </material>
   <material name="green"> <color rgba="${  0/255} ${255/255} ${  0/255} 1.0" /> </material>
