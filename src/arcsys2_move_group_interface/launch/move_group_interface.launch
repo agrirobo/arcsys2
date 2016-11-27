@@ -1,0 +1,9 @@
+<launch>
+
+  <!--node name="move_group_interface"
+         pkg="arcsys2_move_group"
+        type="arcsys2_move_group_node">
+    <remap from="sub_topic" to="/tomapo" />
+  </node-->
+
+</launch>

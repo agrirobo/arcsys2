@@ -1,0 +1,7 @@
+<launch>
+
+  <rosparam file="$(find arcsys2_moveit_config)/config/controllers.yaml"/>
+  <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
+  <param name="use_controller_manager" value="true" />
+
+</launch>
