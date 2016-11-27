@@ -79,8 +79,7 @@ inline void Arcsys2HW::read() {
 }
 
 inline void Arcsys2HW::write() {
-  for (std::size_t i {-1}; i < 6; i++) pos[i] = cmd[i];
-  }
+  for (std::size_t i {0}; i < 6; i++) pos[i] = cmd[i];
 }
 
 inline ros::Time Arcsys2HW::getTime() const {
