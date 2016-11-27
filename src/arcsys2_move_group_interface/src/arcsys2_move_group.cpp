@@ -2,10 +2,9 @@
 #include <vector>
 
 #include <ros/ros.h>
+#include <geometry_msgs/Pose.h>
 #include <moveit/move_group_interface/move_group.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
-
-#include <geometry_msgs/Pose.h>
 #include <moveit_msgs/DisplayRobotState.h>
 #include <moveit_msgs/DisplayTrajectory.h>
 
