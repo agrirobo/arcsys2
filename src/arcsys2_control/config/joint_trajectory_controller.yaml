@@ -1,4 +1,4 @@
-joint_trajectory_controller:
+arcsys2_controller:
   type: "position_controllers/JointTrajectoryController"
   joints:
     - rail_to_shaft_joint                 # dc_motor
