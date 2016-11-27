@@ -1,6 +1,0 @@
-krs_path: /dev/ttyUSB0
-arm_id:
-  - 0
-  - 1
-  - 2
-eef_id: 3
