@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 2.8.3)
 project(arcsys2_control)
 
 set(${PROJECT_NAME}_DEPENDS
+  roscpp
   controller_manager
   hardware_interface
-  roscpp
 )
 
 include(CheckCXXCompilerFlag)
@@ -30,6 +30,14 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(arcsys2_control_node src/arcsys2_control_node.cpp)
-add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES})
+add_executable(arcsys2_control_node
+  src/arcsys2_control_node.cpp
+)
+
+add_dependencies(arcsys2_control_node
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(arcsys2_control_node
+  ${catkin_LIBRARIES}
+)
