@@ -3,6 +3,10 @@
 <package format="2">
   <name> arcsys2_move_group_interface </name>
   <version> 0.0.1 </version>
+  <description>
+    The arcsys2_move_group_interface package.
+  </description>
+
 
   <maintainer email="httperror@404-notfound.jp">
     Yamasaki Tatsuya
@@ -10,14 +14,10 @@
 
   <license> MIT </license>
 
-  <description>
-    The arcsys2_move_group_interface package.
-  </description>
-
   <buildtool_depend> catkin </buildtool_depend>
 
   <depend> roscpp                        </depend>
-  <depend> moveit_ros_planning_interface </depend>
   <depend> geometry_msgs                 </depend>
   <depend> moveit_msgs                   </depend>
+  <depend> moveit_ros_planning_interface </depend>
 </package>
