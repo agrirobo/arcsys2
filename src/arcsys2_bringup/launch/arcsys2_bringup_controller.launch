@@ -1,6 +1,6 @@
 <launch>
 
-  <!-- <include file="$(find arcsys2_gazebo)/launch/arcsys2_gazebo.launch" /> -->
+  <node name="arcsys2_control_node" pkg="arcsys2_control" type="arcsys2_control_node" />
 
   <!-- <group ns="/arcsys2_controller"> -->
     <include file="$(find arcsys2_control)/launch/joint_state_controller.launch" />
