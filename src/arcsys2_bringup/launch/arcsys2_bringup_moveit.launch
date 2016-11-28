@@ -4,34 +4,6 @@
     <arg name="info" value="true" />
   </include>
 
-
-
-  <!-- ROSにとっての実機コントローラとなるノード？                                      -->
-  <!-- 実体はアクションサーバで，MoveIt!が吐くよく分からん形式の軌道を                  -->
-  <!-- trajectory_msgs::JointTrajectoryへ変換するのが役割？                             -->
-
-  <!-- 呼び出すアクションサーバの名前は                                                 -->
-  <!-- arcsys2_moveit_config/config/controllers.yamlに書いた                            -->
-  <!-- [name]/[action_ns] と一致している必要があるみたい                                -->
-
-  <!-- 以下のエラー文が見えた時は多分アクションサーバの名前が設定と一致していないため   -->
-  <!-- MoveitSimpleControllerManager: Action client not connected                       -->
-
-  <!-- ノード名とアクションサーバ名に関係性は無いと思われる                             -->
-  <!-- 正確にはこのノードの存在（つまりこのノードが立ち上げるアクションサーバの存在）を -->
-  <!-- MoveIt!が認識するとその仲立ちとなるトピックが生成される，のか？                  -->
-
-  <!-- 追記：[name]/[action_ns] の前半部分，[name] の部分を名前空間にして             -->
-  <!--       アクションサーバ名を [action_ns] だけにしてみたところ                    -->
-  <!--       MoveIt!側が [name]/[name]/[action_ns]/action_topic なるトピックを生成し  -->
-  <!--       ノード側が [name]/[action_ns]/action_topic を生成した                    -->
-  <!--       名前空間を綺麗にしたいため，controller.yamlの name を空白（""）とする    -->
-  <group ns="/arcsys2_controller">
-    <!-- <node name="arcsys2_action_server_node" pkg="arcsys2_control" type="arcsys2_action_server_node" /> -->
-  </group>
-
-
-
   <!-- 実験中に起動するには重いので以下のRVizはコメントアウトしておく -->
   <!-- <include file="$(find arcsys2_moveit_config)/launch/moveit_rviz.launch"> -->
   <!--   <arg name="config" value="true" />                                     -->

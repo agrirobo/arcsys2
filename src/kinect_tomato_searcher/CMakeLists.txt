@@ -13,16 +13,12 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  #  INCLUDE_DIRS include
-  #  LIBRARIES kinect_tomato_search
   CATKIN_DEPENDS roscpp cv_bridge geometry_msgs image_transport sensor_msgs std_msgs tf2 tf2_ros
-  #  DEPENDS system_lib
 )
 
 ###########
 ## Build ##
 ###########
-
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )

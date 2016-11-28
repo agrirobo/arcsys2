@@ -2,13 +2,9 @@ cmake_minimum_required(VERSION 2.8.3)
 project(arcsys2_control)
 
 set(${PROJECT_NAME}_DEPENDS
-  actionlib
-  actionlib_msgs
-  control_msgs
+  roscpp
   controller_manager
   hardware_interface
-  roscpp
-  trajectory_msgs
 )
 
 include(CheckCXXCompilerFlag)
@@ -27,41 +23,21 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  # INCLUDE_DIRS   include
   CATKIN_DEPENDS ${${PROJECT_NAME}_DEPENDS}
 )
 
 include_directories(
-  # include
   ${catkin_INCLUDE_DIRS}
-  ${Boost_INCLUDE_DIRS}
 )
 
-add_executable(arcsys2_action_server_node
-  src/arcsys2_action_server_node.cpp
+add_executable(arcsys2_control_node
+  src/arcsys2_control_node.cpp
 )
 
-add_executable(arcsys2_action_client_node
-  src/arcsys2_action_client_node.cpp
-)
-
-add_dependencies(arcsys2_action_server_node
+add_dependencies(arcsys2_control_node
   ${catkin_EXPORTED_TARGETS}
 )
 
-add_dependencies(arcsys2_action_client_node
-  ${catkin_EXPORTED_TARGETS}
-)
-
-target_link_libraries(arcsys2_action_server_node
+target_link_libraries(arcsys2_control_node
   ${catkin_LIBRARIES}
 )
-
-target_link_libraries(arcsys2_action_client_node
-  ${catkin_LIBRARIES}
-  ics3
-)
-
-add_executable(arcsys2_control_node src/arcsys2_control_node.cpp)
-add_dependencies(arcsys2_control_node ${catkin_EXPORTED_TARGETS})
-target_link_libraries(arcsys2_control_node ${catkin_LIBRARIES})
