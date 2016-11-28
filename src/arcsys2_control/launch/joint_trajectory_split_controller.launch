@@ -1,0 +1,13 @@
+<launch>
+
+  <rosparam file="$(find arcsys2_control)/config/joint_trajectory_split_controller.yaml" command="load" />
+  <node name="joint_trajectory_controller_spawner" pkg="controller_manager" type="spawner"
+        respawn="false" output="screen"
+        args="arcsys2_shaft_controller
+              arcsys2_arm0_controller
+              arcsys2_arm1_controller
+              arcsys2_arm2_controller
+              arcsys2_effector_base_controller
+              arcsys2_effector_end_controller" />
+
+</launch>

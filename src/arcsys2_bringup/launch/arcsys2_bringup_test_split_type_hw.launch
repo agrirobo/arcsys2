@@ -1,0 +1,25 @@
+<launch>
+
+  <node name="arcsys2_control_node1" pkg="arcsys2_control" type="arcsys2_split_dammy_hw_node">
+    <param name="joint_name" value="rail_to_shaft_joint" />
+  </node>
+  <node name="arcsys2_control_node2" pkg="arcsys2_control" type="arcsys2_split_dammy_hw_node">
+    <param name="joint_name" value="shaft_to_arm0_joint" />
+  </node>
+  <node name="arcsys2_control_node3" pkg="arcsys2_control" type="arcsys2_split_dammy_hw_node">
+    <param name="joint_name" value="arm0_to_arm1_joint" />
+  </node>
+  <node name="arcsys2_control_node4" pkg="arcsys2_control" type="arcsys2_split_dammy_hw_node">
+    <param name="joint_name" value="arm1_to_arm2_joint" />
+  </node>
+  <node name="arcsys2_control_node5" pkg="arcsys2_control" type="arcsys2_split_dammy_hw_node">
+    <param name="joint_name" value="arm2_to_effector_base_joint" />
+  </node>
+  <node name="arcsys2_control_node6" pkg="arcsys2_control" type="arcsys2_split_dammy_hw_node">
+    <param name="joint_name" value="effector_base_to_effector_end_joint" />
+  </node>
+
+  <include file="$(find arcsys2_control)/launch/joint_state_controller.launch" />
+  <include file="$(find arcsys2_control)/launch/joint_trajectory_split_controller.launch" />
+
+</launch>

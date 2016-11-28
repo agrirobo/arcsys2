@@ -1,0 +1,24 @@
+arcsys2_shaft_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - rail_to_shaft_joint # dc_motor
+arcsys2_arm0_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - shaft_to_arm0_joint # krs_servo_motor
+arcsys2_arm1_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - arm0_to_arm1_joint # krs_servo_motor
+arcsys2_arm2_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - arm1_to_arm2_joint # krs_servo_motor
+arcsys2_effector_base_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - arm2_to_effector_base_joint # krs_servo_motor
+arcsys2_effector_end_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - effector_base_to_effector_end_joint # dammy
