@@ -7,10 +7,12 @@
 class MoveGroupInterface {
   moveit::planning_interface::MoveGroup move_group_;
 
+  ros::Subscriber sub_;
+
 public:
-  MoveGroupInterface(ros::NodeHandle& node_handle)
-    : sub_ {node_handle.subscribe<geometry_msgs::Point>("/tomato_point", 1, &MoveGroupInterface::callback, this)},
-      move_group_ {"arcsys2"}
+  MoveGroupInterface(const std::string& group_name, ros::NodeHandle& node_handle)
+    : move_group_ {group_name},
+      sub_ {node_handle.subscribe<geometry_msgs::Point>("/tomato_point", 1, &MoveGroupInterface::callback, this)}
   {
   }
 
@@ -39,7 +41,7 @@ int main(int argc, char** argv) {
   ros::Rate rate {ros::Duration(3.0)};
   ros::AsyncSpinner spinner {1};
 
-  MoveGroupInterface interface {node_handle};
+  MoveGroupInterface interface {"arcsys2", node_handle};
 
   spinner.start();
 
