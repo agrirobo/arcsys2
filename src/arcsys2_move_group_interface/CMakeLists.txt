@@ -20,7 +20,8 @@ else()
 endif()
 
 file(GLOB ${PROJECT_NAME}_SOURCES
-  ${PROJECT_SOURCE_DIR}/src/*.cpp
+  # ${PROJECT_SOURCE_DIR}/src/*.cpp
+  ${PROJECT_SOURCE_DIR}/src/${PROJECT_NAME}.cpp
 )
 
 find_package(catkin REQUIRED COMPONENTS
