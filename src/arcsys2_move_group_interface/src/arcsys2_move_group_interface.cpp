@@ -19,17 +19,17 @@ public:
 private:
   void callback(const geometry_msgs::PointConstPtr& point)
   {
-    geometry_msgs::Pose pose_;
-    pose_.position = *point;
-    pose_.orientation.w = 1.0;
+    geometry_msgs::Pose pose;
+    pose.position = *point;
+    pose.orientation.w = 1.0;
 
-    move_group_.setPoseTarget(pose_);
+    move_group_.setPoseTarget(pose);
 
-    moveit::planning_interface::MoveGroup::Plan plan_;
-    if (move_group_.plan(plan_)) ROS_INFO_STREAM("SUCCESS");
+    moveit::planning_interface::MoveGroup::Plan plan;
+    if (move_group_.plan(plan)) ROS_INFO_STREAM("SUCCESS");
     else ROS_INFO_STREAM("FAILED");
 
-    move_group_.execute(plan_);
+    move_group_.execute(plan);
   }
 };
 
@@ -45,7 +45,7 @@ int main(int argc, char** argv) {
 
   spinner.start();
 
-  while (ros::ok()) ros::spin();
+  ros::spin();
 
   spinner.stop();
 
