@@ -1,3 +1,4 @@
+#include <array>
 #include <string>
 #include <utility>
 
@@ -21,10 +22,10 @@ private:
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface joint_position_interface_;
   hardware_interface::VelocityJointInterface joint_velocity_interface_;
-  double pos_[JOINT_COUNT];
-  double vel_[JOINT_COUNT];
-  double eff_[JOINT_COUNT];
-  double cmd_[JOINT_COUNT];
+  std::array<double, JOINT_COUNT> pos_;
+  std::array<double, JOINT_COUNT> vel_;
+  std::array<double, JOINT_COUNT> eff_;
+  std::array<double, JOINT_COUNT> cmd_;
 };
 
 int main(int argc, char *argv[])
