@@ -77,19 +77,20 @@ inline Arcsys2HW::Arcsys2HW()
   joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("arm2_to_effector_base_joint"), &cmd_[4]});
   joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("effector_base_to_effector_end_joint"), &cmd_[5]});
 
+  registerInterface(&joint_velocity_interface_);
   registerInterface(&joint_position_interface_);
 }
 
 inline void Arcsys2HW::read()
 {
-  for (std::size_t i {0}; i < 6; i++)
-    ROS_INFO_STREAM("cmd[" << i << "]: "  << cmd_[i]);
+  for (std::size_t i {0}; i < 2; i++)
+    vel_[i] = cmd_[i];
+  for (std::size_t i {2}; i < 6; i++)
+    pos_[i] = cmd_[i];
 }
 
 inline void Arcsys2HW::write()
 {
-  for (std::size_t i {0}; i < 6; i++)
-    pos_[i] = cmd_[i];
 }
 
 inline ros::Time Arcsys2HW::getTime() const

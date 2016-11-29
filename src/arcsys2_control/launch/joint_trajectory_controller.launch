@@ -3,6 +3,6 @@
   <rosparam file="$(find arcsys2_control)/config/joint_trajectory_controller.yaml" command="load" />
   <node name="joint_trajectory_controller_spawner" pkg="controller_manager" type="spawner"
         respawn="false" output="screen"
-        args="arcsys2_controller" />
+        args="arcsys2_position_controller arcsys2_velocity_controller" />
 
 </launch>

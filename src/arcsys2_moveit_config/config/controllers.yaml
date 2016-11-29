@@ -1,12 +1,17 @@
 controller_list:
-  - name: "arcsys2_controller"
+  - name: "arcsys2_position_controller"
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - arm0_to_arm1_joint
+      - arm1_to_arm2_joint
+      - arm2_to_effector_base_joint
+      - effector_base_to_effector_end_joint
+  - name: "arcsys2_velocity_controller"
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     default: true
     joints:
       - rail_to_shaft_joint
       - shaft_to_arm0_joint
-      - arm0_to_arm1_joint
-      - arm1_to_arm2_joint
-      - arm2_to_effector_base_joint
-      - effector_base_to_effector_end_joint
