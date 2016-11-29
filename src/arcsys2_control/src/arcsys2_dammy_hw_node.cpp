@@ -20,6 +20,7 @@ private:
   static constexpr std::size_t JOINT_COUNT {6};
   hardware_interface::JointStateInterface joint_state_interface_;
   hardware_interface::PositionJointInterface joint_position_interface_;
+  hardware_interface::VelocityJointInterface joint_velocity_interface_;
   double pos_[JOINT_COUNT];
   double vel_[JOINT_COUNT];
   double eff_[JOINT_COUNT];
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
 inline Arcsys2HW::Arcsys2HW()
 : joint_state_interface_ {},
   joint_position_interface_ {},
+  joint_velocity_interface_ {},
   cmd_ {},
   pos_ {},
   vel_ {},
@@ -68,8 +70,8 @@ inline Arcsys2HW::Arcsys2HW()
   registerInterface(&joint_state_interface_);
 
   // [output] connect and register the joint position interface
-  joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("rail_to_shaft_joint"), &cmd_[0]});
-  joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("shaft_to_arm0_joint"), &cmd_[1]});
+  joint_velocity_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("rail_to_shaft_joint"), &cmd_[0]});
+  joint_velocity_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("shaft_to_arm0_joint"), &cmd_[1]});
   joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("arm0_to_arm1_joint"), &cmd_[2]});
   joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("arm1_to_arm2_joint"), &cmd_[3]});
   joint_position_interface_.registerHandle(hardware_interface::JointHandle {joint_state_interface_.getHandle("arm2_to_effector_base_joint"), &cmd_[4]});
