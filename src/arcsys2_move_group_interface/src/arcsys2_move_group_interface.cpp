@@ -4,30 +4,7 @@
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/Pose.h>
 
-class TargetStatus {
-  ros::Subscriber sub_;
-
-  geometry_msgs::Point point_;
-
-public:
-  TargetStatus(ros::NodeHandle node_handle)
-    : sub_ {node_handle.subscribe<geometry_msgs::Point>("/tomato_point", 1, &TargetStatus::callback, this)},
-      point_ {}
-  {
-  }
-
-  geometry_msgs::Point getTargetPoint() const { return point_; }
-
-private:
-  void callback(const geometry_msgs::PointConstPtr& point) {
-    point_ = *point;
-    ROS_INFO_STREAM(point_);
-  }
-};
-
 class MoveGroupInterface {
-  ros::Subscriber sub_;
-
   moveit::planning_interface::MoveGroup move_group_;
 
 public:
