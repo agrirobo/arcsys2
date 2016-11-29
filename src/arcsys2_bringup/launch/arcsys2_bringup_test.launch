@@ -1,5 +1,7 @@
 <launch>
 
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find arcsys2_description)/urdf/arcsys2.xacro'" />
+
   <node name="arcsys2_dammy_hw_node" pkg="arcsys2_control" type="arcsys2_dammy_hw_node" />
 
   <include file="$(find arcsys2_moveit_config)/launch/move_group.launch">
