@@ -214,7 +214,7 @@ class ImageConverter {
          cv::Mat buf = rgb_ptr->image.clone();
          // search tomato
          if (found_flag = searchTomatoObj.searchTomatoPoint(rgb_ptr->image, tomato_point))
-            cv::circle(buf, tomato_point, 2, CV_RGB(0, 255, 0), -1);
+            cv::circle(buf, tomato_point, 40, CV_RGB(0, 255, 0), 3);
 
          cv::imshow(RGB_WINDOW_NAME, buf);
          cv::waitKey(100);
