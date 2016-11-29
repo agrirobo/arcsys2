@@ -84,9 +84,8 @@ inline Arcsys2HW::Arcsys2HW()
 inline void Arcsys2HW::read()
 {
   for (std::size_t i {0}; i < 2; i++) {
-    static double pos_vel_cntr[2] {0.0, 0.0};
     vel_[i] = cmd_[i];
-    pos_[i] = pos_vel_cntr[i] += cmd_[i] * getPeriod().toSec();
+    pos_[i] += cmd_[i] * getPeriod().toSec();
   }
   for (std::size_t i {2}; i < 6; i++)
     pos_[i] = cmd_[i];
