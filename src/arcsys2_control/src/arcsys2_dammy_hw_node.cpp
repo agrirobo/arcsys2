@@ -8,7 +8,7 @@
 #include <hardware_interface/robot_hw.h>
 
 class Arcsys2HW
-: public hardware_interface::RobotHW
+  : public hardware_interface::RobotHW
 {
 public:
   Arcsys2HW();
