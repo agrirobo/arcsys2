@@ -101,3 +101,19 @@ inline void registerJoint(
 {
   registerJoint(joint, build_data.jnt_stat_, build_data.jnt_cmd_);
 }
+
+ICSControl::ICSControl(
+      const BuildDataType& build_data,
+      const std::string& device_path,
+      const ics::ID& id)
+  : data_ {build_data.joint_name_}
+{
+}
+
+void ICSControl::fetch()
+{
+}
+
+void ICSControl::move()
+{
+}
