@@ -24,8 +24,8 @@ struct JointDatas
   double eff_;
 };
 
-template<class CmdJntInterface>
-void registerJoint(JointDatas&, hardware_interface::JointStateInterface&, CmdJntInterface&);
+template<class JntCmdInterface>
+void registerJoint(JointDatas&, hardware_interface::JointStateInterface&, JntCmdInterface&);
 
 class ICSControl
 : public JointControlInterface
