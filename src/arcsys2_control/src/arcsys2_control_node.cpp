@@ -8,6 +8,13 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
+class JointControlInterface
+{
+public:
+  virtual void fetch() = 0;
+  virtual void move() = 0;
+};
+
 int main(int argc, char *argv[])
 {
   ros::init(argc, argv, "arcsys2_control_node");
