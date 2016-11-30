@@ -19,12 +19,12 @@ struct JointData
   double eff_;
 };
 
-template<class JntCmdInterface>
+template<class JntCmdIF>
 struct JointControlBuildData
 {
   std::string joint_name_;
   hardware_interface::JointStateInterface& jnt_stat_;
-  JntCmdInterface& jnt_cmd_;
+  JntCmdIF& jnt_cmd_;
 };
 
 class JointControlInterface
@@ -76,16 +76,16 @@ private:
   JointControlContainer controls;
 };
 
-template<class JntCmdInterface>
+template<class JntCmdIF>
 void registerJoint(
     JointData&,
     hardware_interface::JointStateInterface&,
-    JntCmdInterface&);
+    JntCmdIF&);
 
-template<class JntCmdInterface>
+template<class JntCmdIF>
 void registerJoint(
     JointData&,
-    JointControlBuildData<JntCmdInterface>&);
+    JointControlBuildData<JntCmdIF>&);
 
 int main(int argc, char *argv[])
 {
@@ -195,20 +195,20 @@ inline ros::Duration Arcsys2HW::getPeriod()
   return ros::Duration {0.01};
 }
 
-template<class JntCmdInterface>
+template<class JntCmdIF>
 inline void registerJoint(
     JointData& joint,
     hardware_interface::JointStateInterface& jnt_stat,
-    JntCmdInterface& jnt_cmd)
+    JntCmdIF& jnt_cmd)
 {
   jnt_stat.registerHandle(hardware_interface::JointStateHandle {joint.name_, &joint.pos_, &joint.vel_, &joint.eff_});
   jnt_cmd.registerHandle(hardware_interface::JointHandle {jnt_stat.getHandle(joint.name_), &joint.cmd_});
 }
 
-template<class JntCmdInterface>
+template<class JntCmdIF>
 inline void registerJoint(
     JointData& joint,
-    JointControlBuildData<JntCmdInterface>& build_data)
+    JointControlBuildData<JntCmdIF>& build_data)
 {
   registerJoint(joint, build_data.jnt_stat_, build_data.jnt_cmd_);
 }
