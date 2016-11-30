@@ -1,0 +1,32 @@
+#include <array>
+#include <string>
+#include <utility>
+
+#include <ros/ros.h>
+#include <controller_manager/controller_manager.h>
+#include <hardware_interface/joint_command_interface.h>
+#include <hardware_interface/joint_state_interface.h>
+#include <hardware_interface/robot_hw.h>
+
+int main(int argc, char *argv[])
+{
+  ros::init(argc, argv, "arcsys2_control_node");
+//
+//  Arcsys2HW robot {};
+//  controller_manager::ControllerManager cm {&robot};
+//
+//  ros::Rate rate(1.0 / robot.getPeriod().toSec());
+  ros::AsyncSpinner spinner {1};
+
+  spinner.start();
+  while(ros::ok())
+  {
+//    robot.read();
+//    cm.update(robot.getTime(), robot.getPeriod());
+//    robot.write();
+//    rate.sleep();
+  }
+  spinner.stop();
+
+  return 0;
+}

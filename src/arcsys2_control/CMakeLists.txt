@@ -30,6 +30,18 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+add_executable(arcsys2_control_node
+  src/arcsys2_control_node.cpp
+)
+
+add_dependencies(arcsys2_control_node
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(arcsys2_control_node
+  ${catkin_LIBRARIES}
+)
+
 add_executable(arcsys2_dammy_hw_node
   src/arcsys2_dammy_hw_node.cpp
 )
