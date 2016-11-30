@@ -60,6 +60,18 @@ private:
   JointData data_;
 };
 
+class Arcsys2HW
+  : public hardware_interface::RobotHW
+{
+public:
+  static constexpr std::size_t JOINT_COUNT {6};
+  using JointControlContainer = std::array<JointControlInterface*, JOINT_COUNT>;
+  Arcsys2HW(hardware_interface::JointStateInterface*);
+  void registerControl(JointControlInterface*);
+private:
+  JointControlContainer controls;
+};
+
 template<class JntCmdInterface>
 void registerJoint(
     JointData&,
@@ -132,6 +144,20 @@ void DammyControl::fetch()
 
 void DammyControl::move()
 {
+}
+
+inline Arcsys2HW::Arcsys2HW(hardware_interface::JointStateInterface* jnt_stat)
+  : controls {}
+{
+  registerInterface(jnt_stat);
+}
+
+inline void Arcsys2HW::registerControl(JointControlInterface* jnt_cntr)
+{
+  static auto inserter = controls.begin();
+  if (inserter == controls.cend()) throw std::out_of_range {"Too many JointControl"};
+  *inserter = jnt_cntr;
+  ++inserter;
 }
 
 template<class JntCmdInterface>
