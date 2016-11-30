@@ -52,6 +52,19 @@ private:
   ics::ID id_;
 };
 
+class DCMotorControl
+  : public JointControlInterface
+{
+public:
+  using JntCmdType = hardware_interface::VelocityJointInterface;
+  using BuildDataType = JointControlBuildData<JntCmdType>;
+  DCMotorControl(BuildDataType&);
+  void fetch() override;
+  void move() override;
+private:
+  JointData data_;
+};
+
 template<class JntCmdIF>
 class DammyControl
   : public JointControlInterface
