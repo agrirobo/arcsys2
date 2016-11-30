@@ -40,6 +40,7 @@ add_dependencies(arcsys2_control_node
 
 target_link_libraries(arcsys2_control_node
   ${catkin_LIBRARIES}
+  ics3
 )
 
 add_executable(arcsys2_dammy_hw_node

@@ -8,6 +8,8 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
+#include <ics3/ics>
+
 class JointControlInterface
 {
 public:
@@ -39,9 +41,13 @@ struct JointControlBuildData
 };
 
 class ICSControl
-: public JointControlInterface
+  : public JointControlInterface
 {
 public:
+  ICSControl(
+      const JointControlBuildData<hardware_interface::PositionJointInterface>&,
+      const std::string&,
+      const ics::ID&);
   void fetch() override;
   void move() override;
 private:
