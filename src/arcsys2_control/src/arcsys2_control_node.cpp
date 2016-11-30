@@ -30,6 +30,14 @@ void registerJoint(
     hardware_interface::JointStateInterface&,
     JntCmdInterface&);
 
+template<class JntCmdInterface>
+struct JointControlBuildData
+{
+  std::string joint_name_;
+  hardware_interface::JointStateInterface& jnt_stat_;
+  JntCmdInterface& jnt_cmd_;
+};
+
 class ICSControl
 : public JointControlInterface
 {
