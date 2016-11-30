@@ -40,10 +40,7 @@ class ICSControl
 public:
   using JntCmdType = hardware_interface::PositionJointInterface;
   using BuildDataType = JointControlBuildData<JntCmdType>;
-  ICSControl(
-      BuildDataType&,
-      const std::string&,
-      const ics::ID&);
+  ICSControl(BuildDataType&, const std::string&, const ics::ID&);
   void fetch() override;
   void move() override;
 private:
@@ -126,10 +123,7 @@ inline void registerJoint(
   registerJoint(joint, build_data.jnt_stat_, build_data.jnt_cmd_);
 }
 
-ICSControl::ICSControl(
-      BuildDataType& build_data,
-      const std::string& device_path,
-      const ics::ID& id)
+ICSControl::ICSControl(BuildDataType& build_data, const std::string& device_path, const ics::ID& id)
   : data_ {build_data.joint_name_}
 {
   registerJoint(data_, build_data);
