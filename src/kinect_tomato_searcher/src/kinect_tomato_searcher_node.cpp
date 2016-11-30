@@ -20,7 +20,7 @@ public:
 
   ~SearchTomato() {}
 
-bool searchTomatoPoint(const cv::Mat& capture_rgb, cv::Point& tomato_point) {
+bool searchTomatoPoint(const cv::Mat& capture_rgb, cv::Point& tomato_point) {//MATLAB-OpenCV_function...[ref]:https://kyamagu.github.io/mexopencv/matlab/KalmanFilter.html
   cv::Mat binary_mat = cv::Mat::zeros(capture_rgb.size(), CV_8UC1);
   std::vector<cv::Rect> tomato_boxs;
   // reset transition matrix of kalman filter.
