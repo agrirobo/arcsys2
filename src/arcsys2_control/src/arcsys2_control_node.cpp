@@ -44,8 +44,10 @@ class ICSControl
   : public JointControlInterface
 {
 public:
+  using JntCmdType = hardware_interface::PositionJointInterface;
+  using BuildDataType = JointControlBuildData<JntCmdType>;
   ICSControl(
-      const JointControlBuildData<hardware_interface::PositionJointInterface>&,
+      const BuildDataType&,
       const std::string&,
       const ics::ID&);
   void fetch() override;
