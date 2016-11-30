@@ -90,8 +90,8 @@ inline void registerJoint(
     hardware_interface::JointStateInterface& jnt_stat,
     JntCmdInterface& jnt_cmd)
 {
-  jnt_stat.registerHandle(hardware_interface::JointStateHandle {joint.name_, joint.pos_, joint.vel_, joint.eff_});
-  jnt_cmd.registerHandle(hardware_interface::JointHandle {jnt_stat.getHandle(joint.name_), joint.cmd_});
+  jnt_stat.registerHandle(hardware_interface::JointStateHandle {joint.name_, &joint.pos_, &joint.vel_, &joint.eff_});
+  jnt_cmd.registerHandle(hardware_interface::JointHandle {jnt_stat.getHandle(joint.name_), &joint.cmd_});
 }
 
 template<class JntCmdInterface>
