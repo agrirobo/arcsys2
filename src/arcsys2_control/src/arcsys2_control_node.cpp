@@ -203,14 +203,21 @@ inline DCMotorControl::DCMotorControl(BuildDataType& build_data)
 
 inline void DCMotorControl::fetch()
 {
+  data_.pos_ = last_pos_;
+  data_.vel_ = last_vel_;
 }
 
 inline void DCMotorControl::move()
 {
+  geometry_msgs::Twist msg;
+  msg.linear.x = data_.cmd_;
+  pub_.publish(std::move(msg));
 }
 
-inline void DCMotorControl::odomCb(const nav_msgs::OdometryConstPtr&)
+inline void DCMotorControl::odomCb(const nav_msgs::OdometryConstPtr& odom)
 {
+  last_pos_ = odom->pose.pose.position.x;
+  last_vel_ = odom->twist.twist.linear.x;
 }
 
 template<class JntCmdIF>
