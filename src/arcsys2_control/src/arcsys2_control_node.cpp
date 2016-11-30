@@ -34,6 +34,7 @@ class JointControlInterface
 public:
   virtual void fetch() = 0;
   virtual void move() = 0;
+  virtual ~JointControlInterface() noexcept {}
 };
 
 class ICSControl
