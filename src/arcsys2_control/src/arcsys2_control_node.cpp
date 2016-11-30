@@ -1,6 +1,8 @@
 #include <array>
 #include <stdexcept>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include <ros/ros.h>
 #include <controller_manager/controller_manager.h>
