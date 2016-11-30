@@ -26,6 +26,16 @@ struct JointDatas {
 template<class CmdJntInterface>
 void registerJoint(JointDatas&, hardware_interface::JointStateInterface&, CmdJntInterface&);
 
+class ICSControl
+: public JointControlInterface,
+{
+public:
+  void fetch() override;
+  void move() override;
+private:
+  JointDatas data;
+};
+
 int main(int argc, char *argv[])
 {
   ros::init(argc, argv, "arcsys2_control_node");
