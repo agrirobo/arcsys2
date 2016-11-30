@@ -77,11 +77,22 @@ void registerJoint(
 int main(int argc, char *argv[])
 {
   ros::init(argc, argv, "arcsys2_control_node");
-//
-//  Arcsys2HW robot {};
-//  controller_manager::ControllerManager cm {&robot};
-//
-//  ros::Rate rate(1.0 / robot.getPeriod().toSec());
+  hardware_interface::JointStateInterface joint_state_interface {};
+  hardware_interface::PositionJointInterface position_joint_interface {};
+
+  DammyControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, position_joint_interface};
+  DammyControl shaft_control {shaft_builder};
+  DammyControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
+  DammyControl arm0_control {arm0_builder};
+  DammyControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
+  DammyControl arm1_control {arm1_builder};
+  DammyControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
+  DammyControl arm2_control {arm2_builder};
+  DammyControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
+  DammyControl effector_base_control {effector_base_builder};
+  DammyControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
+  DammyControl effector_end_control {effector_end_builder};
+
   ros::AsyncSpinner spinner {1};
 
   spinner.start();
