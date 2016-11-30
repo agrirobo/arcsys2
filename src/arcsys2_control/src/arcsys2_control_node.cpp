@@ -40,11 +40,13 @@ class ICSControl
 public:
   using JntCmdType = hardware_interface::PositionJointInterface;
   using BuildDataType = JointControlBuildData<JntCmdType>;
-  ICSControl(BuildDataType&, const std::string&, const ics::ID&);
+  ICSControl(BuildDataType&, ics::ICS3&, const ics::ID&);
   void fetch() override;
   void move() override;
 private:
   JointData data_;
+  ics::ICS3& driver_;
+  ics::ID id_;
 };
 
 template<class JntCmdIF>
@@ -138,8 +140,10 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-inline ICSControl::ICSControl(BuildDataType& build_data, const std::string& device_path, const ics::ID& id)
-  : data_ {build_data.joint_name_}
+inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, const ics::ID& id)
+  : data_ {build_data.joint_name_},
+    driver_ {driver},
+    id_ {id}
 {
   registerJoint(data_, build_data);
 }
@@ -150,6 +154,7 @@ inline void ICSControl::fetch()
 
 inline void ICSControl::move()
 {
+  data_.pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
 }
 
 template<class JntCmdIF>
