@@ -47,11 +47,12 @@ private:
   JointData data_;
 };
 
+template<class JntCmdIF>
 class DammyControl
   : public JointControlInterface
 {
 public:
-  using JntCmdType = hardware_interface::PositionJointInterface;
+  using JntCmdType = JntCmdIF;
   using BuildDataType = JointControlBuildData<JntCmdType>;
   DammyControl(BuildDataType&);
   void fetch() override;
@@ -59,6 +60,9 @@ public:
 private:
   JointData data_;
 };
+
+using DammyPositionControl = DammyControl<hardware_interface::PositionJointInterface>;
+using DammyVelocityControl = DammyControl<hardware_interface::VelocityJointInterface>;
 
 class Arcsys2HW
   : public hardware_interface::RobotHW
@@ -92,22 +96,24 @@ int main(int argc, char *argv[])
   ros::init(argc, argv, "arcsys2_control_node");
   hardware_interface::JointStateInterface joint_state_interface {};
   hardware_interface::PositionJointInterface position_joint_interface {};
+  hardware_interface::VelocityJointInterface velocity_joint_interface {};
 
-  DammyControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, position_joint_interface};
-  DammyControl shaft_control {shaft_builder};
-  DammyControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
-  DammyControl arm0_control {arm0_builder};
-  DammyControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
-  DammyControl arm1_control {arm1_builder};
-  DammyControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
-  DammyControl arm2_control {arm2_builder};
-  DammyControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
-  DammyControl effector_base_control {effector_base_builder};
-  DammyControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
-  DammyControl effector_end_control {effector_end_builder};
+  DammyVelocityControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, velocity_joint_interface};
+  DammyVelocityControl shaft_control {shaft_builder};
+  DammyVelocityControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, velocity_joint_interface};
+  DammyVelocityControl arm0_control {arm0_builder};
+  DammyPositionControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl arm1_control {arm1_builder};
+  DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl arm2_control {arm2_builder};
+  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl effector_base_control {effector_base_builder};
+  DammyPositionControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl effector_end_control {effector_end_builder};
 
   Arcsys2HW robot {&joint_state_interface};
   robot.registerInterface(&position_joint_interface);
+  robot.registerInterface(&velocity_joint_interface);
   robot.registerControl(&shaft_control);
   robot.registerControl(&arm0_control);
   robot.registerControl(&arm1_control);
@@ -146,18 +152,28 @@ inline void ICSControl::move()
 {
 }
 
-inline DammyControl::DammyControl(BuildDataType& build_data)
+template<class JntCmdIF>
+inline DammyControl<JntCmdIF>::DammyControl(BuildDataType& build_data)
   : data_ {build_data.joint_name_}
 {
   registerJoint(data_, build_data);
 }
 
-inline void DammyControl::fetch()
+template<>
+inline void DammyPositionControl::fetch()
 {
   data_.pos_ = data_.cmd_;
 }
 
-inline void DammyControl::move()
+template<>
+inline void DammyVelocityControl::fetch()
+{
+  data_.pos_ += data_.cmd_ * 0.01; // FIXME: test code
+  data_.vel_ = data_.cmd_;
+}
+
+template<class JntCmdIF>
+inline void DammyControl<JntCmdIF>::move()
 {
 }
 
