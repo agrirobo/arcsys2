@@ -15,6 +15,14 @@ public:
   virtual void move() = 0;
 };
 
+struct JointDatas {
+  std::string name_;
+  double cmd_;
+  double pos_;
+  double vel_;
+  double eff_;
+};
+
 int main(int argc, char *argv[])
 {
   ros::init(argc, argv, "arcsys2_control_node");
