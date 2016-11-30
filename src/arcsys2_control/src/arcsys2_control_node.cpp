@@ -133,10 +133,10 @@ int main(int argc, char *argv[])
   hardware_interface::PositionJointInterface position_joint_interface {};
   hardware_interface::VelocityJointInterface velocity_joint_interface {};
 
-  DammyVelocityControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, velocity_joint_interface};
-  DammyVelocityControl shaft_control {shaft_builder};
-  DammyVelocityControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, velocity_joint_interface};
-  DammyVelocityControl arm0_control {arm0_builder};
+  DCMotorControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, velocity_joint_interface};
+  DCMotorControl shaft_control {shaft_builder};
+  DCMotorControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, velocity_joint_interface};
+  DCMotorControl arm0_control {arm0_builder};
   auto ics_id_it = ics_ids.cbegin();
   ICSControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
   ICSControl arm1_control {arm1_builder, ics_driver, *ics_id_it++};
