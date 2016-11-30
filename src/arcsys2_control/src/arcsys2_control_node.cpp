@@ -25,7 +25,10 @@ struct JointDatas
 };
 
 template<class JntCmdInterface>
-void registerJoint(JointDatas&, hardware_interface::JointStateInterface&, JntCmdInterface&);
+void registerJoint(
+    JointDatas&,
+    hardware_interface::JointStateInterface&,
+    JntCmdInterface&);
 
 class ICSControl
 : public JointControlInterface
@@ -58,4 +61,14 @@ int main(int argc, char *argv[])
   spinner.stop();
 
   return 0;
+}
+
+template<class JntCmdInterface>
+void registerJoint(
+    JointDatas& joint,
+    hardware_interface::JointStateInterface& jnt_state,
+    JntCmdInterface& jnt_cmd)
+{
+  jnt_state.registerHandle(hardware_interface::JointStateHandle {joint.name_, joint.pos_, joint.vel_, joint.eff_});
+  jnt_cmd.registerHandle(hardware_interface::JointHandle {jnt_state.getHandle(joint.name_), joint.cmd_});
 }
