@@ -15,7 +15,8 @@ public:
   virtual void move() = 0;
 };
 
-struct JointDatas {
+struct JointDatas
+{
   std::string name_;
   double cmd_;
   double pos_;
@@ -27,7 +28,7 @@ template<class CmdJntInterface>
 void registerJoint(JointDatas&, hardware_interface::JointStateInterface&, CmdJntInterface&);
 
 class ICSControl
-: public JointControlInterface,
+: public JointControlInterface
 {
 public:
   void fetch() override;
