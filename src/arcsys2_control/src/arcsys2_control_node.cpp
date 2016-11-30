@@ -27,12 +27,6 @@ struct JointData
 };
 
 template<class JntCmdInterface>
-void registerJoint(
-    JointData&,
-    hardware_interface::JointStateInterface&,
-    JntCmdInterface&);
-
-template<class JntCmdInterface>
 struct JointControlBuildData
 {
   std::string joint_name_;
@@ -53,8 +47,19 @@ public:
   void fetch() override;
   void move() override;
 private:
-  JointData data;
+  JointData data_;
 };
+
+template<class JntCmdInterface>
+void registerJoint(
+    JointData&,
+    hardware_interface::JointStateInterface&,
+    JntCmdInterface&);
+
+template<class JntCmdInterface>
+void registerJoint(
+    JointData&,
+    JointControlBuildData<JntCmdInterface>&);
 
 int main(int argc, char *argv[])
 {
@@ -80,11 +85,19 @@ int main(int argc, char *argv[])
 }
 
 template<class JntCmdInterface>
-void registerJoint(
+inline void registerJoint(
     JointData& joint,
-    hardware_interface::JointStateInterface& jnt_state,
+    hardware_interface::JointStateInterface& jnt_stat,
     JntCmdInterface& jnt_cmd)
 {
-  jnt_state.registerHandle(hardware_interface::JointStateHandle {joint.name_, joint.pos_, joint.vel_, joint.eff_});
-  jnt_cmd.registerHandle(hardware_interface::JointHandle {jnt_state.getHandle(joint.name_), joint.cmd_});
+  jnt_stat.registerHandle(hardware_interface::JointStateHandle {joint.name_, joint.pos_, joint.vel_, joint.eff_});
+  jnt_cmd.registerHandle(hardware_interface::JointHandle {jnt_stat.getHandle(joint.name_), joint.cmd_});
+}
+
+template<class JntCmdInterface>
+inline void registerJoint(
+    JointData& joint,
+    JointControlBuildData<JntCmdInterface>& build_data)
+{
+  registerJoint(joint, build_data.jnt_stat_, build_data.jnt_cmd_);
 }
