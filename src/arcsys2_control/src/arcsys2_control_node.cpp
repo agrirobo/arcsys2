@@ -120,8 +120,8 @@ int main(int argc, char *argv[])
   ICSControl arm2_control {arm2_builder, ics_driver, *ics_id_it++};
   ICSControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
   ICSControl effector_base_control {effector_base_builder, ics_driver, *ics_id_it++};
-  ICSControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
-  ICSControl effector_end_control {effector_end_builder, ics_driver, *ics_id_it};
+  DammyPositionControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl effector_end_control {effector_end_builder};
 
   Arcsys2HW robot {&joint_state_interface};
   robot.registerInterface(&position_joint_interface);
