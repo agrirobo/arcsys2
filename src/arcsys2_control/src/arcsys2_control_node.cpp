@@ -23,6 +23,9 @@ struct JointDatas {
   double eff_;
 };
 
+template<class CmdJntInterface>
+void registerJoint(JointDatas&, hardware_interface::JointStateInterface&, CmdJntInterface&);
+
 int main(int argc, char *argv[])
 {
   ros::init(argc, argv, "arcsys2_control_node");
