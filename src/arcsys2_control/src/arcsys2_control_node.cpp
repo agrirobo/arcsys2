@@ -117,32 +117,32 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-ICSControl::ICSControl(BuildDataType& build_data, const std::string& device_path, const ics::ID& id)
+inline ICSControl::ICSControl(BuildDataType& build_data, const std::string& device_path, const ics::ID& id)
   : data_ {build_data.joint_name_}
 {
   registerJoint(data_, build_data);
 }
 
-void ICSControl::fetch()
+inline void ICSControl::fetch()
 {
 }
 
-void ICSControl::move()
+inline void ICSControl::move()
 {
 }
 
-DammyControl::DammyControl(BuildDataType& build_data)
+inline DammyControl::DammyControl(BuildDataType& build_data)
   : data_ {build_data.joint_name_}
 {
   registerJoint(data_, build_data);
 }
 
-void DammyControl::fetch()
+inline void DammyControl::fetch()
 {
   data_.pos_ = data_.cmd_;
 }
 
-void DammyControl::move()
+inline void DammyControl::move()
 {
 }
 
