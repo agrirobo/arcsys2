@@ -1,4 +1,7 @@
 <launch>
-  <node pkg="kinect_tomato_searcher" type="kinect_tomato_searcher_node" name="search_tomato_node" />
+  <node pkg="kinect_tomato_searcher" type="kinect_tomato_searcher_node" name="search_tomato_node">
+    <remap from="camera/rgb/image_raw" to="kinect2/hd/image_color"/>
+    <remap from="camera/depth_registered/image_raw" to="kinect2/hd/image_depth_rect"/>
+  </node>
   <node pkg="kinect_tomato_searcher" type="tomato_broadcaster" name="tomato_broadcaster" />
 </launch>
