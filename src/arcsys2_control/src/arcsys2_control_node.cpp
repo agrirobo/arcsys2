@@ -96,6 +96,15 @@ void registerJoint(
 int main(int argc, char *argv[])
 {
   ros::init(argc, argv, "arcsys2_control_node");
+  ros::NodeHandle pnh {"~"};
+
+  std::string ics_device_path {"/dev/ttyUSB0"};
+  pnh.param<std::string>("ics_device_path", ics_device_path, ics_device_path);
+  ics::ICS3 ics_driver {std::move(ics_device_path)};
+  std::vector<int> ics_id_vec {};
+  pnh.getParam("ics_id_vec", ics_id_vec);
+  std::vector<ics::ID> ics_ids(ics_id_vec.cbegin(), ics_id_vec.cend());
+
   hardware_interface::JointStateInterface joint_state_interface {};
   hardware_interface::PositionJointInterface position_joint_interface {};
   hardware_interface::VelocityJointInterface velocity_joint_interface {};
@@ -104,14 +113,15 @@ int main(int argc, char *argv[])
   DammyVelocityControl shaft_control {shaft_builder};
   DammyVelocityControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, velocity_joint_interface};
   DammyVelocityControl arm0_control {arm0_builder};
-  DammyPositionControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl arm1_control {arm1_builder};
-  DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl arm2_control {arm2_builder};
-  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl effector_base_control {effector_base_builder};
-  DammyPositionControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl effector_end_control {effector_end_builder};
+  auto ics_id_it = ics_ids.cbegin();
+  ICSControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
+  ICSControl arm1_control {arm1_builder, ics_driver, *ics_id_it++};
+  ICSControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
+  ICSControl arm2_control {arm2_builder, ics_driver, *ics_id_it++};
+  ICSControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
+  ICSControl effector_base_control {effector_base_builder, ics_driver, *ics_id_it++};
+  ICSControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
+  ICSControl effector_end_control {effector_end_builder, ics_driver, *ics_id_it};
 
   Arcsys2HW robot {&joint_state_interface};
   robot.registerInterface(&position_joint_interface);
