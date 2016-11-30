@@ -50,6 +50,19 @@ private:
   JointData data_;
 };
 
+class DammyControl
+  : public JointControlInterface
+{
+public:
+  using JntCmdType = hardware_interface::PositionJointInterface;
+  using BuildDataType = JointControlBuildData<JntCmdType>;
+  DammyControl(BuildDataType&);
+  void fetch() override;
+  void move() override;
+private:
+  JointData data_;
+};
+
 template<class JntCmdInterface>
 void registerJoint(
     JointData&,
@@ -116,5 +129,20 @@ void ICSControl::fetch()
 }
 
 void ICSControl::move()
+{
+}
+
+DammyControl::DammyControl(BuildDataType& build_data)
+  : data_ {build_data.joint_name_}
+{
+  registerJoint(data_, build_data);
+}
+
+void DammyControl::fetch()
+{
+  data_.pos_ = data_.cmd_;
+}
+
+void DammyControl::move()
 {
 }
