@@ -17,7 +17,7 @@ public:
   virtual void move() = 0;
 };
 
-struct JointDatas
+struct JointData
 {
   std::string name_;
   double cmd_;
@@ -28,7 +28,7 @@ struct JointDatas
 
 template<class JntCmdInterface>
 void registerJoint(
-    JointDatas&,
+    JointData&,
     hardware_interface::JointStateInterface&,
     JntCmdInterface&);
 
@@ -51,7 +51,7 @@ public:
   void fetch() override;
   void move() override;
 private:
-  JointDatas data;
+  JointData data;
 };
 
 int main(int argc, char *argv[])
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 
 template<class JntCmdInterface>
 void registerJoint(
-    JointDatas& joint,
+    JointData& joint,
     hardware_interface::JointStateInterface& jnt_state,
     JntCmdInterface& jnt_cmd)
 {
