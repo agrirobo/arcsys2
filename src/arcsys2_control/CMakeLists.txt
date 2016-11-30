@@ -4,7 +4,9 @@ project(arcsys2_control)
 set(${PROJECT_NAME}_DEPENDS
   roscpp
   controller_manager
+  geometry_msgs
   hardware_interface
+  nav_msgs
 )
 
 include(CheckCXXCompilerFlag)
