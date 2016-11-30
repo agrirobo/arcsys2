@@ -15,7 +15,7 @@ class SearchTomato {
 public:
   SearchTomato(): found_flag(false), tick_count(0), last_tick_count(0), not_founding_count(0), kf(6, 4, 0, CV_32F), state(6, 1, CV_32F)
   {
-  init_set_kalman(kf);   
+  init_set_kalman(kf);
   }
 
   ~SearchTomato() {}
