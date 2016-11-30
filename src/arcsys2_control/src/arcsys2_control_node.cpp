@@ -10,13 +10,6 @@
 
 #include <ics3/ics>
 
-class JointControlInterface
-{
-public:
-  virtual void fetch() = 0;
-  virtual void move() = 0;
-};
-
 struct JointData
 {
   std::string name_;
@@ -24,6 +17,13 @@ struct JointData
   double pos_;
   double vel_;
   double eff_;
+};
+
+class JointControlInterface
+{
+public:
+  virtual void fetch() = 0;
+  virtual void move() = 0;
 };
 
 template<class JntCmdInterface>
