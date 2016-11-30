@@ -68,6 +68,10 @@ public:
   using JointControlContainer = std::array<JointControlInterface*, JOINT_COUNT>;
   Arcsys2HW(hardware_interface::JointStateInterface*);
   void registerControl(JointControlInterface*);
+  void read();
+  void write();
+  ros::Time getTime();
+  ros::Duration getPeriod();
 private:
   JointControlContainer controls;
 };
@@ -102,15 +106,26 @@ int main(int argc, char *argv[])
   DammyControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
   DammyControl effector_end_control {effector_end_builder};
 
+  Arcsys2HW robot {&joint_state_interface};
+  robot.registerInterface(&position_joint_interface);
+  robot.registerControl(&shaft_control);
+  robot.registerControl(&arm0_control);
+  robot.registerControl(&arm1_control);
+  robot.registerControl(&arm2_control);
+  robot.registerControl(&effector_base_control);
+  robot.registerControl(&effector_end_control);
+  controller_manager::ControllerManager cm {&robot};
+
+  ros::Rate rate(1.0 / robot.getPeriod().toSec());
   ros::AsyncSpinner spinner {1};
 
   spinner.start();
   while(ros::ok())
   {
-//    robot.read();
-//    cm.update(robot.getTime(), robot.getPeriod());
-//    robot.write();
-//    rate.sleep();
+    robot.read();
+    cm.update(robot.getTime(), robot.getPeriod());
+    robot.write();
+    rate.sleep();
   }
   spinner.stop();
 
@@ -158,6 +173,26 @@ inline void Arcsys2HW::registerControl(JointControlInterface* jnt_cntr)
   if (inserter == controls.cend()) throw std::out_of_range {"Too many JointControl"};
   *inserter = jnt_cntr;
   ++inserter;
+}
+
+inline void Arcsys2HW::read()
+{
+  for (auto control : controls) control->fetch();
+}
+
+inline void Arcsys2HW::write()
+{
+  for (auto control : controls) control->move();
+}
+
+inline ros::Time Arcsys2HW::getTime()
+{
+  return ros::Time::now();
+}
+
+inline ros::Duration Arcsys2HW::getPeriod()
+{
+  return ros::Duration {0.01};
 }
 
 template<class JntCmdInterface>
