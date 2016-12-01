@@ -4,7 +4,9 @@ project(arcsys2_control)
 set(${PROJECT_NAME}_DEPENDS
   roscpp
   controller_manager
+  geometry_msgs
   hardware_interface
+  nav_msgs
 )
 
 include(CheckCXXCompilerFlag)
@@ -41,16 +43,4 @@ add_dependencies(arcsys2_control_node
 target_link_libraries(arcsys2_control_node
   ${catkin_LIBRARIES}
   ics3
-)
-
-add_executable(arcsys2_dammy_hw_node
-  src/arcsys2_dammy_hw_node.cpp
-)
-
-add_dependencies(arcsys2_dammy_hw_node
-  ${catkin_EXPORTED_TARGETS}
-)
-
-target_link_libraries(arcsys2_dammy_hw_node
-  ${catkin_LIBRARIES}
 )

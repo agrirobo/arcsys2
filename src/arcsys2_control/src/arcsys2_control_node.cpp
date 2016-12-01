@@ -1,12 +1,16 @@
 #include <array>
 #include <stdexcept>
 #include <string>
+#include <utility>
+#include <vector>
 
 #include <ros/ros.h>
 #include <controller_manager/controller_manager.h>
+#include <geometry_msgs/Twist.h>
 #include <hardware_interface/joint_command_interface.h>
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
+#include <nav_msgs/Odometry.h>
 
 #include <ics3/ics>
 
@@ -32,6 +36,7 @@ class JointControlInterface
 public:
   virtual void fetch() = 0;
   virtual void move() = 0;
+  virtual ~JointControlInterface() noexcept {}
 };
 
 class ICSControl
@@ -47,6 +52,25 @@ private:
   JointData data_;
   ics::ICS3& driver_;
   ics::ID id_;
+};
+
+class DCMotorControl
+  : public JointControlInterface
+{
+public:
+  using JntCmdType = hardware_interface::VelocityJointInterface;
+  using BuildDataType = JointControlBuildData<JntCmdType>;
+  DCMotorControl(BuildDataType&);
+  void fetch() override;
+  void move() override;
+  void odomCb(const nav_msgs::OdometryConstPtr&);
+private:
+  JointData data_;
+  double last_pos_;
+  double last_vel_;
+  ros::NodeHandle nh_;
+  ros::Publisher pub_;
+  ros::Subscriber sub_;
 };
 
 template<class JntCmdIF>
@@ -103,6 +127,7 @@ int main(int argc, char *argv[])
   ics::ICS3 ics_driver {std::move(ics_device_path)};
   std::vector<int> ics_id_vec {};
   pnh.getParam("ics_id_vec", ics_id_vec);
+  if (ics_id_vec.empty()) throw std::invalid_argument {"ics_id_vec parameter is not found"};
   std::vector<ics::ID> ics_ids(ics_id_vec.cbegin(), ics_id_vec.cend());
 
   hardware_interface::JointStateInterface joint_state_interface {};
@@ -160,11 +185,41 @@ inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, cons
 
 inline void ICSControl::fetch()
 {
+  data_.pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
 }
 
 inline void ICSControl::move()
 {
-  data_.pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
+  driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
+}
+
+inline DCMotorControl::DCMotorControl(BuildDataType& build_data)
+  : data_ {build_data.joint_name_},
+    last_pos_ {},
+    last_vel_ {},
+    nh_ {build_data.joint_name_},
+    pub_ {nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1)},
+    sub_ {nh_.subscribe("odom", 1, &DCMotorControl::odomCb, this)}
+{
+}
+
+inline void DCMotorControl::fetch()
+{
+  data_.pos_ = last_pos_;
+  data_.vel_ = last_vel_;
+}
+
+inline void DCMotorControl::move()
+{
+  geometry_msgs::Twist msg {};
+  msg.linear.x = data_.cmd_;
+  pub_.publish(std::move(msg));
+}
+
+inline void DCMotorControl::odomCb(const nav_msgs::OdometryConstPtr& odom)
+{
+  last_pos_ = odom->pose.pose.position.x;
+  last_vel_ = odom->twist.twist.linear.x;
 }
 
 template<class JntCmdIF>
