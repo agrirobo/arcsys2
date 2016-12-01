@@ -2,7 +2,11 @@
 
   <param name="robot_description" command="$(find xacro)/xacro.py '$(find arcsys2_description)/urdf/arcsys2.xacro'" />
 
-  <node name="arcsys2_control_node" pkg="arcsys2_control" type="arcsys2_control_node" />
+  <node name="arcsys2_control_node" pkg="arcsys2_control" type="arcsys2_control_node">
+    <rosparam>
+      ics_id_vec: [0]
+    </rosparam>
+  </node>
 
   <include file="$(find arcsys2_moveit_config)/launch/move_group.launch">
     <arg name="info" value="true" />
