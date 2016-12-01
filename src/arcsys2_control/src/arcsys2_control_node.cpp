@@ -141,10 +141,10 @@ int main(int argc, char *argv[])
   auto ics_id_it = ics_ids.cbegin();
   ICSControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
   ICSControl arm1_control {arm1_builder, ics_driver, *ics_id_it++};
-  DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl arm2_control {arm2_builder};
-  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl effector_base_control {effector_base_builder};
+  ICSControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
+  ICSControl arm2_control {arm2_builder, ics_driver, *ics_id_it++};
+  ICSControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
+  ICSControl effector_base_control {effector_base_builder, ics_driver, *ics_id_it++};
   DammyPositionControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl effector_end_control {effector_end_builder};
 
