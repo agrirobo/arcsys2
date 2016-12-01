@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
   ics::ICS3 ics_driver {std::move(ics_device_path)};
   std::vector<int> ics_id_vec {};
   pnh.getParam("ics_id_vec", ics_id_vec);
+  if (ics_id_vec.empty()) throw std::invalid_argument {"ics_id_vec parameter is not found"};
   std::vector<ics::ID> ics_ids(ics_id_vec.cbegin(), ics_id_vec.cend());
 
   hardware_interface::JointStateInterface joint_state_interface {};
