@@ -209,7 +209,7 @@ inline void DCMotorControl::fetch()
 
 inline void DCMotorControl::move()
 {
-  geometry_msgs::Twist msg;
+  geometry_msgs::Twist msg {};
   msg.linear.x = data_.cmd_;
   pub_.publish(std::move(msg));
 }
