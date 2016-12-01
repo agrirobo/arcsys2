@@ -185,11 +185,12 @@ inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, cons
 
 inline void ICSControl::fetch()
 {
+  data_.pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
 }
 
 inline void ICSControl::move()
 {
-  data_.pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
+  driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
 }
 
 inline DCMotorControl::DCMotorControl(BuildDataType& build_data)
