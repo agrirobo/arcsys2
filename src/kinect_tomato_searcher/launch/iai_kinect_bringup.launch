@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
+    <arg name="reg_method" value="opencl" />
+    <arg name="depth_method" value="opencl" />
+  </include>
+</launch>
