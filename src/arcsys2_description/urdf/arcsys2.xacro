@@ -53,6 +53,12 @@
 
   <xacro:SCARA_LINK name="effector_end" length="${effector_length/2}" color="blue" />
 
+  <xacro:FIXED_JOINT parent="shaft" child="kinect">
+    <origin xyz="0 0 ${shaft_height/2}" />
+  </xacro:FIXED_JOINT>
+
+  <xacro:PLAIN_LINK name="kinect" color="green" />
+
 
 <!-- Macro Definition -->
   <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
@@ -87,6 +93,14 @@
         </geometry>
       </collision>
     </link>
+  </xacro:macro>
+
+  <xacro:macro name="FIXED_JOINT" params="parent child *origin">
+    <joint name="${parent}_to_${child}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${child}"/>
+    </joint>
   </xacro:macro>
 
   <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin reduction:=1.0 hardware_interface:=${default_hardware_interface}">
