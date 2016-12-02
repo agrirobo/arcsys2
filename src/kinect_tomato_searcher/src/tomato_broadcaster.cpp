@@ -32,7 +32,7 @@ int main(int argc, char** argv){
   offset_nh.getParam("y", offset_y);
   offset_nh.getParam("z", offset_z);
 
-  ros::Subscriber sub = node.subscribe("target_point", 1, &pointCallback);
+  ros::Subscriber sub = node.subscribe("tomato_point", 1, &pointCallback);
 
   ros::spin();
   return 0;
