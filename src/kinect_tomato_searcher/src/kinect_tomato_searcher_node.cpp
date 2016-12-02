@@ -10,14 +10,13 @@
 class ShowImage {
 public:
   ShowImage()
-    : m_gamma(2048),
-      RGB_WINDOW_NAME("RGB image"),
-      DEPTH_WINDOW_NAME("Depth image"),
-      BINARY_WINDOW_NAME("Binary image")
+    : m_gamma {2048},
+      RGB_WINDOW_NAME {"RGB image"},
+      DEPTH_WINDOW_NAME {"Depth image"},
+      BINARY_WINDOW_NAME {"Binary image"}
   {
-    float v;
     for(int i = 0; i < 2048; i++) {
-      v = i/2048.0;
+      float v = i / 2048.0;
       v = std::pow(v, 3) * 6;
       m_gamma[i] = v * 6 * 256;
     }
@@ -54,40 +53,40 @@ public:
 
       switch(pval >> 8) {
       case 0:
-  output.at<cv::Vec3b>(y,x)[2] = 255;
-  output.at<cv::Vec3b>(y,x)[1] = 255-lb;
-  output.at<cv::Vec3b>(y,x)[0] = 255-lb;
-  break;
+        output.at<cv::Vec3b>(y,x)[2] = 255;
+        output.at<cv::Vec3b>(y,x)[1] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[0] = 255-lb;
+        break;
       case 1:
-  output.at<cv::Vec3b>(y,x)[2] = 255;
-  output.at<cv::Vec3b>(y,x)[1] = lb;
-  output.at<cv::Vec3b>(y,x)[0] = 0;
-  break;
+        output.at<cv::Vec3b>(y,x)[2] = 255;
+        output.at<cv::Vec3b>(y,x)[1] = lb;
+        output.at<cv::Vec3b>(y,x)[0] = 0;
+        break;
       case 2:
-  output.at<cv::Vec3b>(y,x)[2] = 255-lb;
-  output.at<cv::Vec3b>(y,x)[1] = 255;
-  output.at<cv::Vec3b>(y,x)[0] = 0;
-  break;
+        output.at<cv::Vec3b>(y,x)[2] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[1] = 255;
+        output.at<cv::Vec3b>(y,x)[0] = 0;
+        break;
       case 3:
-  output.at<cv::Vec3b>(y,x)[2] = 0;
-  output.at<cv::Vec3b>(y,x)[1] = 255;
-  output.at<cv::Vec3b>(y,x)[0] = lb;
-  break;
+        output.at<cv::Vec3b>(y,x)[2] = 0;
+        output.at<cv::Vec3b>(y,x)[1] = 255;
+        output.at<cv::Vec3b>(y,x)[0] = lb;
+        break;
       case 4:
-  output.at<cv::Vec3b>(y,x)[2] = 0;
-  output.at<cv::Vec3b>(y,x)[1] = 255-lb;
-  output.at<cv::Vec3b>(y,x)[0] = 255;
-  break;
+        output.at<cv::Vec3b>(y,x)[2] = 0;
+        output.at<cv::Vec3b>(y,x)[1] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[0] = 255;
+        break;
       case 5:
-  output.at<cv::Vec3b>(y,x)[2] = 0;
-  output.at<cv::Vec3b>(y,x)[1] = 0;
-  output.at<cv::Vec3b>(y,x)[0] = 255-lb;
+        output.at<cv::Vec3b>(y,x)[2] = 0;
+        output.at<cv::Vec3b>(y,x)[1] = 0;
+        output.at<cv::Vec3b>(y,x)[0] = 255-lb;
         break;
       default:
         output.at<cv::Vec3b>(y,x)[2] = 0;
-  output.at<cv::Vec3b>(y,x)[1] = 0;
-  output.at<cv::Vec3b>(y,x)[0] = 0;
-  break;
+        output.at<cv::Vec3b>(y,x)[1] = 0;
+        output.at<cv::Vec3b>(y,x)[0] = 0;
+        break;
       }
     }
     imshow(DEPTH_WINDOW_NAME, output);
@@ -104,11 +103,9 @@ private:
 class SearchTomato {
 public:
   SearchTomato()
-    : tomato_contours()
-    , siObj()
+    : tomato_contours {},
+      siObj {}
   {}
-
-  ~SearchTomato() {}
 
   void update(const cv::Mat& capture_rgb) {
     siObj.showRGB(capture_rgb);
@@ -155,11 +152,11 @@ private:
 
       bounding_box = cv::boundingRect(contour);
       ratio_balance = (float)bounding_box.width / (float)bounding_box.height;
-  if (ratio_balance > 1.0f) ratio_balance = 1.0f / ratio_balance;
+      if (ratio_balance > 1.0f) ratio_balance = 1.0f / ratio_balance;
 
       // delete mismach. that is smaller or spier or empty
-  if (bounding_box.area() >= 400 && bounding_box.area() < cv::contourArea(contour)*2 && ratio_balance > 0.4f)
-  tomato_contours.push_back(contour);
+      if (bounding_box.area() >= 400 && bounding_box.area() < cv::contourArea(contour)*2 && ratio_balance > 0.4f)
+        tomato_contours.push_back(contour);
     }
   }
 
@@ -167,11 +164,11 @@ private:
     int a, x, y;
     for(y = 0; y < hsv.rows; y++) {
       for(x = 0; x < hsv.cols; x++) {
-  a = hsv.step*y+(x*3);
-  if((hsv.data[a] <= 5 || hsv.data[a] >= 175) && hsv.data[a+1] >= 50 && hsv.data[a+2] >= 50 )
-    binary.at<unsigned char>(y,x) = 255;
-  else
-    binary.at<unsigned char>(y,x) = 0;
+        a = hsv.step*y+(x*3);
+        if((hsv.data[a] <= 5 || hsv.data[a] >= 175) && hsv.data[a+1] >= 50 && hsv.data[a+2] >= 50 )
+          binary.at<unsigned char>(y,x) = 255;
+        else
+          binary.at<unsigned char>(y,x) = 0;
       }
     }
   }
@@ -183,13 +180,13 @@ private:
     for (int y = 0; y < maskedDepth.rows; y++) {
       const uint16_t* line_point = maskedDepth.ptr<uint16_t>(y);
       for (int x = 0; x < maskedDepth.cols; x++) {
-  depth = line_point[x];
-  if (256 < depth && depth <  close_depth) {
-    tomato_point.x = x;
-    tomato_point.y = y;
-    tomato_point.z = depth;
-    close_depth = depth;
-  }
+        depth = line_point[x];
+        if (256 < depth && depth <  close_depth) {
+          tomato_point.x = x;
+          tomato_point.y = y;
+          tomato_point.z = depth;
+          close_depth = depth;
+        }
       }
     }
     return (close_depth != 4096 ? true : false);
@@ -222,8 +219,6 @@ public:
     rgb_sub = it.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::rgbCb, this);
     depth_sub = it.subscribe("/camera/depth_registered/image_raw", 1, &ImageConverter::depthCb, this);
   }
-
-  ~ImageConverter() {}
 
   /**
    * search tomato function.
