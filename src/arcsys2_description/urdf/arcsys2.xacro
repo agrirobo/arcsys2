@@ -53,6 +53,12 @@
 
   <xacro:SCARA_LINK name="effector_end" length="${effector_length/2}" color="blue" />
 
+  <xacro:FIXED_JOINT parent="shaft" child="kinect">
+    <origin xyz="0 0 ${shaft_height/2}" />
+  </xacro:FIXED_JOINT>
+
+  <xacro:PLAIN_LINK name="kinect" color="green" />
+
 
 <!-- Macro Definition -->
   <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} length:=${default_size} height:=${default_size} color:=white">
