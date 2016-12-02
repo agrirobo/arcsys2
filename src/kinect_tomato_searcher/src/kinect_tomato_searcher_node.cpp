@@ -201,6 +201,7 @@ private:
 class ImageConverter {
 private:
   ros::NodeHandle nh;
+  ros::NodeHandle tomapo_nh;
   ros::Publisher point_pub;
   geometry_msgs::Point pub_msg;
   image_transport::ImageTransport it;
@@ -215,7 +216,8 @@ private:
 public:
   ImageConverter(const std::size_t width, const std::size_t height, const double angle_of_view_x, const double angle_of_view_y)
     : nh {},
-      point_pub {nh.advertise<geometry_msgs::Point>("tomato_point/raw", 1)},
+      tomapo_nh {nh, "tomato_point"},
+      point_pub {tomapo_nh.advertise<geometry_msgs::Point>("raw", 1)},
       it {nh},
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
