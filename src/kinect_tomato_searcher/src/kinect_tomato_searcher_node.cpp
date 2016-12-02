@@ -183,9 +183,9 @@ private:
       for (int x = 0; x < maskedDepth.cols; x++) {
         depth = line_point[x];
         if (256 < depth && depth <  close_depth) {
-          tomato_point.x = x;
-          tomato_point.y = y;
-          tomato_point.z = depth;
+          tomato_point.x = depth; // for ros coordinate system
+          tomato_point.y = x; // for ros coordinate system
+          tomato_point.z = -y; // for ros coordinate system
           close_depth = depth;
         }
       }
