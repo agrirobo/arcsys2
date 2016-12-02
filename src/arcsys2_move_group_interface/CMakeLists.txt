@@ -6,6 +6,8 @@ set(${PROJECT_NAME}_DEPENDS
   geometry_msgs
   moveit_msgs
   moveit_ros_planning_interface
+  tf2
+  tf2_ros
 )
 
 include(CheckCXXCompilerFlag)
