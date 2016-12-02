@@ -220,8 +220,8 @@ public:
       rgb_sub {it.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("/camera/depth_registered/image_raw", 1, &ImageConverter::depthCb, this)},
       stObj {},
-      angle_x_per_piccell_ {},
-      angle_y_per_piccell_ {}
+      angle_x_per_piccell_ {width / angle_of_view_x},
+      angle_y_per_piccell_ {height / angle_of_view_y}
   {
   }
 
@@ -252,8 +252,11 @@ public:
       ROS_ERROR("cv_bridge exception by depth: %s", e.what());
     }
 
-    if (stObj.searchTomato(depth_ptr->image, pub_msg))
+    if (stObj.searchTomato(depth_ptr->image, pub_msg)) {
+      pub_msg.y = pub_msg.x * tan(pub_msg.y * angle_x_per_piccell_); // convert to mm
+      pub_msg.z = pub_msg.x * tan(pub_msg.z * angle_y_per_piccell_); // convert to mm
       point_pub.publish(pub_msg);
+    }
 
     cv::waitKey(100);
   }
