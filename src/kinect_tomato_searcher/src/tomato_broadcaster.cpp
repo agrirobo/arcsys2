@@ -20,6 +20,7 @@ private:
   void callback(const geometry_msgs::PointStamped::ConstPtr& msg)
   {
     transform_.header = msg->header;
+    transform_.header.frame_id = "kinect";
     transform_.child_frame_id = "tomato";
 
     transform_.transform.translation.x = msg->point.x;
