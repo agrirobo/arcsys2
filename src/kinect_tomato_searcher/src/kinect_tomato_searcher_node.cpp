@@ -10,10 +10,10 @@
 class ShowImage {
 public:
   ShowImage()
-    : m_gamma(2048)
-    , RGB_WINDOW_NAME("RGB image")
-    , DEPTH_WINDOW_NAME("Depth image")
-    , BINARY_WINDOW_NAME("Binary image")
+    : m_gamma(2048),
+      RGB_WINDOW_NAME("RGB image"),
+      DEPTH_WINDOW_NAME("Depth image"),
+      BINARY_WINDOW_NAME("Binary image")
   {
     float v;
     for(int i = 0; i < 2048; i++) {
