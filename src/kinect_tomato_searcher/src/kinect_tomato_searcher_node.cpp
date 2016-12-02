@@ -105,7 +105,8 @@ public:
   SearchTomato()
     : tomato_contours {},
       siObj {}
-  {}
+  {
+  }
 
   void update(const cv::Mat& capture_rgb) {
     siObj.showRGB(capture_rgb);
@@ -208,16 +209,20 @@ private:
   cv_bridge::CvImageConstPtr rgb_ptr;
   cv_bridge::CvImageConstPtr depth_ptr;
   SearchTomato stObj;
+  const double angle_x_per_piccell_;
+  const double angle_y_per_piccell_;
 
 public:
-  ImageConverter()
-    : it(nh)
-    , stObj()
+  ImageConverter(const std::size_t width, const std::size_t height, const double angle_of_view_x, const double angle_of_view_y)
+    : nh {},
+      point_pub {nh.advertise<geometry_msgs::Point>("tomato_point", 1)},
+      it {nh},
+      rgb_sub {it.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::rgbCb, this)},
+      depth_sub {it.subscribe("/camera/depth_registered/image_raw", 1, &ImageConverter::depthCb, this)},
+      stObj {},
+      angle_x_per_piccell_ {},
+      angle_y_per_piccell_ {}
   {
-    // subscrive to input video feed.
-    point_pub = nh.advertise<geometry_msgs::Point>("tomato_point", 1);
-    rgb_sub = it.subscribe("/camera/rgb/image_raw", 1, &ImageConverter::rgbCb, this);
-    depth_sub = it.subscribe("/camera/depth_registered/image_raw", 1, &ImageConverter::depthCb, this);
   }
 
   /**
@@ -258,7 +263,7 @@ public:
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "kinect_tomato_group_search_node");
-  ImageConverter ic;
+  ImageConverter ic {1920, 1080, 70, 60};
   ros::spin();
   return 0;
 }
