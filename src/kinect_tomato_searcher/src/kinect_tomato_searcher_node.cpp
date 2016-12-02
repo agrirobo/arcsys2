@@ -217,8 +217,8 @@ public:
     : nh {},
       point_pub {nh.advertise<geometry_msgs::Point>("tomato_point/raw", 1)},
       it {nh},
-      rgb_sub {it.subscribe("camera/rgb/image_raw", 1, &ImageConverter::rgbCb, this)},
-      depth_sub {it.subscribe("camera/depth_registered/image_raw", 1, &ImageConverter::depthCb, this)},
+      rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
+      depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
       stObj {},
       angle_x_per_piccell_ {width / angle_of_view_x},
       angle_y_per_piccell_ {height / angle_of_view_y}
