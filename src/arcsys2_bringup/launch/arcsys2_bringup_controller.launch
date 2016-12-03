@@ -1,8 +1,16 @@
 <launch>
 
+  <arg name="dammy" default="false" />
+  <arg unless="$(arg dammy)" name="control_node" value="arcsys2_control_node" />
+  <arg     if="$(arg dammy)" name="control_node" value="arcsys2_dammy_hw_node" />
+
   <include file="$(find arcsys2_control)/launch/joint_state_controller.launch" />
   <include file="$(find arcsys2_control)/launch/joint_trajectory_controller.launch" />
 
-  <node name="arcsys2_control_node" pkg="arcsys2_control" type="arcsys2_control_node" />
+  <node name="arcsys2_control_node" pkg="arcsys2_control" type="$(control_node)">
+    <rosparam>
+      ics_id_vec: [0, 1, 2]
+    </rosparam>
+  </node>
 
 </launch>
