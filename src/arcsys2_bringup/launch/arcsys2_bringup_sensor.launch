@@ -10,4 +10,8 @@
     <arg name="depth_topic" value="kinect2/sd/image_depth_rect" />
   </include>
 
+  <node name="kinect_tomato_broadcaster_node" pkg="kinect_tomato_searcher" type="kinect_tomato_broadcaster_node">
+    <remap from="tomato_point" to="tomato_point/raw" />
+  </node>
+
 </launch>
