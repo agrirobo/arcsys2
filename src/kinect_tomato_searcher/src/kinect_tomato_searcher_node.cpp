@@ -223,8 +223,8 @@ public:
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
       stObj {},
-      angle_x_per_piccell_ {width / (angle_of_view_x * PI / 180.0)},
-      angle_y_per_piccell_ {height / (angle_of_view_y * PI / 180.0)}
+      angle_x_per_piccell_ {(angle_of_view_x * PI / 180.0) / width},
+      angle_y_per_piccell_ {(angle_of_view_y * PI / 180.0) / height}
   {
   }
 
