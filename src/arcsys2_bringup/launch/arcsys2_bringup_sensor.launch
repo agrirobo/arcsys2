@@ -1,0 +1,13 @@
+<launch>
+
+  <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
+    <arg name="reg_method" value="opencl" />
+    <arg name="depth_method" value="opencl" />
+  </include>
+
+  <include file="$(find kinect_tomato_searcher)/launch/kinect_tomato_searcher.launch">
+    <arg name="color_topic" value="kinect2/sd/image_color_rect" />
+    <arg name="depth_topic" value="kinect2/sd/image_depth_rect" />
+  </include>
+
+</launch>
