@@ -212,6 +212,7 @@ private:
   SearchTomato stObj;
   const double angle_x_per_piccell_;
   const double angle_y_per_piccell_;
+  static constexpr double PI {3.141592653589793};
 
 public:
   ImageConverter(const std::size_t width, const std::size_t height, const double angle_of_view_x, const double angle_of_view_y)
@@ -222,8 +223,8 @@ public:
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
       stObj {},
-      angle_x_per_piccell_ {width / angle_of_view_x},
-      angle_y_per_piccell_ {height / angle_of_view_y}
+      angle_x_per_piccell_ {width / (angle_of_view_x * PI / 180.0)},
+      angle_y_per_piccell_ {height / (angle_of_view_y * PI / 180.0)}
   {
   }
 
