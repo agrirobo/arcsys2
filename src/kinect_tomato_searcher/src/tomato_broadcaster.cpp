@@ -12,7 +12,7 @@ class TomatoBroadcaster {
 public:
   TomatoBroadcaster(ros::NodeHandle node_handle)
     : transform_ {},
-      sub_ {node_handle.subscribe<geometry_msgs::PointStamped>("tomato_point/trusted", 1, &TomatoBroadcaster::callback, this)}
+      sub_ {node_handle.subscribe<geometry_msgs::PointStamped>("tomato_point", 1, &TomatoBroadcaster::callback, this)}
   {
   }
 
