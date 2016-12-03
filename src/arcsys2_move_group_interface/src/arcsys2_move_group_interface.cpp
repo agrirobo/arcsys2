@@ -105,7 +105,14 @@ int main(int argc, char** argv) {
 
   spinner.start();
 
-  ros::spin();
+  while (ros::ok()) {
+    if (interface.getTomatoPoint()) {
+      if (interface.setPoseToApproach()) if (interface.plan()) interface.execute();
+      if (interface.setPoseToInsert()) if (interface.plan()) interface.execute();
+      if (interface.setPoseToCut()) if (interface.plan()) interface.execute();
+    }
+    ros::spin();
+  }
 
   spinner.stop();
 
