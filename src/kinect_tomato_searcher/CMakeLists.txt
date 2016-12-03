@@ -32,7 +32,7 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(kinect_tomato_searcher_node src/kinect_tomato_searcher_node.cpp)
-add_executable(kinect_tomato_broadcaster_node src/kinect_tomato_broadcaster.cpp)
+add_executable(kinect_tomato_broadcaster_node src/kinect_tomato_broadcaster_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
