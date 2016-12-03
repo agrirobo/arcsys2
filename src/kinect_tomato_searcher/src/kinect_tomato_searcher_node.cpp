@@ -166,7 +166,7 @@ private:
     for(y = 0; y < hsv.rows; y++) {
       for(x = 0; x < hsv.cols; x++) {
         a = hsv.step*y+(x*3);
-        if((hsv.data[a] <= 10 || hsv.data[a] >= 160) && hsv.data[a+1] >= 30 && hsv.data[a+2] >= 30)
+        if((hsv.data[a] <= 15 || hsv.data[a] >= 300) && hsv.data[a+1] >= 30 && hsv.data[a+2] >= 50)
           binary.at<unsigned char>(y,x) = 255;
         else
           binary.at<unsigned char>(y,x) = 0;
