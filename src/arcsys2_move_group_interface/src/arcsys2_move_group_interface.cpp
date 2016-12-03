@@ -7,7 +7,7 @@
 
 class MoveGroupInterface {
   moveit::planning_interface::MoveGroup move_group_;
-  moveit::planning_interface::MoveGroup::Plan plan_;
+  moveit::planning_interface::MoveGroup::Plan motion_plan_;
 
   geometry_msgs::Pose target_;
 
@@ -17,7 +17,7 @@ class MoveGroupInterface {
 public:
   MoveGroupInterface(const std::string group_name)
     : move_group_ {group_name},
-      plan_ {},
+      motion_plan_ {},
       buffer_ {},
       listener_ {buffer_}
   {
@@ -60,9 +60,9 @@ public:
     return move_group_.setPoseTarget(target_);
   }
 
-  bool plan() { return move_group_.plan(plan_); }
+  bool plan() { return move_group_.plan(motion_plan_); }
 
-  bool execute() { return move_group_.execute(plan_); }
+  bool execute() { return move_group_.execute(motion_plan_); }
 };
 
 int main(int argc, char** argv) {
