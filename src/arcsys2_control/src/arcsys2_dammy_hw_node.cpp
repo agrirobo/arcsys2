@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 
 inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, const ics::ID& id)
   : data_ {build_data.joint_name_},
-    driver_ {driver},
+    driver_(driver), // for ubuntu 14.04
     id_ {id}
 {
   registerJoint(data_, build_data);
