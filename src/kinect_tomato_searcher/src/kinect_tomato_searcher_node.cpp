@@ -267,7 +267,7 @@ public:
 
 
 int main(int argc, char** argv) {
-  ros::init(argc, argv, "kinect_tomato_group_search_node");
+  ros::init(argc, argv, "kinect_tomato_searcher_node");
   ImageConverter ic {1920, 1080, 70, 60};
   ros::spin();
   return 0;
