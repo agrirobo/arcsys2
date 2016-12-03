@@ -177,7 +177,8 @@ private:
 
   bool findClosePoint(const cv::Mat& maskedDepth, geometry_msgs::Point& tomato_point) {
     uint16_t depth;
-    uint16_t close_depth = 3000;
+    constexpr uint16_t OVER_RANGE = 3000;
+    uint16_t close_depth = OVER_RANGE;
 
     for (int y = 0; y < maskedDepth.rows; y++) {
       const uint16_t* line_point = maskedDepth.ptr<uint16_t>(y);
@@ -191,7 +192,7 @@ private:
         }
       }
     }
-    return (close_depth != 4096 ? true : false);
+    return (close_depth != OVER_RANGE ? true : false);
   }
 
   std::vector<std::vector<cv::Point> > tomato_contours;
