@@ -4,10 +4,6 @@
     <arg name="info" value="true" />
   </include>
 
-  <!-- 実験中に起動するには重いので以下のRVizはコメントアウトしておく -->
-  <!-- <include file="$(find arcsys2_moveit_config)/launch/moveit_rviz.launch"> -->
-  <!--   <arg name="config" value="true" />                                     -->
-  <!--   <arg name="debug"  value="false" />                                    -->
-  <!-- </include>                                                               -->
+  <node name="move_group_interface" pkg="move_group_interface" type="move_group_interface_node" />
 
 </launch>
