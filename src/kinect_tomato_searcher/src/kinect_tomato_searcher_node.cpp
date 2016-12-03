@@ -103,25 +103,25 @@ private:
 class SearchTomato {
 public:
   SearchTomato()
-    : tomato_contours {},
-      siObj {}
+    : tomato_contours {}
+//      siObj {}
   {
   }
 
   void update(const cv::Mat& capture_rgb) {
-    siObj.showRGB(capture_rgb);
+//    siObj.showRGB(capture_rgb);
     cv::Mat binary_mat = cv::Mat::zeros(capture_rgb.size(), CV_8UC1);
     imageProsessing(capture_rgb, binary_mat);
-    siObj.showBinary(binary_mat);
+//    siObj.showBinary(binary_mat);
     searchTomatoContours(binary_mat, tomato_contours);
   }
 
   bool searchTomato(const cv::Mat& capture_depth, geometry_msgs::Point& tomato_point) {
-    siObj.showDepth(capture_depth);
+//    siObj.showDepth(capture_depth);
     cv::Mat maskedDepth = cv::Mat::zeros(capture_depth.size(), CV_16UC1);
     cv::Mat mask = cv::Mat::zeros(capture_depth.size(), CV_8UC1);
     cv::drawContours(mask, tomato_contours, -1, cv::Scalar(255), CV_FILLED, 8);
-    siObj.showBinary(mask);
+//    siObj.showBinary(mask);
 
     capture_depth.copyTo(maskedDepth, mask);
     return findClosePoint(maskedDepth, tomato_point);
@@ -194,7 +194,7 @@ private:
   }
 
   std::vector<std::vector<cv::Point> > tomato_contours;
-  ShowImage siObj;
+//  ShowImage siObj;
 };
 
 
