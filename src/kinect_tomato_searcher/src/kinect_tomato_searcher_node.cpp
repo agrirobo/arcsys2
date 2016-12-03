@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/Point.h>
+#include <geometry_msgs/PointStamped.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -219,7 +220,7 @@ public:
   ImageConverter(const std::size_t width, const std::size_t height, const double angle_of_view_x, const double angle_of_view_y)
     : nh {},
       tomapo_nh {nh, "tomato_point"},
-      point_pub {tomapo_nh.advertise<geometry_msgs::Point>("raw", 1)},
+      point_pub {tomapo_nh.advertise<geometry_msgs::PointStamped>("raw", 1)},
       it {nh},
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
@@ -260,7 +261,10 @@ public:
     if (stObj.searchTomato(depth_ptr->image, pub_msg)) {
       pub_msg.y = pub_msg.x * tan(angle_x_per_piccell_ * pub_msg.y); // convert to mm
       pub_msg.z = pub_msg.x * tan(angle_y_per_piccell_ * (height_ + pub_msg.z)); // convert to mm
-      point_pub.publish(pub_msg);
+      geometry_msgs::PointStamped stamped_msg; // FIXME: rename to pub_msg
+      stamped_msg.header.stamp = ros::Time::now();
+      stamped_msg.header.frame_id = "kinect";
+      point_pub.publish(stamped_msg);
     }
 
     cv::waitKey(100);
