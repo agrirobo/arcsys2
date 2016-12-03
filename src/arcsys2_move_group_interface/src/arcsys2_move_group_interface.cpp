@@ -9,7 +9,7 @@ class MoveGroupInterface {
   moveit::planning_interface::MoveGroup move_group_;
   moveit::planning_interface::MoveGroup::Plan motion_plan_;
 
-  geometry_msgs::Pose target_;
+  geometry_msgs::Pose target_pose_;
 
   tf2_ros::Buffer buffer_;
   tf2_ros::TransformListener listener_;
@@ -29,10 +29,10 @@ public:
       // geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform(move_group_.getPlanningFrame(), "tomato", ros::Time(0), ros::Duration(5.0))};
       geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform("rail", "tomato", ros::Time(0), ros::Duration(5.0))};
 
-      target_.position.x = transform_stamped_.transform.translation.x;
-      target_.position.y = transform_stamped_.transform.translation.y;
-      target_.position.z = transform_stamped_.transform.translation.z;
-      target_.orientation.w = 1.0;
+      target_pose_.position.x = transform_stamped_.transform.translation.x;
+      target_pose_.position.y = transform_stamped_.transform.translation.y;
+      target_pose_.position.z = transform_stamped_.transform.translation.z;
+      target_pose_.orientation.w = 1.0;
 
     } catch (const tf2::TransformException& ex) {
       ROS_WARN_STREAM(ex.what());
@@ -44,20 +44,20 @@ public:
 
   bool setPoseToApproach()
   {
-    target_.position.x -= 0.1;
-    return move_group_.setPoseTarget(target_);
+    target_pose_.position.x -= 0.1;
+    return move_group_.setPoseTarget(target_pose_);
   }
 
   bool setPoseToInsert()
   {
-    target_.position.x += 0.1;
-    return move_group_.setPoseTarget(target_);
+    target_pose_.position.x += 0.1;
+    return move_group_.setPoseTarget(target_pose_);
   }
 
   bool setPoseToCut()
   {
-    target_.orientation.w -= 0.1;
-    return move_group_.setPoseTarget(target_);
+    target_pose_.orientation.w -= 0.1;
+    return move_group_.setPoseTarget(target_pose_);
   }
 
   bool plan() { return move_group_.plan(motion_plan_); }
