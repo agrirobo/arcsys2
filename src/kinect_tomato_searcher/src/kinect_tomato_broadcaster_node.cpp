@@ -33,7 +33,7 @@ private:
 };
 
 int main(int argc, char** argv){
-  ros::init(argc, argv, "tomato_point_broadcaster");
+  ros::init(argc, argv, "kinect_tomato_broadcaster_node");
   ros::NodeHandle node_handle;
 
   TomatoBroadcaster broadcaster {node_handle};
