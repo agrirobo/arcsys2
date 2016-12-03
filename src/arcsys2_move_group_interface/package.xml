@@ -20,4 +20,6 @@
   <depend> geometry_msgs                 </depend>
   <depend> moveit_msgs                   </depend>
   <depend> moveit_ros_planning_interface </depend>
+  <depend> tf2                           </depend>
+  <depend> tf2_ros                       </depend>
 </package>
