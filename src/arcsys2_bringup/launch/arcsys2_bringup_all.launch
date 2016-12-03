@@ -1,0 +1,15 @@
+<launch>
+
+  <arg name="dammy" default="false" />
+
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find arcsys2_description)/urdf/arcsys2.xacro'" />
+
+  <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_controller.launch">
+    <arg name="dammy" value="$(arg dammy)" />
+  </include>
+
+  <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_sensor.launch" />
+
+  <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_moveit.launch" />
+
+</launch>
