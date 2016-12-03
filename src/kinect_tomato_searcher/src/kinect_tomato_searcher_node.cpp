@@ -176,13 +176,13 @@ private:
 
   bool findClosePoint(const cv::Mat& maskedDepth, geometry_msgs::Point& tomato_point) {
     uint16_t depth;
-    uint16_t close_depth = 4096;
+    uint16_t close_depth = 3000;
 
     for (int y = 0; y < maskedDepth.rows; y++) {
       const uint16_t* line_point = maskedDepth.ptr<uint16_t>(y);
       for (int x = 0; x < maskedDepth.cols; x++) {
         depth = line_point[x];
-        if (256 < depth && depth <  close_depth) {
+        if (512 < depth && depth <  close_depth) {
           tomato_point.x = depth; // for ros coordinate system
           tomato_point.y = x; // for ros coordinate system
           tomato_point.z = -y; // for ros coordinate system
