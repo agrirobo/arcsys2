@@ -56,7 +56,8 @@ public:
   bool getTomatoPoint()
   {
     try {
-      geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform(move_group_.getPlanningFrame(), "tomato", ros::Time(0), ros::Duration(5.0))};
+      // geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform(move_group_.getPlanningFrame(), "tomato", ros::Time(0), ros::Duration(5.0))};
+      geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform("rail", "tomato", ros::Time(0), ros::Duration(5.0))};
 
       target_.position.x = transform_stamped_.transform.translation.x;
       target_.position.y = transform_stamped_.transform.translation.y;
@@ -73,19 +74,19 @@ public:
 
   bool setPoseToApproach()
   {
-    target_.position.x -= 0.5;
+    target_.position.x -= 0.1;
     return move_group_.setPoseTarget(target_);
   }
 
   bool setPoseToInsert()
   {
-    target_.position.x += 0.5;
+    target_.position.x += 0.1;
     return move_group_.setPoseTarget(target_);
   }
 
   bool setPoseToCut()
   {
-    target_.orientation.w -= 0.5;
+    target_.orientation.w -= 0.1;
     return move_group_.setPoseTarget(target_);
   }
 
