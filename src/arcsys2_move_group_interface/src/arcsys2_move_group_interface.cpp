@@ -37,7 +37,9 @@ private:
 
 class MoveGroupInterfaceTest {
   moveit::planning_interface::MoveGroup move_group_;
-    moveit::planning_interface::MoveGroup::Plan plan_;
+  moveit::planning_interface::MoveGroup::Plan plan_;
+
+  geometry_msgs::Pose target_;
 
   tf2_ros::Buffer buffer_;
   tf2_ros::TransformListener listener_;
@@ -51,23 +53,15 @@ public:
   {
   }
 
-  bool plan()
+  bool getTomatoPoint()
   {
     try {
       geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform(move_group_.getPlanningFrame(), "tomato", ros::Time(0), ros::Duration(5.0))};
 
-      geometry_msgs::Pose target;
-      target.position.x = transform_stamped_.transform.translation.x;
-      target.position.y = transform_stamped_.transform.translation.y;
-      target.position.z = transform_stamped_.transform.translation.z;
-      target.orientation.w = 1.0;
-
-      if (move_group_.plan(plan_)) {
-        ROS_INFO_STREAM("planning succeeded");
-      } else {
-        ROS_INFO_STREAM("planning failed");
-        return false;
-      }
+      target_.position.x = transform_stamped_.transform.translation.x;
+      target_.position.y = transform_stamped_.transform.translation.y;
+      target_.position.z = transform_stamped_.transform.translation.z;
+      target_.orientation.w = 1.0;
 
     } catch (const tf2::TransformException& ex) {
       ROS_WARN_STREAM(ex.what());
@@ -77,10 +71,27 @@ public:
     return true;
   }
 
-  bool execute()
+  bool setPoseToApproach()
   {
-    move_group_.execute(plan_);
+    target_.position.x -= 0.5;
+    return move_group_.setPoseTarget(target_);
   }
+
+  bool setPoseToInsert()
+  {
+    target_.position.x += 0.5;
+    return move_group_.setPoseTarget(target_);
+  }
+
+  bool setPoseToCut()
+  {
+    target_.orientation.w -= 0.5;
+    return move_group_.setPoseTarget(target_);
+  }
+
+  bool plan() { return move_group_.plan(plan_); }
+
+  bool execute() { return move_group_.execute(plan_); }
 };
 
 int main(int argc, char** argv) {
