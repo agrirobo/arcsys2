@@ -60,9 +60,12 @@ public:
     return move_group_.setPoseTarget(target_pose_);
   }
 
-  bool plan() { return move_group_.plan(motion_plan_); }
-
-  bool execute() { return move_group_.execute(motion_plan_); }
+  bool move()
+  {
+    if (!move_group_.plan(motion_plan_)) return false;
+    move_group_.execute(motion_plan_);
+    return true;
+  }
 };
 
 int main(int argc, char** argv) {
@@ -77,9 +80,9 @@ int main(int argc, char** argv) {
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
-      if (interface.setPoseToApproach()) if (interface.plan()) interface.execute();
-      if (interface.setPoseToInsert()) if (interface.plan()) interface.execute();
-      if (interface.setPoseToCut()) if (interface.plan()) interface.execute();
+      if (interface.setPoseToApproach()) interface.move();
+      if (interface.setPoseToInsert()) interface.move();
+      if (interface.setPoseToCut()) interface.move();
     }
     ros::spin();
   }
