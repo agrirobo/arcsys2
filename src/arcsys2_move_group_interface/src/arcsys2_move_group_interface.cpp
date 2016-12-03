@@ -7,36 +7,6 @@
 
 class MoveGroupInterface {
   moveit::planning_interface::MoveGroup move_group_;
-
-  ros::Subscriber sub_;
-
-public:
-  MoveGroupInterface(const std::string& group_name, ros::NodeHandle& node_handle)
-    : move_group_ {group_name},
-      sub_ {node_handle.subscribe<geometry_msgs::PointStamped>("/tomato_point_trusted", 1, &MoveGroupInterface::callback, this)}
-  {
-  }
-
-private:
-  void callback(const geometry_msgs::PointStampedConstPtr& msg)
-  {
-    geometry_msgs::PoseStamped target_pose;
-    target_pose.header = msg->header;
-    target_pose.pose.position = msg->point;
-    target_pose.pose.orientation.w = 1.0;
-
-    move_group_.setPoseTarget(target_pose);
-
-    moveit::planning_interface::MoveGroup::Plan plan;
-    if (move_group_.plan(plan)) ROS_INFO_STREAM("SUCCESS");
-    else ROS_INFO_STREAM("FAILED");
-
-    move_group_.execute(plan);
-  }
-};
-
-class MoveGroupInterfaceTest {
-  moveit::planning_interface::MoveGroup move_group_;
   moveit::planning_interface::MoveGroup::Plan plan_;
 
   geometry_msgs::Pose target_;
@@ -45,7 +15,7 @@ class MoveGroupInterfaceTest {
   tf2_ros::TransformListener listener_;
 
 public:
-  MoveGroupInterfaceTest(const std::string group_name)
+  MoveGroupInterface(const std::string group_name)
     : move_group_ {group_name},
       plan_ {},
       buffer_ {},
@@ -101,7 +71,7 @@ int main(int argc, char** argv) {
   ros::NodeHandle node_handle {"~"};
   ros::AsyncSpinner spinner {1};
 
-  MoveGroupInterfaceTest interface {"arcsys2"};
+  MoveGroupInterface interface {"arcsys2"};
 
   spinner.start();
 
