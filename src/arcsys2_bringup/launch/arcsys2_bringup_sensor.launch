@@ -6,7 +6,7 @@
   </include>
 
   <include file="$(find kinect_tomato_searcher)/launch/kinect_tomato_searcher.launch">
-    <arg name="rbg_topic" value="kinect2/sd/image_color_rect" />
+    <arg name="color_topic" value="kinect2/sd/image_color_rect" />
     <arg name="depth_topic" value="kinect2/sd/image_depth_rect" />
   </include>
 
