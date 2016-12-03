@@ -185,8 +185,8 @@ private:
         depth = line_point[x];
         if (512 < depth && depth <  close_depth) {
           tomato_point.x = depth; // for ros coordinate system
-          tomato_point.y = x - maskDepth.cols / 2; // for ros coordinate system
-          tomato_point.z = -y + maskDepth.rows / 2; // for ros coordinate system
+          tomato_point.y = x - maskedDepth.cols / 2; // for ros coordinate system
+          tomato_point.z = -y + maskedDepth.rows / 2; // for ros coordinate system
           close_depth = depth;
         }
       }
