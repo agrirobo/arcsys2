@@ -259,8 +259,9 @@ public:
     }
 
     if (stObj.searchTomato(depth_ptr->image, pub_msg)) {
-      pub_msg.y = pub_msg.x * tan(angle_x_per_piccell_ * pub_msg.y); // convert to mm
-      pub_msg.z = pub_msg.x * tan(angle_y_per_piccell_ * (height_ + pub_msg.z)); // convert to mm
+      pub_msg.y = pub_msg.x * tan(angle_x_per_piccell_ * pub_msg.y) / 1000.0; // convert to m
+      pub_msg.z = pub_msg.x * tan(angle_y_per_piccell_ * (height_ + pub_msg.z)) / 1000.0; // convert to m
+      pub_msg.x = pub_msg.x / 1000.0; // convert to m
       geometry_msgs::PointStamped stamped_msg; // FIXME: rename to pub_msg
       stamped_msg.header.stamp = ros::Time::now();
       stamped_msg.header.frame_id = "kinect";
