@@ -3,36 +3,36 @@
 #include <geometry_msgs/TransformStamped.h>
 #include <tf2_ros/transform_broadcaster.h>
 
-int offset_x, offset_y, offset_z;
+int offsetX, offsetY, offsetZ;
 
 void pointCallback(const geometry_msgs::Point::ConstPtr& msg) {
   static tf2_ros::TransformBroadcaster br;
-  geometry_msgs::TransformStamped transform_stamped;
+  geometry_msgs::TransformStamped transformStamped;
   
-  transform_stamped.header.stamp = ros::Time::now();
-  transform_stamped.header.frame_id = "kinect";
-  transform_stamped.child_frame_id = "tomato";
-  transform_stamped.transform.translation.x = msg->x + offset_x;
-  transform_stamped.transform.translation.y = msg->y + offset_y;
-  transform_stamped.transform.translation.z = msg->z + offset_z;
-  transform_stamped.transform.rotation.x = 0;
-  transform_stamped.transform.rotation.y = 0;
-  transform_stamped.transform.rotation.z = 0;
-  transform_stamped.transform.rotation.w = 1;
+  transformStamped.header.stamp = ros::Time::now();
+  transformStamped.header.frame_id = "kinect";
+  transformStamped.child_frame_id = "tomato";
+  transformStamped.transform.translation.x = msg->x + offsetX;
+  transformStamped.transform.translation.y = msg->y + offsetY;
+  transformStamped.transform.translation.z = msg->z + offsetZ;
+  transformStamped.transform.rotation.x = 0;
+  transformStamped.transform.rotation.y = 0;
+  transformStamped.transform.rotation.z = 0;
+  transformStamped.transform.rotation.w = 1;
 
-  br.sendTransform(transform_stamped);
+  br.sendTransform(transformStamped);
 }
 
 int main(int argc, char** argv){
   ros::init(argc, argv, "tomato_broadcaster");
   ros::NodeHandle node;
-  ros::NodeHandle offset_nh {"~offset"};
+  ros::NodeHandle private_node;
 
-  offset_nh.getParam("x", offset_x);
-  offset_nh.getParam("y", offset_y);
-  offset_nh.getParam("z", offset_z);
+  private_node.getParam("kinect_offset_x", offsetX);
+  private_node.getParam("kinect_offset_y", offsetY);
+  private_node.getParam("kinect_offset_z", offsetZ);
 
-  ros::Subscriber sub = node.subscribe("tomato_point", 1, &pointCallback);
+  ros::Subscriber sub = node.subscribe("/tomato_point", 1, &pointCallback);
 
   ros::spin();
   return 0;
