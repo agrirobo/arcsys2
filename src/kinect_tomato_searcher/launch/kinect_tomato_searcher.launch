@@ -1,10 +1,10 @@
 <launch>
 
-  <arg name="rbg_topic" default="kinect2/sd/image_color_rect" />
+  <arg name="color_topic" default="kinect2/sd/image_color_rect" />
   <arg name="depth_topic" default="kinect2/sd/image_depth_rect" />
 
   <node pkg="kinect_tomato_searcher" type="kinect_tomato_searcher_node" name="search_tomato_node">
-    <remap from="rgb" to="$(arg rgb_topic)" />
+    <remap from="rgb" to="$(arg color_topic)" />
     <remap from="depth" to="$(arg depth_topic)" />
   </node>
 
