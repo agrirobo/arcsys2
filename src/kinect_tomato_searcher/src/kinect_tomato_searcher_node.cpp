@@ -210,6 +210,7 @@ private:
   cv_bridge::CvImageConstPtr rgb_ptr;
   cv_bridge::CvImageConstPtr depth_ptr;
   SearchTomato stObj;
+  const std::size_t height_;
   const double angle_x_per_piccell_;
   const double angle_y_per_piccell_;
   static constexpr double PI {3.141592653589793};
@@ -223,6 +224,7 @@ public:
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
       stObj {},
+      height_ {height},
       angle_x_per_piccell_ {(angle_of_view_x * PI / 180.0) / width},
       angle_y_per_piccell_ {(angle_of_view_y * PI / 180.0) / height}
   {
@@ -256,8 +258,8 @@ public:
     }
 
     if (stObj.searchTomato(depth_ptr->image, pub_msg)) {
-      pub_msg.y = pub_msg.x * tan(pub_msg.y * angle_x_per_piccell_); // convert to mm
-      pub_msg.z = pub_msg.x * tan(pub_msg.z * angle_y_per_piccell_); // convert to mm
+      pub_msg.y = pub_msg.x * tan(angle_x_per_piccell_ * pub_msg.y); // convert to mm
+      pub_msg.z = pub_msg.x * tan(angle_y_per_piccell_ * (height_ + pub_msg.z)); // convert to mm
       point_pub.publish(pub_msg);
     }
 
