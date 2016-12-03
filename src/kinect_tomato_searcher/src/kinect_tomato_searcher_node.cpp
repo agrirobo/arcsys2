@@ -264,6 +264,7 @@ public:
       geometry_msgs::PointStamped stamped_msg; // FIXME: rename to pub_msg
       stamped_msg.header.stamp = ros::Time::now();
       stamped_msg.header.frame_id = "kinect";
+      stamped_msg.point = pub_msg;
       point_pub.publish(stamped_msg);
     }
 
