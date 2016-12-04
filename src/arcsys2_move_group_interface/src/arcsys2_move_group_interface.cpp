@@ -72,11 +72,7 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
 
   ros::NodeHandle node_handle {"~"};
-  ros::AsyncSpinner spinner {1};
-
   MoveGroupInterface interface {"arcsys2"};
-
-  spinner.start();
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
@@ -86,8 +82,6 @@ int main(int argc, char** argv) {
     }
     ros::spin();
   }
-
-  spinner.stop();
 
   return 0;
 }
