@@ -1,9 +1,9 @@
 <launch>
 
-  <!--node name="move_group_interface"
-         pkg="arcsys2_move_group"
-        type="arcsys2_move_group_node">
-    <remap from="sub_topic" to="/tomapo" />
-  </node-->
+  <node name="move_group_interface_node" pkg="arcsys2_move_group_interface" type="arcsys2_move_group_interface_node">
+    <param name="joint_tolerance" value="0.1" />
+    <param name="position_tolerance" value="0.1" />
+    <param name="orientation_tolerance" value="0.1" />
+  </node>
 
 </launch>

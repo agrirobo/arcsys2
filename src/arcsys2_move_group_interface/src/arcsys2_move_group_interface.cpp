@@ -78,7 +78,10 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
   ros::NodeHandle node_handle {"~"};
 
-  MoveGroupInterface interface {"arcsys2"};
+  MoveGroupInterface interface {"arcsys2",
+                                node_handle.param("joint_tolerance", 0.1),
+                                node_handle.param("position_tolerance", 0.1),
+                                node_handle.param("orientation_tolerance", 0.1)};
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
