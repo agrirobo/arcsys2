@@ -2,11 +2,14 @@
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/Pose.h>
+#include <geometry_msgs/PoseArray.h>
 #include <image_transport/image_transport.h>
+#include <sensor_msgs/image_encodings.h>
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/video/video.hpp>
-#include <sensor_msgs/image_encodings.h>
 
 class ShowImage {
 public:
@@ -128,6 +131,21 @@ public:
     return findClosePoint(maskedDepth, tomato_point);
   }
 
+  bool searchTomato(const cv::Mat& capture_depth, geometry_msgs::PoseArray& tomato_poses) {
+    tomato_poses.poses.clear();
+    siObj.showDepth(capture_depth);
+    cv::Mat maskedDepth = cv::Mat::zeros(capture_depth.size(), CV_16UC1);
+    cv::Mat mask = cv::Mat::zeros(capture_depth.size(), CV_8UC1);
+    for (std::size_t i {0}; i < tomato_contours.size(); ++i) {
+      cv::drawContours(mask, tomato_contours, i, cv::Scalar(255), CV_FILLED, 8);
+      siObj.showBinary(mask);
+
+      capture_depth.copyTo(maskedDepth, mask);
+      findClosePoint(maskedDepth, tomato_poses);
+    }
+    return tomato_poses.empty() ? false : true;
+  }
+
 private:
   void imageProsessing(const cv::Mat& rgb, cv::Mat& binary) {
     cv::Mat blur, hsv;
@@ -177,7 +195,8 @@ private:
 
   bool findClosePoint(const cv::Mat& maskedDepth, geometry_msgs::Point& tomato_point) {
     uint16_t depth;
-    uint16_t close_depth = 3000;
+    constexpr uint16_t OVER_RANGE = 3000;
+    uint16_t close_depth = OVER_RANGE;
 
     for (int y = 0; y < maskedDepth.rows; y++) {
       const uint16_t* line_point = maskedDepth.ptr<uint16_t>(y);
@@ -191,7 +210,19 @@ private:
         }
       }
     }
-    return (close_depth != 4096 ? true : false);
+    return (close_depth != OVER_RANGE ? true : false);
+  }
+
+  bool findClosePoint(const cv::Mat& maskedDepth, geometry_msgs::PoseArray& tomato_poses) {
+    geometry_msgs::Point tomato_point {};
+    if (findClosePoint(maskedDepth, tomato_point)) {
+      geometry_msgs::Pose tomato_pose {};
+      tomato_pose.position = tomato_point;
+      tomato_pose.orientation.w = 1.0;
+      tomato_poses.poses.push_back(tomato_pose);
+      return true;
+    }
+    return false;
   }
 
   std::vector<std::vector<cv::Point> > tomato_contours;
@@ -203,8 +234,8 @@ class ImageConverter {
 private:
   ros::NodeHandle nh;
   ros::NodeHandle tomapo_nh;
-  ros::Publisher point_pub;
-  geometry_msgs::Point pub_msg;
+  ros::Publisher poses_pub;
+  geometry_msgs::PoseArray pub_msg;
   image_transport::ImageTransport it;
   image_transport::Subscriber rgb_sub;
   image_transport::Subscriber depth_sub;
@@ -220,7 +251,7 @@ public:
   ImageConverter(const std::size_t width, const std::size_t height, const double angle_of_view_x, const double angle_of_view_y)
     : nh {},
       tomapo_nh {nh, "tomato_point"},
-      point_pub {tomapo_nh.advertise<geometry_msgs::PointStamped>("raw", 1)},
+      poses_pub {tomapo_nh.advertise<geometry_msgs::PoseArray>("raw", 1)},
       it {nh},
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
@@ -259,14 +290,12 @@ public:
     }
 
     if (stObj.searchTomato(depth_ptr->image, pub_msg)) {
-      pub_msg.y = pub_msg.x * tan(angle_x_per_piccell_ * pub_msg.y) / 1000.0; // convert to m
-      pub_msg.z = pub_msg.x * tan(angle_y_per_piccell_ * pub_msg.z) / 1000.0; // convert to m
-      pub_msg.x = pub_msg.x / 1000.0; // convert to m
-      geometry_msgs::PointStamped stamped_msg; // FIXME: rename to pub_msg
-      stamped_msg.header.stamp = ros::Time::now();
-      stamped_msg.header.frame_id = "kinect";
-      stamped_msg.point = pub_msg;
-      point_pub.publish(stamped_msg);
+      for (auto tomato_pose : pub_msg.poses) {
+        tomato_pose.position.y = tomato_pose.position.x * tan(angle_x_per_piccell_ * tomato_pose.position.y) / 1000.0; // convert to m
+        tomato_pose.position.z = tomato_pose.position.x * tan(angle_y_per_piccell_ * tomato_pose.position.z) / 1000.0; // convert to m
+        tomato_pose.position.x = tomato_pose.position.x / 1000.0; // convert to m
+      }
+      poses_pub.publish(pub_msg);
     }
 
     cv::waitKey(100);
