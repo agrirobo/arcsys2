@@ -24,6 +24,8 @@ public:
       buffer_ {},
       listener_ {buffer_}
   {
+    move_group_.allowReplanning(true);
+
     move_group_.setGoalJointTolerance(joint_tolerance);
     move_group_.setGoalPositionTolerance(position_tolerance);
     move_group_.setGoalOrientationTolerance(orientation_tolerance);
