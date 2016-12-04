@@ -52,6 +52,7 @@ private:
   JointData data_;
   ics::ICS3& driver_;
   ics::ID id_;
+  double last_pos_;
 };
 
 class DCMotorControl
@@ -178,19 +179,20 @@ int main(int argc, char *argv[])
 inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, const ics::ID& id)
   : data_ {build_data.joint_name_},
     driver_(driver), // for ubuntu 14.04
-    id_ {id}
+    id_ {id},
+    last_pos_ {0}
 {
   registerJoint(data_, build_data);
 }
 
 inline void ICSControl::fetch()
 {
-  data_.pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
+  data_.pos_ = last_pos_;
 }
 
 inline void ICSControl::move()
 {
-  driver_.move(id_, ics::Angle::newRadian(data_.cmd_));
+  last_pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_)) / 2 + last_pos_ / 2;
 }
 
 inline DCMotorControl::DCMotorControl(BuildDataType& build_data)
