@@ -1,16 +1,16 @@
 <launch>
 
-  <arg name="dammy_controller" default="false" />
-  <arg name="dammy_sensor"     default="false" />
+  <arg name="dummy_controller" default="false" />
+  <arg name="dummy_sensor"     default="false" />
 
   <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_description.launch" />
 
   <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_controller.launch">
-    <arg name="dammy" value="$(arg dammy_controller)" />
+    <arg name="dummy" value="$(arg dummy_controller)" />
   </include>
 
   <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_sensor.launch">
-    <arg name="dammy" value="$(arg dammy_sensor)" />
+    <arg name="dummy" value="$(arg dummy_sensor)" />
   </include>
 
   <include file="$(find arcsys2_bringup)/launch/arcsys2_bringup_moveit.launch" />

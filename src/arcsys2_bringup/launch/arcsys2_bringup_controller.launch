@@ -1,8 +1,8 @@
 <launch>
 
-  <arg name="dammy" default="false" />
-  <arg unless="$(arg dammy)" name="control_node" value="arcsys2_control_node" />
-  <arg     if="$(arg dammy)" name="control_node" value="arcsys2_dammy_hw_node" />
+  <arg name="dummy" default="false" />
+  <arg unless="$(arg dummy)" name="control_node" value="arcsys2_control_node" />
+  <arg     if="$(arg dummy)" name="control_node" value="arcsys2_dammy_hw_node" />
 
   <include file="$(find arcsys2_control)/launch/joint_state_controller.launch" />
   <include file="$(find arcsys2_control)/launch/joint_trajectory_controller.launch" />
