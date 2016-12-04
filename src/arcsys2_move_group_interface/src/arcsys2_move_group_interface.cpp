@@ -48,21 +48,21 @@ public:
     return true;
   }
 
-  bool setPoseToApproach()
+  bool setPoseToApproach(const double& effector_length)
   {
-    target_pose_.position.x -= 0.1;
+    target_pose_.position.x -= effector_length;
     return move_group_.setPoseTarget(target_pose_);
   }
 
-  bool setPoseToInsert()
+  bool setPoseToInsert(const double& effector_length)
   {
-    target_pose_.position.x += 0.1;
+    target_pose_.position.x += effector_length;
     return move_group_.setPoseTarget(target_pose_);
   }
 
-  bool setPoseToCut()
+  bool setPoseToCut(const double& effector_length)
   {
-    target_pose_.orientation.w -= 0.1;
+    target_pose_.orientation.w -= effector_length;
     return move_group_.setPoseTarget(target_pose_);
   }
 
@@ -82,9 +82,9 @@ int main(int argc, char** argv) {
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
-      if (interface.setPoseToApproach()) interface.move();
-      if (interface.setPoseToInsert()) interface.move();
-      if (interface.setPoseToCut()) interface.move();
+      if (interface.setPoseToApproach(0.1)) interface.move();
+      if (interface.setPoseToInsert(0.1)) interface.move();
+      if (interface.setPoseToCut(0.1)) interface.move();
     }
     ros::spin();
   }
