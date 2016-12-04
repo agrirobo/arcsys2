@@ -141,8 +141,9 @@ public:
       siObj.showBinary(mask);
 
       capture_depth.copyTo(maskedDepth, mask);
-      return findClosePoint(maskedDepth, tomato_poses);
+      findClosePoint(maskedDepth, tomato_poses);
     }
+    return tomato_poses.empty() ? false : true;
   }
 
 private:
@@ -219,8 +220,9 @@ private:
       tomato_pose.position = tomato_point;
       tomato_pose.orientation.w = 1.0;
       tomato_poses.poses.push_back(tomato_pose);
+      return true;
     }
-    return tomato_poses.poses.empty() ? false : true;
+    return false;
   }
 
   std::vector<std::vector<cv::Point> > tomato_contours;
