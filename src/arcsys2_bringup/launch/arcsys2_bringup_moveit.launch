@@ -4,6 +4,10 @@
     <arg name="info" value="true" />
   </include>
 
-  <node name="move_group_interface" pkg="arcsys2_move_group_interface" type="arcsys2_move_group_interface_node" />
+  <include file="$(find arcsys2_move_group_interface)/launch/move_group_interface.launch">
+    <arg name="joint_tolerance" value="0.1" />
+    <arg name="position_tolerance" value="0.1" />
+    <arg name="orientation_tolerance" value="0.1" />
+  </include>
 
 </launch>
