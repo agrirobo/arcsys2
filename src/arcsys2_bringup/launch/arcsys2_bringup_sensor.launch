@@ -1,17 +1,26 @@
 <launch>
 
-  <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
-    <arg name="reg_method" value="opencl" />
-    <arg name="depth_method" value="opencl" />
-  </include>
+  <arg name="dummy" default="false" />
 
-  <include file="$(find kinect_tomato_searcher)/launch/kinect_tomato_searcher.launch">
-    <arg name="color_topic" value="kinect2/sd/image_color_rect" />
-    <arg name="depth_topic" value="kinect2/sd/image_depth_rect" />
-  </include>
+  <group unless="$(arg dummy)">
+    <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
+      <arg name="reg_method" value="opencl" />
+      <arg name="depth_method" value="opencl" />
+    </include>
 
-  <node name="kinect_tomato_broadcaster_node" pkg="kinect_tomato_searcher" type="kinect_tomato_broadcaster_node">
-    <remap from="tomato_point" to="tomato_point/raw" />
-  </node>
+    <include file="$(find kinect_tomato_searcher)/launch/kinect_tomato_searcher.launch">
+      <arg name="color_topic" value="kinect2/sd/image_color_rect" />
+      <arg name="depth_topic" value="kinect2/sd/image_depth_rect" />
+    </include>
+
+    <node name="kinect_tomato_broadcaster_node" pkg="kinect_tomato_searcher" type="kinect_tomato_broadcaster_node">
+      <remap from="tomato_point" to="tomato_point/raw" />
+    </node>
+  </group>
+
+  <group if="$(arg dummy)">
+    <node name="kinect_tomato_broadcaster_dummy" pkg="tf2_ros" type="static_transform_publisher"
+          args="1.2 0 -0.5 0 0 0 1 kinect tomato" />
+  </group>
 
 </launch>
