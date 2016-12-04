@@ -9,18 +9,24 @@ class MoveGroupInterface {
   moveit::planning_interface::MoveGroup move_group_;
   moveit::planning_interface::MoveGroup::Plan motion_plan_;
 
-  geometry_msgs::Pose target_pose_;
-
   tf2_ros::Buffer buffer_;
   tf2_ros::TransformListener listener_;
 
+  geometry_msgs::Pose target_pose_;
+
 public:
-  MoveGroupInterface(const std::string group_name)
+  MoveGroupInterface(const std::string& group_name,
+                     const double& joint_tolerance = 0.1,
+                     const double& position_tolerance = 0.1,
+                     const double& orientation_tolerance = 0.1)
     : move_group_ {group_name},
       motion_plan_ {},
       buffer_ {},
       listener_ {buffer_}
   {
+    move_group_.setGoalJointTolerance(joint_tolerance);
+    move_group_.setGoalPositionTolerance(position_tolerance);
+    move_group_.setGoalOrientationTolerance(orientation_tolerance);
   }
 
   bool getTomatoPoint()
@@ -70,8 +76,8 @@ public:
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
-
   ros::NodeHandle node_handle {"~"};
+
   MoveGroupInterface interface {"arcsys2"};
 
   while (ros::ok()) {
