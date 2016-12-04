@@ -8,8 +8,4 @@
     <remap from="depth" to="$(arg depth_topic)" />
   </node>
 
-  <node pkg="kinect_tomato_searcher" type="tomato_broadcaster" name="tomato_broadcaster">
-    <remap from="tomato_point" to="tomato_point/raw" />
-  </node>
-
 </launch>
