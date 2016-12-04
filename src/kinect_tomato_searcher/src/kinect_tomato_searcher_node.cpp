@@ -143,7 +143,7 @@ public:
       capture_depth.copyTo(maskedDepth, mask);
       findClosePoint(maskedDepth, tomato_poses);
     }
-    return tomato_poses.empty() ? false : true;
+    return tomato_poses.poses.empty() ? false : true;
   }
 
 private:
