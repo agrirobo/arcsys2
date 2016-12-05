@@ -45,15 +45,15 @@ target_link_libraries(arcsys2_control_node
   ics3
 )
 
-add_executable(arcsys2_dammy_hw_node
-  src/arcsys2_dammy_hw_node.cpp
+add_executable(arcsys2_dummy_hw_node
+  src/arcsys2_dummy_hw_node.cpp
 )
 
-add_dependencies(arcsys2_dammy_hw_node
+add_dependencies(arcsys2_dummy_hw_node
   ${catkin_EXPORTED_TARGETS}
 )
 
-target_link_libraries(arcsys2_dammy_hw_node
+target_link_libraries(arcsys2_dummy_hw_node
   ${catkin_LIBRARIES}
   ics3
 )
