@@ -4,7 +4,7 @@ arcsys2_position_controller:
     - arm0_to_arm1_joint                  # krs_servo_motor
     - arm1_to_arm2_joint                  # krs_servo_motor
     - arm2_to_effector_base_joint         # krs_servo_motor
-    - effector_base_to_effector_end_joint # dammy
+    - effector_base_to_effector_end_joint # dummy
 
 arcsys2_velocity_controller:
   type: "velocity_controllers/JointTrajectoryController"
