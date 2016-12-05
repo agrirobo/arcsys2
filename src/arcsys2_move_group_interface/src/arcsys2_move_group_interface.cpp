@@ -78,14 +78,19 @@ public:
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
+
   ros::NodeHandle node_handle {"~"};
+  ros::Rate rate {ros::Duration(1.0)};
 
   // MoveGroupInterface interface {"arcsys2",
   //                               node_handle.param("joint_tolerance", 0.1),
   //                               node_handle.param("position_tolerance", 0.1),
   //                               node_handle.param("orientation_tolerance", 0.1)};
 
-  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 1.0)};
+  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
+
+  ros::AsyncSpinner spinner {1};
+  spinner.start();
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
@@ -93,8 +98,11 @@ int main(int argc, char** argv) {
       if (interface.setPoseToInsert(0.1)) interface.move();
       if (interface.setPoseToCut(0.1)) interface.move();
     }
-    ros::spin();
+
+    rate.sleep();
   }
+
+  spinner.stop();
 
   return 0;
 }
