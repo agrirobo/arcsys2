@@ -16,9 +16,9 @@ class MoveGroupInterface {
 
 public:
   MoveGroupInterface(const std::string& group_name,
-                     const double& joint_tolerance = 0.1,
-                     const double& position_tolerance = 0.1,
-                     const double& orientation_tolerance = 0.1)
+                     const double& joint_tolerance = 0.1)
+                     // const double& position_tolerance = 0.1,
+                     // const double& orientation_tolerance = 0.1)
     : move_group_ {group_name},
       motion_plan_ {},
       buffer_ {},
@@ -27,8 +27,8 @@ public:
     move_group_.allowReplanning(true);
 
     move_group_.setGoalJointTolerance(joint_tolerance);
-    move_group_.setGoalPositionTolerance(position_tolerance);
-    move_group_.setGoalOrientationTolerance(orientation_tolerance);
+    // move_group_.setGoalPositionTolerance(position_tolerance);
+    // move_group_.setGoalOrientationTolerance(orientation_tolerance);
   }
 
   bool getTomatoPoint()
@@ -80,10 +80,12 @@ int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
   ros::NodeHandle node_handle {"~"};
 
-  MoveGroupInterface interface {"arcsys2",
-                                node_handle.param("joint_tolerance", 0.1),
-                                node_handle.param("position_tolerance", 0.1),
-                                node_handle.param("orientation_tolerance", 0.1)};
+  // MoveGroupInterface interface {"arcsys2",
+  //                               node_handle.param("joint_tolerance", 0.1),
+  //                               node_handle.param("position_tolerance", 0.1),
+  //                               node_handle.param("orientation_tolerance", 0.1)};
+
+  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 1.0)};
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
