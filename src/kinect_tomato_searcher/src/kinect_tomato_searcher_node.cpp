@@ -260,6 +260,7 @@ public:
       angle_x_per_piccell_ {(angle_of_view_x * PI / 180.0) / width},
       angle_y_per_piccell_ {(angle_of_view_y * PI / 180.0) / height}
   {
+    pub_msg.header.frame_id = "kinect";
   }
 
   /**
@@ -290,6 +291,7 @@ public:
     }
 
     if (stObj.searchTomato(depth_ptr->image, pub_msg)) {
+      pub_msg.header.stamp = ros::Time::now();
       for (auto tomato_pose : pub_msg.poses) {
         tomato_pose.position.y = tomato_pose.position.x * tan(angle_x_per_piccell_ * tomato_pose.position.y) / 1000.0; // convert to m
         tomato_pose.position.z = tomato_pose.position.x * tan(angle_y_per_piccell_ * tomato_pose.position.z) / 1000.0; // convert to m
