@@ -22,7 +22,6 @@ public:
       listener_ {buffer_}
   {
     move_group_.allowReplanning(true);
-
     move_group_.setGoalJointTolerance(joint_tolerance);
   }
 
@@ -56,10 +55,20 @@ public:
     return move_group_.setPoseTarget(target_pose_);
   }
 
-  bool setPoseToCut(const double& effector_length)
+  bool setPoseToCut(const double& radian)
   {
-    target_pose_.orientation.w -= effector_length;
+    // tf::createQuaternionMsgFromRollPitchYaw(1.0, 0.0, 0.0);
+
+    target_pose_.orientation = tf::createQuaternionMsgFromRollPitchYaw(1, 0, 0);
     return move_group_.setPoseTarget(target_pose_);
+  }
+
+  bool setPoseToWait()
+  {
+    target_pose_.position.x = 1.0;
+    // target_pose_.position.y =
+    target_pose_.position.z = 1.5;
+    target_pose_.orientation.w = 1.0;
   }
 
   bool move()
@@ -83,9 +92,10 @@ int main(int argc, char** argv) {
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
-      if (interface.setPoseToApproach(0.1)) interface.move();
-      if (interface.setPoseToInsert(0.1)) interface.move();
-      if (interface.setPoseToCut(0.1)) interface.move();
+      if (interface.setPoseToApproach(0.3)) interface.move();
+      if (interface.setPoseToInsert(0.3)) interface.move();
+      if (interface.setPoseToCut(0.5)) interface.move();
+      if (interface.setPoseToWait()) interface.move();
     }
 
     rate.sleep();
