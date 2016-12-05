@@ -1,7 +1,7 @@
 #include <ros/ros.h>
 #include <tf2_ros/transform_broadcaster.h>
 
-#include <geometry_msgs/PointStamped.h>
+#include <geometry_msgs/PoseStamped.h>
 #include <geometry_msgs/TransformStamped.h>
 
 class TomatoBroadcaster {
@@ -10,23 +10,24 @@ class TomatoBroadcaster {
   ros::Subscriber sub_;
 
 public:
-  TomatoBroadcaster(ros::NodeHandle node_handle)
-    : transform_ {},
-      sub_ {node_handle.subscribe<geometry_msgs::PointStamped>("tomato_point", 1, &TomatoBroadcaster::callback, this)}
+  TomatoBroadcaster(ros::NodeHandle& node_handle)
+    : broadcaster_ {},
+      transform_ {},
+      sub_ {node_handle.subscribe<geometry_msgs::PoseStamped>("tomato_point", 1, &TomatoBroadcaster::callback, this)}
   {
   }
 
 private:
-  void callback(const geometry_msgs::PointStamped::ConstPtr& msg)
+  void callback(const geometry_msgs::PoseStamped::ConstPtr& msg)
   {
     transform_.header = msg->header;
     transform_.header.frame_id = "kinect";
     transform_.child_frame_id = "tomato";
 
-    transform_.transform.translation.x = msg->point.x;
-    transform_.transform.translation.y = msg->point.y;
-    transform_.transform.translation.z = msg->point.z;
-    transform_.transform.rotation.w = 1.0;
+    transform_.transform.translation.x = msg->pose.position.x;
+    transform_.transform.translation.y = msg->pose.position.y;
+    transform_.transform.translation.z = msg->pose.position.z;
+    transform_.transform.rotation = msg->pose.orientation;
 
     broadcaster_.sendTransform(transform_);
   }
