@@ -251,7 +251,7 @@ public:
   ImageConverter(const std::size_t width, const std::size_t height, const double angle_of_view_x, const double angle_of_view_y)
     : nh {},
       tomapo_nh {nh, "tomato_point"},
-      poses_pub {tomapo_nh.advertise<geometry_msgs::PoseArray>("raw", 1)},
+      poses_pub {tomapo_nh.advertise<geometry_msgs::PoseArray>("array", 1)},
       it {nh},
       rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
