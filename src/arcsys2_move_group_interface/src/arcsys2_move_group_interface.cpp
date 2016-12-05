@@ -5,7 +5,7 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/Transform.h>
 
-class MoveGroupInterface {
+class MoveGroupInterfaceOld {
   moveit::planning_interface::MoveGroup move_group_;
   moveit::planning_interface::MoveGroup::Plan motion_plan_;
 
@@ -15,7 +15,7 @@ class MoveGroupInterface {
   geometry_msgs::Pose target_pose_;
 
 public:
-  MoveGroupInterface(const std::string& group_name, const double& joint_tolerance = 0.1)
+  MoveGroupInterfaceOld(const std::string& group_name, const double& joint_tolerance = 0.1)
     : move_group_ {group_name},
       motion_plan_ {},
       buffer_ {},
@@ -79,24 +79,28 @@ public:
   }
 };
 
+class MoveGroupInterface {
+
+};
+
 int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
 
   ros::NodeHandle node_handle {"~"};
   ros::Rate rate {ros::Duration(1.0)};
 
-  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
+  MoveGroupInterfaceOld interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
   ros::AsyncSpinner spinner {1};
   spinner.start();
 
   while (ros::ok()) {
-    if (interface.getTomatoPoint()) {
-      if (interface.setPoseToApproach(0.3)) interface.move();
-      if (interface.setPoseToInsert(0.3)) interface.move();
-      if (interface.setPoseToCut(0.5)) interface.move();
-      if (interface.setPoseToWait()) interface.move();
-    }
+    // if (interface.getTomatoPoint()) {
+    //   if (interface.setPoseToApproach(0.3)) interface.move();
+    //   if (interface.setPoseToInsert(0.3)) interface.move();
+    //   if (interface.setPoseToCut(0.5)) interface.move();
+    //   if (interface.setPoseToWait()) interface.move();
+    // }
 
     rate.sleep();
   }
