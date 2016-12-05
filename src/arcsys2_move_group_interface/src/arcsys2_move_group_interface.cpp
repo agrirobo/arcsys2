@@ -101,6 +101,24 @@ public:
     move_group_.setGoalJointTolerance(joint_tolerance);
   }
 
+  bool queryTargetExistence()
+  {
+    try {
+      geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform("rail", "tomato", ros::Time(0), ros::Duration(5.0))};
+      tomapo_.position.x = transform_stamped_.transform.translation.x;
+      tomapo_.position.y = transform_stamped_.transform.translation.y;
+      tomapo_.position.z = transform_stamped_.transform.translation.z;
+      return true;
+    } catch (const tf2::TransformException& ex) {
+      ROS_INFO_STREAM(ex.what());
+      return false;
+    }
+  }
+
+private:
+  void setCartesianPaths(const geometry_msgs::Pose& from)
+  {
+  }
 };
 
 int main(int argc, char** argv)
