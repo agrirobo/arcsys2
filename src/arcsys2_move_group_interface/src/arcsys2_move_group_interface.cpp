@@ -15,26 +15,19 @@ class MoveGroupInterface {
   geometry_msgs::Pose target_pose_;
 
 public:
-  MoveGroupInterface(const std::string& group_name,
-                     const double& joint_tolerance = 0.1,
-                     const double& position_tolerance = 0.1,
-                     const double& orientation_tolerance = 0.1)
+  MoveGroupInterface(const std::string& group_name, const double& joint_tolerance = 0.1)
     : move_group_ {group_name},
       motion_plan_ {},
       buffer_ {},
       listener_ {buffer_}
   {
     move_group_.allowReplanning(true);
-
     move_group_.setGoalJointTolerance(joint_tolerance);
-    move_group_.setGoalPositionTolerance(position_tolerance);
-    move_group_.setGoalOrientationTolerance(orientation_tolerance);
   }
 
   bool getTomatoPoint()
   {
     try {
-      // geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform(move_group_.getPlanningFrame(), "tomato", ros::Time(0), ros::Duration(5.0))};
       geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform("rail", "tomato", ros::Time(0), ros::Duration(5.0))};
 
       target_pose_.position.x = transform_stamped_.transform.translation.x;
@@ -62,10 +55,20 @@ public:
     return move_group_.setPoseTarget(target_pose_);
   }
 
-  bool setPoseToCut(const double& effector_length)
+  bool setPoseToCut(const double& radian)
   {
-    target_pose_.orientation.w -= effector_length;
+    // tf::createQuaternionMsgFromRollPitchYaw(1.0, 0.0, 0.0);
+
+    target_pose_.orientation = tf::createQuaternionMsgFromRollPitchYaw(1, 0, 0);
     return move_group_.setPoseTarget(target_pose_);
+  }
+
+  bool setPoseToWait()
+  {
+    target_pose_.position.x = 1.0;
+    // target_pose_.position.y =
+    target_pose_.position.z = 1.5;
+    target_pose_.orientation.w = 1.0;
   }
 
   bool move()
@@ -78,21 +81,27 @@ public:
 
 int main(int argc, char** argv) {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
-  ros::NodeHandle node_handle {"~"};
 
-  MoveGroupInterface interface {"arcsys2",
-                                node_handle.param("joint_tolerance", 0.1),
-                                node_handle.param("position_tolerance", 0.1),
-                                node_handle.param("orientation_tolerance", 0.1)};
+  ros::NodeHandle node_handle {"~"};
+  ros::Rate rate {ros::Duration(1.0)};
+
+  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
+
+  ros::AsyncSpinner spinner {1};
+  spinner.start();
 
   while (ros::ok()) {
     if (interface.getTomatoPoint()) {
-      if (interface.setPoseToApproach(0.1)) interface.move();
-      if (interface.setPoseToInsert(0.1)) interface.move();
-      if (interface.setPoseToCut(0.1)) interface.move();
+      if (interface.setPoseToApproach(0.3)) interface.move();
+      if (interface.setPoseToInsert(0.3)) interface.move();
+      if (interface.setPoseToCut(0.5)) interface.move();
+      if (interface.setPoseToWait()) interface.move();
     }
-    ros::spin();
+
+    rate.sleep();
   }
+
+  spinner.stop();
 
   return 0;
 }
