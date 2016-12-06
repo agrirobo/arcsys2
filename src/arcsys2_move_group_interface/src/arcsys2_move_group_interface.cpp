@@ -44,6 +44,9 @@ public:
       tomapo_.position.x = transform_stamped_.transform.translation.x;
       tomapo_.position.y = transform_stamped_.transform.translation.y;
       tomapo_.position.z = transform_stamped_.transform.translation.z;
+      tomapo_.orientation.x = 0;
+      tomapo_.orientation.y = 0;
+      tomapo_.orientation.z = 0;
       tomapo_.orientation.w = 1.0;
       return true;
     } catch (const tf2::TransformException& ex) {
@@ -76,7 +79,7 @@ private:
     waypoints_.push_back(linear(tomapo_, -eef_length));
     waypoints_.push_back(tomapo_);
     waypoints_.push_back(roll(tomapo_, 1.0));
-    waypoints_.push_back(linearXX(tomapo_, -eef_length));
+    waypoints_.push_back(linear(tomapo_, -eef_length));
 
     moveit_msgs::RobotTrajectory robot_trajectory_;
     move_group_.computeCartesianPath(waypoints_, eef_step, 0.0, robot_trajectory_);
@@ -88,13 +91,6 @@ private:
   {
     geometry_msgs::Pose pose_ {pose};
     pose_.position.x += distance;
-    return pose_;
-  }
-
-  geometry_msgs::Pose linearXX(const geometry_msgs::Pose& pose, const double& distance)
-  {
-    geometry_msgs::Pose pose_ {pose};
-    pose_.position.y += distance;
     return pose_;
   }
 
