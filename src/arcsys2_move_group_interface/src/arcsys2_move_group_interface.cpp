@@ -21,8 +21,8 @@ class MoveGroupInterface {
   geometry_msgs::Pose tomapo_;
   std::vector<geometry_msgs::Pose> waypoints_;
 
-  static constexpr double eef_length {0.3}; // TODO
-  static constexpr double eef_step {0.10};
+  static constexpr double eef_length_ {0.3}; // TODO
+  static constexpr double eef_step_ {0.10};
 
 public:
   MoveGroupInterface(const std::string& group_name, const double& joint_tolerance)
@@ -57,7 +57,25 @@ public:
 
   bool startSequence()
   {
-    moveit_msgs::RobotTrajectory trajectory_msgs_ {getCartesianPaths()};
+    waypoints_.clear();
+
+    geometry_msgs::Pose pose1 {tomapo_};
+    pose1.position.x -= eef_length_;
+    waypoints_.push_back(pose1);
+
+    geometry_msgs::Pose pose2 {tomapo_};
+    waypoints_.push_back(pose2);
+
+    geometry_msgs::Pose pose3 {tomapo_};
+    pose3.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.0, 0, 0);
+    waypoints_.push_back(pose3);
+
+    geometry_msgs::Pose pose4 {tomapo_};
+    pose4.position.x -= eef_length_;
+    waypoints_.push_back(pose4);
+
+    moveit_msgs::RobotTrajectory trajectory_msgs_;
+    move_group_.computeCartesianPath(waypoints_, eef_step_, 0.0, trajectory_msgs_);
 
     robot_trajectory::RobotTrajectory robot_trajectory_ {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
     robot_trajectory_.setRobotTrajectoryMsg(*move_group_.getCurrentState(), trajectory_msgs_);
@@ -105,9 +123,7 @@ private:
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
-
   ros::NodeHandle node_handle {"~"};
-  // ros::Rate rate {ros::Duration(10.0)};
 
   MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
@@ -116,7 +132,6 @@ int main(int argc, char** argv)
 
   while (ros::ok()) {
     if (interface.queryTargetExistence()) interface.startSequence();
-    // rate.sleep();
   }
 
   spinner.stop();
