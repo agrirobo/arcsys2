@@ -100,48 +100,57 @@ public:
     return move_group_.execute(motion_plan_);
   }
 
-  bool hoge()
+  bool baseShift()
   {
     double tmp;
 
     try {
       geometry_msgs::TransformStamped transform_stamped {buffer_.lookupTransform("rail", "shaft", ros::Time(0), ros::Duration(1.0))};
       tmp = transform_stamped.transform.translation.y;
-      if (tmp < (abs_rail_length_ - 1.0)) sign_ = 1.0;
-      else if (tmp > -(abs_rail_length_ - 1.0)) sign_ = -1.0;
+      if (tmp > (abs_rail_length_ - 1.0)) sign_ = -1.0;
+      else if (tmp < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
     } catch (const tf2::TransformException& ex) {
       ROS_INFO_STREAM(ex.what());
       return false;
     }
 
-    waypoints_.clear();
+    // auto named_target_values = move_group_.getNamedTargetValues("init");
+    // named_target_values["rail_to_shaft_joint"] += (sign_ * 1.0);
+    // move_group_.setJointValueTarget(named_target_values);
 
-    geometry_msgs::Pose pose1 {};
-    pose1.position.x = 1.0; // TODO
-    pose1.position.y = tmp;
-    pose1.position.z = 1.5;
-    pose1.orientation.w = 1.0;
-    waypoints_.push_back(pose1);
+    move_group_.setNamedTarget("init");
 
-    geometry_msgs::Pose pose2 {pose1};
-    pose2.position.y += (sign_ * 1.0);
-    waypoints_.push_back(pose2);
+    std::vector<double> joint_values;
+    auto joint_model_group = move_group_.getCurrentState()->getRobotModel()->getJointModelGroup(move_group_.getName());
+    move_group_.getCurrentState()->copyJointGroupPositions(joint_model_group, joint_values);
 
-    moveit_msgs::RobotTrajectory trajectory_msgs_;
-    move_group_.computeCartesianPath(waypoints_, eef_step_, 0.0, trajectory_msgs_);
+    // joint_values[0] += sign_ * 1.0;
+    // joint_values[1] = -0.3927;
+    joint_values[1] =  0;
+    joint_values[2] = -0.7854;
+    joint_values[3] =  1.5707;
+    joint_values[4] = -0.7854;
+    joint_values[5] =  0;
 
-    robot_trajectory::RobotTrajectory robot_trajectory_ {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
-    robot_trajectory_.setRobotTrajectoryMsg(*move_group_.getCurrentState(), trajectory_msgs_);
+    move_group_.setJointValueTarget(joint_values);
+    moveit::planning_interface::MoveGroup::Plan plan;
+    move_group_.plan(plan);
 
-    trajectory_processing::IterativeParabolicTimeParameterization iptp;
-    iptp.computeTimeStamps(robot_trajectory_);
+    move_group_.execute(plan);
 
-    robot_trajectory_.getRobotTrajectoryMsg(trajectory_msgs_);
+    joint_values[0] += sign_ * 1.0;
+    // joint_values[1] = -0.3927;
+    joint_values[1] =  0;
+    joint_values[2] = -0.7854;
+    joint_values[3] =  1.5707;
+    joint_values[4] = -0.7854;
+    joint_values[5] =  0;
 
-    moveit::planning_interface::MoveGroup::Plan motion_plan_;
-    motion_plan_.trajectory_ = trajectory_msgs_;
+    move_group_.setJointValueTarget(joint_values);
+    // moveit::planning_interface::MoveGroup::Plan plan;
+    move_group_.plan(plan);
 
-    return move_group_.execute(motion_plan_);
+    return move_group_.execute(plan);
   }
 };
 
@@ -156,9 +165,7 @@ int main(int argc, char** argv)
   MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
   while (ros::ok()) {
-    // if (interface.queryTargetExistence()) interface.startSequence();
-
-    while (!interface.queryTargetExistence()) interface.hoge();
+    while (!interface.queryTargetExistence()) interface.baseShift();
     interface.startSequence();
   }
 
