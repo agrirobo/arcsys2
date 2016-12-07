@@ -1,104 +1,172 @@
+#include <string>
+#include <vector>
+
 #include <ros/ros.h>
 #include <moveit/move_group_interface/move_group.h>
+#include <moveit/robot_trajectory/robot_trajectory.h>
+#include <moveit/trajectory_processing/iterative_time_parameterization.h>
 #include <tf2_ros/transform_listener.h>
 
 #include <geometry_msgs/Pose.h>
-#include <geometry_msgs/Transform.h>
+#include <geometry_msgs/Point.h>
+#include <geometry_msgs/TransformStamped.h>
+#include <moveit_msgs/RobotTrajectory.h>
 
 class MoveGroupInterface {
   moveit::planning_interface::MoveGroup move_group_;
-  moveit::planning_interface::MoveGroup::Plan motion_plan_;
 
   tf2_ros::Buffer buffer_;
   tf2_ros::TransformListener listener_;
 
-  geometry_msgs::Pose target_pose_;
+  geometry_msgs::Pose tomapo_;
+  std::vector<geometry_msgs::Pose> waypoints_;
+
+  static constexpr double eef_length_ {0.3}; // TODO
+  static constexpr double eef_step_ {0.10};
+
+  static constexpr double abs_rail_length_ {5.0};
+  double sign_;
 
 public:
-  MoveGroupInterface(const std::string& group_name, const double& joint_tolerance = 0.1)
+  MoveGroupInterface(const std::string& group_name, const double& joint_tolerance)
     : move_group_ {group_name},
-      motion_plan_ {},
       buffer_ {},
-      listener_ {buffer_}
+      listener_ {buffer_},
+      tomapo_ {},
+      waypoints_ {},
+      sign_ {1.0}
   {
     move_group_.allowReplanning(true);
     move_group_.setGoalJointTolerance(joint_tolerance);
+    move_group_.setPlanningTime(5.0);
   }
 
-  bool getTomatoPoint()
+  bool queryTargetExistence()
   {
     try {
-      geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform("rail", "tomato", ros::Time(0), ros::Duration(5.0))};
-
-      target_pose_.position.x = transform_stamped_.transform.translation.x;
-      target_pose_.position.y = transform_stamped_.transform.translation.y;
-      target_pose_.position.z = transform_stamped_.transform.translation.z;
-      target_pose_.orientation.w = 1.0;
-
+      geometry_msgs::TransformStamped transform_stamped_ {buffer_.lookupTransform("rail", "tomato", ros::Time(0), ros::Duration(1.0))};
+      tomapo_.position.x = transform_stamped_.transform.translation.x;
+      tomapo_.position.y = transform_stamped_.transform.translation.y;
+      tomapo_.position.z = transform_stamped_.transform.translation.z;
+      tomapo_.orientation.x = 0;
+      tomapo_.orientation.y = 0;
+      tomapo_.orientation.z = 0;
+      tomapo_.orientation.w = 1.0;
+      return true;
     } catch (const tf2::TransformException& ex) {
-      ROS_WARN_STREAM(ex.what());
+      ROS_INFO_STREAM(ex.what());
+      return false;
+    }
+  }
+
+  bool startSequence()
+  {
+    waypoints_.clear();
+
+    geometry_msgs::Pose pose1 {tomapo_};
+    pose1.position.x -= eef_length_;
+    // waypoints_.push_back(pose1);
+    move_group_.setPoseTarget(pose1);
+
+    moveit::planning_interface::MoveGroup::Plan plan;
+    move_group_.plan(plan);
+    if (!move_group_.execute(plan)) return false;
+
+    geometry_msgs::Pose pose2 {tomapo_};
+    waypoints_.push_back(pose2);
+
+    geometry_msgs::Pose pose3 {tomapo_};
+    pose3.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.0, 0, 0);
+    waypoints_.push_back(pose3);
+
+    geometry_msgs::Pose pose4 {tomapo_};
+    pose4.position.x -= eef_length_;
+    waypoints_.push_back(pose4);
+
+    moveit_msgs::RobotTrajectory trajectory_msgs_;
+    move_group_.computeCartesianPath(waypoints_, eef_step_, 0.0, trajectory_msgs_);
+
+    robot_trajectory::RobotTrajectory robot_trajectory_ {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
+    robot_trajectory_.setRobotTrajectoryMsg(*move_group_.getCurrentState(), trajectory_msgs_);
+
+    trajectory_processing::IterativeParabolicTimeParameterization iptp;
+    iptp.computeTimeStamps(robot_trajectory_);
+
+    robot_trajectory_.getRobotTrajectoryMsg(trajectory_msgs_);
+
+    moveit::planning_interface::MoveGroup::Plan motion_plan_;
+    motion_plan_.trajectory_ = trajectory_msgs_;
+
+    return move_group_.execute(motion_plan_);
+  }
+
+  bool baseShift()
+  {
+    double tmp;
+
+    try {
+      geometry_msgs::TransformStamped transform_stamped {buffer_.lookupTransform("rail", "shaft", ros::Time(0), ros::Duration(1.0))};
+      tmp = transform_stamped.transform.translation.y;
+      if (tmp > (abs_rail_length_ - 1.0)) sign_ = -1.0;
+      else if (tmp < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
+    } catch (const tf2::TransformException& ex) {
+      ROS_INFO_STREAM(ex.what());
       return false;
     }
 
-    return true;
-  }
+    // auto named_target_values = move_group_.getNamedTargetValues("init");
+    // named_target_values["rail_to_shaft_joint"] += (sign_ * 1.0);
+    // move_group_.setJointValueTarget(named_target_values);
 
-  bool setPoseToApproach(const double& effector_length)
-  {
-    target_pose_.position.x -= effector_length;
-    return move_group_.setPoseTarget(target_pose_);
-  }
+    move_group_.setNamedTarget("init");
 
-  bool setPoseToInsert(const double& effector_length)
-  {
-    target_pose_.position.x += effector_length;
-    return move_group_.setPoseTarget(target_pose_);
-  }
+    std::vector<double> joint_values;
+    auto joint_model_group = move_group_.getCurrentState()->getRobotModel()->getJointModelGroup(move_group_.getName());
+    move_group_.getCurrentState()->copyJointGroupPositions(joint_model_group, joint_values);
 
-  bool setPoseToCut(const double& radian)
-  {
-    // tf::createQuaternionMsgFromRollPitchYaw(1.0, 0.0, 0.0);
+    // joint_values[0] += sign_ * 1.0;
+    // joint_values[1] = -0.3927;
+    joint_values[1] =  0;
+    joint_values[2] = -0.7854;
+    joint_values[3] =  1.5707;
+    joint_values[4] = -0.7854;
+    joint_values[5] =  0;
 
-    target_pose_.orientation = tf::createQuaternionMsgFromRollPitchYaw(1, 0, 0);
-    return move_group_.setPoseTarget(target_pose_);
-  }
+    move_group_.setJointValueTarget(joint_values);
+    moveit::planning_interface::MoveGroup::Plan plan;
+    move_group_.plan(plan);
 
-  bool setPoseToWait()
-  {
-    target_pose_.position.x = 1.0;
-    // target_pose_.position.y =
-    target_pose_.position.z = 1.5;
-    target_pose_.orientation.w = 1.0;
-  }
+    move_group_.execute(plan);
 
-  bool move()
-  {
-    if (!move_group_.plan(motion_plan_)) return false;
-    move_group_.execute(motion_plan_);
-    return true;
+    joint_values[0] += sign_ * 1.0;
+    // joint_values[1] = -0.3927;
+    joint_values[1] =  0;
+    joint_values[2] = -0.7854;
+    joint_values[3] =  1.5707;
+    joint_values[4] = -0.7854;
+    joint_values[5] =  0;
+
+    move_group_.setJointValueTarget(joint_values);
+    // moveit::planning_interface::MoveGroup::Plan plan;
+    move_group_.plan(plan);
+
+    return move_group_.execute(plan);
   }
 };
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
   ros::init(argc, argv, "arcsys2_move_group_interface_node");
-
   ros::NodeHandle node_handle {"~"};
-  ros::Rate rate {ros::Duration(1.0)};
-
-  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
   ros::AsyncSpinner spinner {1};
   spinner.start();
 
-  while (ros::ok()) {
-    if (interface.getTomatoPoint()) {
-      if (interface.setPoseToApproach(0.3)) interface.move();
-      if (interface.setPoseToInsert(0.3)) interface.move();
-      if (interface.setPoseToCut(0.5)) interface.move();
-      if (interface.setPoseToWait()) interface.move();
-    }
+  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
-    rate.sleep();
+  while (ros::ok()) {
+    while (!interface.queryTargetExistence()) interface.baseShift();
+    interface.startSequence();
   }
 
   spinner.stop();
