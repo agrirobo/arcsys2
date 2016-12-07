@@ -124,7 +124,7 @@ public:
     waypoints_.push_back(pose1);
 
     geometry_msgs::Pose pose2 {pose1};
-    pose2.position.x += (sign_ * 1.0);
+    pose2.position.y += (sign_ * 1.0);
     waypoints_.push_back(pose2);
 
     moveit_msgs::RobotTrajectory trajectory_msgs_;
