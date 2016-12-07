@@ -55,13 +55,13 @@ private:
   double last_pos_;
 };
 
-class DCMotorControl
+class SimpleVelocityControl
   : public JointControlInterface
 {
 public:
   using JntCmdType = hardware_interface::VelocityJointInterface;
   using BuildDataType = JointControlBuildData<JntCmdType>;
-  DCMotorControl(BuildDataType&);
+  SimpleVelocityControl(BuildDataType&);
   void fetch() override;
   void move() override;
   void odomCb(const nav_msgs::OdometryConstPtr&);
@@ -195,30 +195,30 @@ inline void ICSControl::move()
   last_pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_)) / 2 + last_pos_ / 2;
 }
 
-inline DCMotorControl::DCMotorControl(BuildDataType& build_data)
+inline SimpleVelocityControl::SimpleVelocityControl(BuildDataType& build_data)
   : data_ {build_data.joint_name_},
     last_pos_ {},
     last_vel_ {},
     nh_ {build_data.joint_name_},
     pub_ {nh_.advertise<geometry_msgs::Twist>("cmd_vel", 1)},
-    sub_ {nh_.subscribe("odom", 1, &DCMotorControl::odomCb, this)}
+    sub_ {nh_.subscribe("odom", 1, &SimpleVelocityControl::odomCb, this)}
 {
 }
 
-inline void DCMotorControl::fetch()
+inline void SimpleVelocityControl::fetch()
 {
   data_.pos_ = last_pos_;
   data_.vel_ = last_vel_;
 }
 
-inline void DCMotorControl::move()
+inline void SimpleVelocityControl::move()
 {
   geometry_msgs::Twist msg {};
   msg.linear.x = data_.cmd_;
   pub_.publish(std::move(msg));
 }
 
-inline void DCMotorControl::odomCb(const nav_msgs::OdometryConstPtr& odom)
+inline void SimpleVelocityControl::odomCb(const nav_msgs::OdometryConstPtr& odom)
 {
   last_pos_ = odom->pose.pose.position.x;
   last_vel_ = odom->twist.twist.linear.x;
