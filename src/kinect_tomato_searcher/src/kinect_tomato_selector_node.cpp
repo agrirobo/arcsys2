@@ -31,7 +31,7 @@ int main(int argc, char** argv)
 inline geometry_msgs::Pose NearSelector::select(const geometry_msgs::PoseArray& pose_array)
 {
   std::vector<double> diffs(pose_array.poses.size());
-  auto diff_it {diffs.begin()};
+  auto diff_it = diffs.begin();
   for (auto pose : pose_array.poses) {
     *diff_it = calcDiff(pose, last_pose_);
     ++diff_it;
