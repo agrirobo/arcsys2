@@ -55,13 +55,14 @@ private:
   double last_pos_;
 };
 
-template<class JntCmdIF>
+template<class JntCmdIF, typename CmdMsg>
 class SimpleControl
   : public JointControlInterface
 {
 public:
   using JntCmdType = JntCmdIF;
   using BuildDataType = JointControlBuildData<JntCmdType>;
+  using CmdMsgType = CmdMsg;
   SimpleControl(BuildDataType&);
   void fetch() override;
   void move() override;
@@ -75,7 +76,7 @@ private:
   ros::Subscriber sub_;
 };
 
-using SimplePositionControl = SimpleControl<hardware_interface::PositionJointInterface>;
+using SimplePositionControl = SimpleControl<hardware_interface::PositionJointInterface, geometry_msgs::Point>;
 
 class SimpleVelocityControl
   : public JointControlInterface
@@ -217,26 +218,26 @@ inline void ICSControl::move()
   last_pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_)) / 2 + last_pos_ / 2;
 }
 
-template<class JntCmdIF>
-inline SimpleControl<JntCmdIF>::SimpleControl(BuildDataType& build_data)
+template<class JntCmdIF, typename CmdMsg>
+inline SimpleControl<JntCmdIF, CmdMsg>::SimpleControl(BuildDataType& build_data)
   : data_ {build_data.joint_name_},
     last_pos_ {},
     last_vel_ {},
     nh_ {build_data.joint_name_},
-    pub_ {nh_.advertise<geometry_msgs::Twist>("cmd_pos", 1)},
-    sub_ {nh_.subscribe("odom", 1, &SimpleControl<JntCmdIF>::odomCb, this)}
+    pub_ {nh_.advertise<CmdMsg>("cmd", 1)},
+    sub_ {nh_.subscribe("odom", 1, &SimpleControl<JntCmdIF, CmdMsg>::odomCb, this)}
 {
 }
 
-template<class JntCmdIF>
-inline void SimpleControl<JntCmdIF>::fetch()
+template<class JntCmdIF, typename CmdMsg>
+inline void SimpleControl<JntCmdIF, CmdMsg>::fetch()
 {
   data_.pos_ = last_pos_;
   data_.pos_ = last_pos_;
 }
 
-template<class JntCmdIF>
-inline void SimpleControl<JntCmdIF>::odomCb(const nav_msgs::OdometryConstPtr& odom)
+template<class JntCmdIF, typename CmdMsg>
+inline void SimpleControl<JntCmdIF, CmdMsg>::odomCb(const nav_msgs::OdometryConstPtr& odom)
 {
   last_pos_ = odom->pose.pose.position.x;
   last_vel_ = odom->twist.twist.linear.x;
@@ -245,7 +246,7 @@ inline void SimpleControl<JntCmdIF>::odomCb(const nav_msgs::OdometryConstPtr& od
 template<>
 inline void SimplePositionControl::move()
 {
-  geometry_msgs::Point msg {};
+  CmdMsgType msg {};
   msg.x = data_.cmd_;
   pub_.publish(std::move(msg));
 }
