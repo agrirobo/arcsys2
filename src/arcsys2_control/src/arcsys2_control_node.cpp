@@ -55,6 +55,28 @@ private:
   double last_pos_;
 };
 
+template<class JntCmdIF>
+class SimpleControl
+  : public JointControlInterface
+{
+public:
+  using JntCmdType = JntCmdIF;
+  using BuildDataType = JointControlBuildData<JntCmdType>;
+  SimpleControl(BuildDataType&);
+  void fetch() override;
+  void move() override;
+  void odomCb(const nav_msgs::OdometryConstPtr&);
+private:
+  JointData data_;
+  double last_pos_;
+  double last_vel_;
+  ros::NodeHandle nh_;
+  ros::Publisher pub_;
+  ros::Subscriber sub_;
+};
+
+using SimplePositionControl = SimpleControl<hardware_interface::PositionJointInterface>;
+
 class SimpleVelocityControl
   : public JointControlInterface
 {
@@ -193,6 +215,39 @@ inline void ICSControl::fetch()
 inline void ICSControl::move()
 {
   last_pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_)) / 2 + last_pos_ / 2;
+}
+
+template<class JntCmdIF>
+inline SimpleControl<JntCmdIF>::SimpleControl(BuildDataType& build_data)
+  : data_ {build_data.joint_name_},
+    last_pos_ {},
+    last_vel_ {},
+    nh_ {build_data.joint_name_},
+    pub_ {nh_.advertise<geometry_msgs::Twist>("cmd_pos", 1)},
+    sub_ {nh_.subscribe("odom", 1, &SimpleControl<JntCmdIF>::odomCb, this)}
+{
+}
+
+template<class JntCmdIF>
+inline void SimpleControl<JntCmdIF>::fetch()
+{
+  data_.pos_ = last_pos_;
+  data_.pos_ = last_pos_;
+}
+
+template<class JntCmdIF>
+inline void SimpleControl<JntCmdIF>::odomCb(const nav_msgs::OdometryConstPtr& odom)
+{
+  last_pos_ = odom->pose.pose.position.x;
+  last_vel_ = odom->twist.twist.linear.x;
+}
+
+template<>
+inline void SimplePositionControl::move()
+{
+  geometry_msgs::Point msg {};
+  msg.x = data_.cmd_;
+  pub_.publish(std::move(msg));
 }
 
 inline SimpleVelocityControl::SimpleVelocityControl(BuildDataType& build_data)
