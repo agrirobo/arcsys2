@@ -118,11 +118,11 @@ public:
     // named_target_values["rail_to_shaft_joint"] += (sign_ * 1.0);
     // move_group_.setJointValueTarget(named_target_values);
 
-    move_group_.setNamedTarget("init");
+    // move_group_.setNamedTarget("init");
 
-    std::vector<double> joint_values;
-    auto joint_model_group = move_group_.getCurrentState()->getRobotModel()->getJointModelGroup(move_group_.getName());
-    move_group_.getCurrentState()->copyJointGroupPositions(joint_model_group, joint_values);
+    std::vector<double> joint_values = move_group_.getCurrentJointValues();
+    // auto joint_model_group = move_group_.getCurrentState()->getRobotModel()->getJointModelGroup(move_group_.getName());
+    // move_group_.getCurrentState()->copyJointGroupPositions(joint_model_group, joint_values);
 
     // joint_values[0] += sign_ * 1.0;
     // joint_values[1] = -0.3927;
