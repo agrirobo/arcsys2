@@ -7,14 +7,13 @@
 #include <memory>
 #include <vector>
 
-class Calibrator
+struct Calibrator
 {
-public:
-  geometry_msgs::Pose calibrate(geometry_msgs::Pose) const;
-private:
   const double offset_x_;
   const double offset_y_;
   const double offset_z_;
+
+  geometry_msgs::Pose calibrate(geometry_msgs::Pose) const;
 };
 
 class NearSelector
@@ -37,7 +36,12 @@ int main(int argc, char** argv)
   ros::NodeHandle tomato_nh {"tomato"};
   auto sub = tomato_nh.subscribe("array", 1, &callback);
   pub = tomato_nh.advertise<geometry_msgs::PoseStamped>("raw", 1);
-  calibrator = std::unique_ptr<Calibrator>(new Calibrator {});
+  ros::NodeHandle offset_nh {"~offset"};
+  double offset_x, offset_y, offset_z;
+  offset_nh.getParam("x", offset_x);
+  offset_nh.getParam("y", offset_y);
+  offset_nh.getParam("z", offset_z);
+  calibrator = std::unique_ptr<Calibrator> {new Calibrator {offset_x, offset_y, offset_z}};
   ros::spin();
   return 0;
 }
