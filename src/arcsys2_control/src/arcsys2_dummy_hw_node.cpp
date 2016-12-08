@@ -124,12 +124,11 @@ int main(int argc, char *argv[])
 
   hardware_interface::JointStateInterface joint_state_interface {};
   hardware_interface::PositionJointInterface position_joint_interface {};
-  hardware_interface::VelocityJointInterface velocity_joint_interface {};
 
-  DammyVelocityControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, velocity_joint_interface};
-  DammyVelocityControl shaft_control {shaft_builder};
-  DammyVelocityControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, velocity_joint_interface};
-  DammyVelocityControl arm0_control {arm0_builder};
+  DammyPositionControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl shaft_control {shaft_builder};
+  DammyPositionControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl arm0_control {arm0_builder};
   DammyPositionControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl arm1_control {arm1_builder};
   DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
@@ -141,7 +140,6 @@ int main(int argc, char *argv[])
 
   Arcsys2HW robot {&joint_state_interface};
   robot.registerInterface(&position_joint_interface);
-  robot.registerInterface(&velocity_joint_interface);
   robot.registerControl(&shaft_control);
   robot.registerControl(&arm0_control);
   robot.registerControl(&arm1_control);
