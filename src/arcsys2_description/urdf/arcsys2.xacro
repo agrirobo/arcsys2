@@ -13,7 +13,7 @@
   <xacro:property name="default_size" value="0.1" />
 
   <xacro:property name="rail_length"  value="3.600" /> <!-- OK? -->
-  <xacro:property name="shaft_height" value="2.000" />
+  <xacro:property name="shaft_height" value="1.400" />
   <xacro:property name="arm0_length"  value="0.100" />
   <xacro:property name="arm1_length"  value="0.216" /> <!-- OK? -->
   <xacro:property name="arm2_length"  value="0.199" /> <!-- OK? -->
@@ -25,12 +25,15 @@
 
   <xacro:PRISMATIC_JOINT parent="rail" child="shaft" y="1" lower="${-1*rail_length}" upper="${rail_length}">
     <origin xyz="0 0 ${shaft_height/2}"/>
+    <!-- これのZ座標がキネクトの高度がこれに依存しているので注意 -->
   </xacro:PRISMATIC_JOINT>
 
   <xacro:PLAIN_LINK name="shaft" height="${shaft_height}" color="red"/>
 
-  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.5" upper="0.5">
+  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.2" upper="0.2">
     <origin xyz="${default_size/2} 0 ${shaft_height/4}"/>
+    <!-- ここのdefault_size -> シャフトの奥行き -->
+    <!-- zは初期位置以外の意味は無いと思われる -->
   </xacro:PRISMATIC_JOINT>
 
   <xacro:SCARA_LINK name="arm0" length="${arm0_length}" color="green"/>
@@ -52,7 +55,7 @@
   <xacro:SCARA_LINK name="effector_end" length="${eff_length/2}" color="blue" />
 
   <xacro:FIXED_JOINT parent="shaft" child="kinect">
-    <origin xyz="0 0 ${shaft_height/2}" />
+    <origin xyz="0 -0.1 0" />
   </xacro:FIXED_JOINT>
 
   <xacro:PLAIN_LINK name="kinect" color="green" />

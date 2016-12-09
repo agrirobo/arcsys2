@@ -42,11 +42,13 @@
     <disable_collisions link1="arm0" link2="arm2" reason="Never" />
     <disable_collisions link1="arm0" link2="effector_base" reason="Never" />
     <disable_collisions link1="arm0" link2="effector_end" reason="Never" />
+    <disable_collisions link1="arm0" link2="kinect" reason="Never" />
     <disable_collisions link1="arm0" link2="rail" reason="Never" />
     <disable_collisions link1="arm0" link2="shaft" reason="Adjacent" />
     <disable_collisions link1="arm1" link2="arm2" reason="Adjacent" />
     <disable_collisions link1="arm1" link2="effector_base" reason="Never" />
     <disable_collisions link1="arm1" link2="effector_end" reason="Never" />
+    <disable_collisions link1="arm1" link2="kinect" reason="Never" />
     <disable_collisions link1="arm1" link2="rail" reason="Never" />
     <disable_collisions link1="arm1" link2="shaft" reason="Default" />
     <disable_collisions link1="arm2" link2="effector_base" reason="Adjacent" />
