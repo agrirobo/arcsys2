@@ -40,8 +40,11 @@ public:
     node_handle.getParam("effector_length", eef_length_);
     node_handle.getParam("shift_margin", shift_margin_);
 
+    double joint_tolerance;
+    node_handle.getParam("joint_tolerance", joint_tolerance);
+    move_group_.setGoalJointTolerance(joint_tolerance);
+
     move_group_.allowReplanning(true);
-    move_group_.setGoalJointTolerance(node_handle.param("joint_tolerance", 0.01));
     move_group_.setPlanningTime(5.0);
   }
 
