@@ -102,17 +102,17 @@ public:
 
   bool shift()
   {
-    double tmp;
-
-    try {
-      geometry_msgs::TransformStamped transform_stamped {buffer_.lookupTransform("rail", "shaft", ros::Time(0), ros::Duration(1.0))};
-      tmp = transform_stamped.transform.translation.y;
-      if (tmp > (abs_rail_length_ - 1.0)) sign_ = -1.0;
-      else if (tmp < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
-    } catch (const tf2::TransformException& ex) {
-      ROS_INFO_STREAM(ex.what());
-      return false;
-    }
+    // double tmp;
+    //
+    // try {
+    //   geometry_msgs::TransformStamped transform_stamped {buffer_.lookupTransform("rail", "shaft", ros::Time(0), ros::Duration(1.0))};
+    //   tmp = transform_stamped.transform.translation.y;
+    //   if (tmp > (abs_rail_length_ - 1.0)) sign_ = -1.0;
+    //   else if (tmp < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
+    // } catch (const tf2::TransformException& ex) {
+    //   ROS_INFO_STREAM(ex.what());
+    //   return false;
+    // }
 
     // auto named_target_values = move_group_.getNamedTargetValues("init");
     // named_target_values["rail_to_shaft_joint"] += (sign_ * 1.0);
@@ -136,7 +136,10 @@ public:
 
     move_group_.execute(plan);
 
+    if (joint_values[0] > (abs_rail_length_ - 1.0)) sign_ = -1.0;
+    else if (joint_values[0] < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
     joint_values[0] += sign_ * 1.0;
+
     // joint_values[1] = -0.3927;
     // joint_values[1] =  0;
     // joint_values[2] = -0.7854;
