@@ -17,10 +17,8 @@
   <xacro:property name="arm0_length"     value="0.1"/>
   <xacro:property name="arm1_length"     value="0.5"/>
   <xacro:property name="arm2_length"     value="0.5"/>
-  <xacro:property name="effector_length" value="0.5"/>
+  <xacro:property name="eff_length" value="0.5"/>
 
-  <xacro:property name="default_hardware_interface"
-                 value="hardware_interface/PositionJointInterface" />
 
 <!-- LINK and JOINT -->
   <xacro:PLAIN_LINK width="${rail_length}" name="rail"/>
@@ -47,11 +45,11 @@
 
   <xacro:SCARA_JOINT parent="arm2" child="effector_base" parent_length="${arm2_length}"/>
 
-  <xacro:SCARA_LINK name="effector_base" length="${effector_length/2}" color="green"/>
+  <xacro:SCARA_LINK name="effector_base" length="${eff_length/2}" color="green"/>
 
-  <xacro:WRIST_JOINT parent="effector_base" child="effector_end" parent_length="${effector_length/2}" />
+  <xacro:WRIST_JOINT parent="effector_base" child="effector_end" parent_length="${eff_length/2}" />
 
-  <xacro:SCARA_LINK name="effector_end" length="${effector_length/2}" color="blue" />
+  <xacro:SCARA_LINK name="effector_end" length="${eff_length/2}" color="blue" />
 
   <xacro:FIXED_JOINT parent="shaft" child="kinect">
     <origin xyz="0 0 ${shaft_height/2}" />
@@ -103,7 +101,7 @@
     </joint>
   </xacro:macro>
 
-  <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower:=${-pi/2} upper:=${pi/2} *origin reduction:=1.0 hardware_interface:=${default_hardware_interface}">
+  <xacro:macro name="PRISMATIC_JOINT" params="parent child x:=0 y:=0 z:=0 lower:=-1 upper:=1 *origin">
     <joint name="${parent}_to_${child}_joint" type="prismatic">
       <xacro:insert_block name="origin"/>
       <parent link="${parent}"/>
@@ -111,20 +109,9 @@
       <axis xyz="${x} ${y} ${z}"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
-
-    <transmission name="${parent}_to_${child}_transmission">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="${parent}_to_${child}_actuator">
-        <mechanicalReduction>${reduction}</mechanicalReduction>
-        <hardwareInterface>${default_hardware_interface}</hardwareInterface>
-      </actuator>
-      <joint name="${parent}_to_${child}_joint">
-        <hardwareInterface>${default_hardware_interface}</hardwareInterface>
-      </joint>
-    </transmission>
   </xacro:macro>
 
-  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2} reduction:=1.0 hardware_interface:=${default_hardware_interface}">
+  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2}">
     <joint name="${parent}_to_${child}_joint" type="revolute">
       <origin xyz="${parent_length} 0 0"/>
       <parent link="${parent}"/>
@@ -132,20 +119,9 @@
       <axis xyz="0 0 1"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
-
-    <transmission name="${parent}_to_${child}_transmission">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="${parent}_to_${child}_actuator">
-        <mechanicalReduction>${reduction}</mechanicalReduction>
-        <hardwareInterface>${default_hardware_interface}</hardwareInterface>
-      </actuator>
-      <joint name="${parent}_to_${child}_joint">
-        <hardwareInterface>${default_hardware_interface}</hardwareInterface>
-      </joint>
-    </transmission>
   </xacro:macro>
 
-  <xacro:macro name="WRIST_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2} reduction:=1.0 hardware_interface:=${default_hardware_interface}">
+  <xacro:macro name="WRIST_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
     <joint name="${parent}_to_${child}_joint" type="revolute">
       <origin xyz="${parent_length} 0 0"/>
       <parent link="${parent}"/>
@@ -153,17 +129,6 @@
       <axis xyz="1 0 0"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
-
-    <transmission name="${parent}_to_${child}_transmission">
-      <type>transmission_interface/SimpleTransmission</type>
-      <actuator name="${parent}_to_${child}_actuator">
-        <mechanicalReduction>${reduction}</mechanicalReduction>
-        <hardwareInterface>${default_hardware_interface}</hardwareInterface>
-      </actuator>
-      <joint name="${parent}_to_${child}_joint">
-        <hardwareInterface>${default_hardware_interface}</hardwareInterface>
-      </joint>
-    </transmission>
   </xacro:macro>
 
 </robot>
