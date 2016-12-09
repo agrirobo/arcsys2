@@ -23,6 +23,7 @@ class MoveGroupInterface {
 
   double eef_length_;
   double shift_margin_;
+  bool reverse_coordinate_;
 
   moveit::core::VariableBounds rail_bounds_;
   double sign_;
@@ -39,6 +40,7 @@ public:
   {
     node_handle.getParam("effector_length", eef_length_);
     node_handle.getParam("shift_margin", shift_margin_);
+    node_handle.getParam("reverse_coordinate", reverse_coordinate_);
 
     double joint_tolerance;
     node_handle.getParam("joint_tolerance", joint_tolerance);
@@ -108,9 +110,10 @@ public:
 
     move_group_.execute(plan);
 
-    if (joint_values[0] > (rail_bounds_.max_position_ - shift_margin_)) sign_ = -1.0;
-    else if (joint_values[0] < (rail_bounds_.min_position_ + shift_margin_)) sign_ = 1.0;
+    // if (joint_values[0] > (rail_bounds_.max_position_ - shift_margin_)) sign_ = -1.0;
+    // else if (joint_values[0] < (rail_bounds_.min_position_ + shift_margin_)) sign_ = 1.0;
 
+    updateShiftSign(joint_values[0]);
     joint_values[0] += sign_ * 1.0;
 
     move_group_.setJointValueTarget(joint_values);
@@ -135,6 +138,15 @@ private:
     plan.trajectory_ = msg;
 
     return plan;
+  }
+
+  void updateShiftSign(const double& joint_value)
+  {
+    if (rail_bounds_.max_position_ - shift_margin_ < joint_value)
+      reverse_coordinate_ ? sign_ = +1.0 : sign_ = -1.0;
+
+    if (joint_value < 0 + shift_margin_)
+      reverse_coordinate_ ? sign_ = -1.0 : sign_ = +1.0;
   }
 };
 
