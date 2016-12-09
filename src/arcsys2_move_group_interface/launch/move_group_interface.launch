@@ -4,10 +4,8 @@
   <arg name="position_tolerance" default="0.1" />
   <arg name="orientation_tolerance" default="0.1" />
 
-  <node name="move_group_interface_node" pkg="arcsys2_move_group_interface" type="arcsys2_move_group_interface_node">
+  <node name="move_group_interface_node" pkg="arcsys2_move_group_interface" type="arcsys2_move_group_interface_node" output="screen">
     <param name="joint_tolerance" value="$(arg joint_tolerance)" />
-    <!-- <param name="position_tolerance" value="$(arg position_tolerance)" />       -->
-    <!-- <param name="orientation_tolerance" value="$(arg orientation_tolerance)" /> -->
   </node>
 
 </launch>
