@@ -116,8 +116,8 @@ public:
 
     move_group_.execute(plan);
 
-    if (joint_values[0] > (rail_bounds_.max_position_ - base_width_)) sign_ = -1.0;
-    else if (joint_values[0] < (rail_bounds_.min_position_ + base_width_)) sign_ = 1.0;
+    if (joint_values[0] > (rail_bounds_.max_position_ - shift_margin_)) sign_ = -1.0;
+    else if (joint_values[0] < (rail_bounds_.min_position_ + shift_margin_)) sign_ = 1.0;
 
     joint_values[0] += sign_ * 1.0;
 
