@@ -89,22 +89,7 @@ public:
     pose4.position.x -= eef_length_;
     waypoints_.push_back(pose4);
 
-    moveit_msgs::RobotTrajectory trajectory_msgs_;
-    move_group_.computeCartesianPath(waypoints_, 0.10, 0.0, trajectory_msgs_);
-
-    robot_trajectory::RobotTrajectory robot_trajectory_ {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
-    robot_trajectory_.setRobotTrajectoryMsg(*move_group_.getCurrentState(), trajectory_msgs_);
-
-    trajectory_processing::IterativeParabolicTimeParameterization iptp;
-    iptp.computeTimeStamps(robot_trajectory_);
-
-    robot_trajectory_.getRobotTrajectoryMsg(trajectory_msgs_);
-
-    moveit::planning_interface::MoveGroup::Plan motion_plan_;
-    motion_plan_.trajectory_ = trajectory_msgs_;
-
-    return move_group_.execute(motion_plan_);
-    // return move_group_.execute(planCartesianPath(waypoints_));
+    return move_group_.execute(planCartesianPath(waypoints_));
   }
 
   bool shift()
