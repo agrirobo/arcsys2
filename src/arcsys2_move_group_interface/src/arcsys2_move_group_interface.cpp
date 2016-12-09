@@ -74,7 +74,7 @@ public:
     pose1.position.x -= eef_length_;
     move_group_.setPoseTarget(pose1);
 
-    moveit::planning_interface::MoveGroup::Plan plan;
+    moveit::planning_interface::MoveGroup::Plan plan; // NEED?
     move_group_.plan(plan);
     if (!move_group_.execute(plan)) return false;
 
@@ -82,7 +82,7 @@ public:
     waypoints_.push_back(pose2);
 
     geometry_msgs::Pose pose3 {tomapo_};
-    pose3.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.0, 0, 0);
+    pose3.orientation = tf::createQuaternionMsgFromRollPitchYaw(1.0, 0, 0); // TODO
     waypoints_.push_back(pose3);
 
     geometry_msgs::Pose pose4 {tomapo_};
