@@ -111,7 +111,7 @@
     </joint>
   </xacro:macro>
 
-  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2}">
+  <xacro:macro name="SCARA_JOINT" params="parent child parent_length lower:=${-pi/2} upper:=${pi/2}">
     <joint name="${parent}_to_${child}_joint" type="revolute">
       <origin xyz="${parent_length} 0 0"/>
       <parent link="${parent}"/>
