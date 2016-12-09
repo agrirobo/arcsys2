@@ -12,18 +12,18 @@
   <xacro:property name="pi" value="3.1415926535897931" />
   <xacro:property name="default_size" value="0.1" />
 
-  <xacro:property name="rail_length"  value="10.0" />
-  <xacro:property name="shaft_height" value="2.0" />
-  <xacro:property name="arm0_length"  value="0.1" />
-  <xacro:property name="arm1_length"  value="0.5" />
-  <xacro:property name="arm2_length"  value="0.5" />
-  <xacro:property name="eff_length"   value="0.5" />
+  <xacro:property name="rail_length"  value="3.600" /> <!-- OK? -->
+  <xacro:property name="shaft_height" value="2.000" />
+  <xacro:property name="arm0_length"  value="0.100" />
+  <xacro:property name="arm1_length"  value="0.216" /> <!-- OK? -->
+  <xacro:property name="arm2_length"  value="0.199" /> <!-- OK? -->
+  <xacro:property name="eff_length"   value="0.225" /> <!-- OK? -->
 
 
 <!-- LINK and JOINT -->
-  <xacro:PLAIN_LINK name="rail" width="${rail_length}" />
+  <xacro:PLAIN_LINK name="rail" width="${rail_length*2}" />
 
-  <xacro:PRISMATIC_JOINT parent="rail" child="shaft" y="1" lower="${-1*rail_length/2}" upper="${rail_length/2}">
+  <xacro:PRISMATIC_JOINT parent="rail" child="shaft" y="1" lower="${-1*rail_length}" upper="${rail_length}">
     <origin xyz="0 0 ${shaft_height/2}"/>
   </xacro:PRISMATIC_JOINT>
 
