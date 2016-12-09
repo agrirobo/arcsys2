@@ -253,7 +253,7 @@ public:
       tomapo_nh {nh, "tomato_point"},
       poses_pub {tomapo_nh.advertise<geometry_msgs::PoseArray>("array", 1)},
       it {nh},
-      rgb_sub {it.subscribe("rgb", 1, &ImageConverter::rgbCb, this)},
+      rgb_sub {it.subscribe("color", 1, &ImageConverter::rgbCb, this)},
       depth_sub {it.subscribe("depth", 1, &ImageConverter::depthCb, this)},
       stObj {},
       height_ {height},
