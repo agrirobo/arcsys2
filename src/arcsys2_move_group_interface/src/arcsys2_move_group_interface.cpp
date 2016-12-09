@@ -24,7 +24,7 @@ class MoveGroupInterface {
   static constexpr double eef_length_ {0.3}; // TODO
   static constexpr double eef_step_ {0.10};
 
-  static constexpr double abs_rail_length_ {5.0};
+  moveit::core::VariableBounds rail_bounds_;
   double sign_;
 
 public:
@@ -34,6 +34,7 @@ public:
       listener_ {buffer_},
       tomapo_ {},
       waypoints_ {},
+      rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_shaft_joint")->getVariableBounds()[0]},
       sign_ {1.0}
   {
     move_group_.allowReplanning(true);
@@ -65,7 +66,6 @@ public:
 
     geometry_msgs::Pose pose1 {tomapo_};
     pose1.position.x -= eef_length_;
-    // waypoints_.push_back(pose1);
     move_group_.setPoseTarget(pose1);
 
     moveit::planning_interface::MoveGroup::Plan plan;
@@ -100,32 +100,10 @@ public:
     return move_group_.execute(motion_plan_);
   }
 
-  bool baseShift()
+  bool shift()
   {
-    double tmp;
+    std::vector<double> joint_values {move_group_.getCurrentJointValues()};
 
-    try {
-      geometry_msgs::TransformStamped transform_stamped {buffer_.lookupTransform("rail", "shaft", ros::Time(0), ros::Duration(1.0))};
-      tmp = transform_stamped.transform.translation.y;
-      if (tmp > (abs_rail_length_ - 1.0)) sign_ = -1.0;
-      else if (tmp < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
-    } catch (const tf2::TransformException& ex) {
-      ROS_INFO_STREAM(ex.what());
-      return false;
-    }
-
-    // auto named_target_values = move_group_.getNamedTargetValues("init");
-    // named_target_values["rail_to_shaft_joint"] += (sign_ * 1.0);
-    // move_group_.setJointValueTarget(named_target_values);
-
-    move_group_.setNamedTarget("init");
-
-    std::vector<double> joint_values;
-    auto joint_model_group = move_group_.getCurrentState()->getRobotModel()->getJointModelGroup(move_group_.getName());
-    move_group_.getCurrentState()->copyJointGroupPositions(joint_model_group, joint_values);
-
-    // joint_values[0] += sign_ * 1.0;
-    // joint_values[1] = -0.3927;
     joint_values[1] =  0;
     joint_values[2] = -0.7854;
     joint_values[3] =  1.5707;
@@ -138,16 +116,12 @@ public:
 
     move_group_.execute(plan);
 
+    if (joint_values[0] > (rail_bounds_.max_position_ - 1.0)) sign_ = -1.0;
+    else if (joint_values[0] < (rail_bounds_.min_position_ + 1.0)) sign_ = 1.0;
+
     joint_values[0] += sign_ * 1.0;
-    // joint_values[1] = -0.3927;
-    joint_values[1] =  0;
-    joint_values[2] = -0.7854;
-    joint_values[3] =  1.5707;
-    joint_values[4] = -0.7854;
-    joint_values[5] =  0;
 
     move_group_.setJointValueTarget(joint_values);
-    // moveit::planning_interface::MoveGroup::Plan plan;
     move_group_.plan(plan);
 
     return move_group_.execute(plan);
@@ -165,7 +139,7 @@ int main(int argc, char** argv)
   MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
   while (ros::ok()) {
-    while (!interface.queryTargetExistence()) interface.baseShift();
+    while (!interface.queryTargetExistence()) interface.shift();
     interface.startSequence();
   }
 
