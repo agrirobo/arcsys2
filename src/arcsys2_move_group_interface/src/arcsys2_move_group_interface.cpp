@@ -21,14 +21,14 @@ class MoveGroupInterface {
   geometry_msgs::Pose tomapo_;
   std::vector<geometry_msgs::Pose> waypoints_;
 
-  static constexpr double eef_length_ {0.225}; // OK?
-  static constexpr double base_width_ {0.85}; // OK?
+  double eef_length_;
+  double shift_margin_;
 
   moveit::core::VariableBounds rail_bounds_;
   double sign_;
 
 public:
-  MoveGroupInterface(const std::string& group_name, const double& joint_tolerance)
+  MoveGroupInterface(const std::string& group_name, const ros::NodeHandle& node_handle)
     : move_group_ {group_name},
       buffer_ {},
       listener_ {buffer_},
@@ -37,8 +37,11 @@ public:
       rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_shaft_joint")->getVariableBounds()[0]},
       sign_ {1.0}
   {
+    node_handle.getParam("effector_length", eef_length_);
+    node_handle.getParam("shift_margin", shift_margin_);
+
     move_group_.allowReplanning(true);
-    move_group_.setGoalJointTolerance(joint_tolerance);
+    move_group_.setGoalJointTolerance(node_handle.param("joint_tolerance", 0.01));
     move_group_.setPlanningTime(5.0);
   }
 
@@ -136,7 +139,7 @@ int main(int argc, char** argv)
   ros::AsyncSpinner spinner {1};
   spinner.start();
 
-  MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
+  MoveGroupInterface interface {"arcsys2", node_handle};
 
   while (ros::ok()) {
     while (!interface.queryTargetExistence()) interface.shift();
