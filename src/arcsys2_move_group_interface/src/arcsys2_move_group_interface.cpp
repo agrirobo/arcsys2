@@ -21,8 +21,8 @@ class MoveGroupInterface {
   geometry_msgs::Pose tomapo_;
   std::vector<geometry_msgs::Pose> waypoints_;
 
-  static constexpr double eef_length_ {0.3}; // TODO
-  static constexpr double eef_step_ {0.10};
+  static constexpr double eef_length_ {0.225}; // OK?
+  static constexpr double base_width_ {0.85}; // OK?
 
   moveit::core::VariableBounds rail_bounds_;
   double sign_;
@@ -84,7 +84,7 @@ public:
     waypoints_.push_back(pose4);
 
     moveit_msgs::RobotTrajectory trajectory_msgs_;
-    move_group_.computeCartesianPath(waypoints_, eef_step_, 0.0, trajectory_msgs_);
+    move_group_.computeCartesianPath(waypoints_, 0.10, 0.0, trajectory_msgs_);
 
     robot_trajectory::RobotTrajectory robot_trajectory_ {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
     robot_trajectory_.setRobotTrajectoryMsg(*move_group_.getCurrentState(), trajectory_msgs_);
@@ -116,8 +116,8 @@ public:
 
     move_group_.execute(plan);
 
-    if (joint_values[0] > (rail_bounds_.max_position_ - 1.0)) sign_ = -1.0;
-    else if (joint_values[0] < (rail_bounds_.min_position_ + 1.0)) sign_ = 1.0;
+    if (joint_values[0] > (rail_bounds_.max_position_ - base_width_)) sign_ = -1.0;
+    else if (joint_values[0] < (rail_bounds_.min_position_ + base_width_)) sign_ = 1.0;
 
     joint_values[0] += sign_ * 1.0;
 
