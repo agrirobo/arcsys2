@@ -24,7 +24,7 @@ class MoveGroupInterface {
   static constexpr double eef_length_ {0.3}; // TODO
   static constexpr double eef_step_ {0.10};
 
-  static constexpr double abs_rail_length_ {5.0};
+  moveit::core::VariableBounds rail_bounds_;
   double sign_;
 
 public:
@@ -34,6 +34,7 @@ public:
       listener_ {buffer_},
       tomapo_ {},
       waypoints_ {},
+      rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_shaft_joint")->getVariableBounds()[0]},
       sign_ {1.0}
   {
     move_group_.allowReplanning(true);
@@ -103,6 +104,7 @@ public:
   {
     std::vector<double> joint_values {move_group_.getCurrentJointValues()};
 
+    joint_values[1] =  0;
     joint_values[2] = -0.7854;
     joint_values[3] =  1.5707;
     joint_values[4] = -0.7854;
@@ -114,8 +116,9 @@ public:
 
     move_group_.execute(plan);
 
-    if (joint_values[0] > (abs_rail_length_ - 1.0)) sign_ = -1.0;
-    else if (joint_values[0] < -(abs_rail_length_ - 1.0)) sign_ = 1.0;
+    if (joint_values[0] > (rail_bounds_.max_position_ - 1.0)) sign_ = -1.0;
+    else if (joint_values[0] < (rail_bounds_.min_position_ + 1.0)) sign_ = 1.0;
+
     joint_values[0] += sign_ * 1.0;
 
     move_group_.setJointValueTarget(joint_values);
