@@ -100,7 +100,7 @@ public:
     return move_group_.execute(motion_plan_);
   }
 
-  bool baseShift()
+  bool shift()
   {
     double tmp;
 
@@ -165,7 +165,7 @@ int main(int argc, char** argv)
   MoveGroupInterface interface {"arcsys2", node_handle.param("joint_tolerance", 0.1)};
 
   while (ros::ok()) {
-    while (!interface.queryTargetExistence()) interface.baseShift();
+    while (!interface.queryTargetExistence()) interface.shift();
     interface.startSequence();
   }
 
