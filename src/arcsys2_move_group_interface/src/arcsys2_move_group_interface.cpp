@@ -35,7 +35,7 @@ public:
       listener_ {buffer_},
       tomapo_ {},
       waypoints_ {},
-      rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_shaft_joint")->getVariableBounds()[0]},
+      rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_base_joint")->getVariableBounds()[0]},
       sign_ {1.0}
   {
     node_handle.getParam("effector_length", eef_length_);
