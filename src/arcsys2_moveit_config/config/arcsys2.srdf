@@ -12,6 +12,7 @@
     <group name="arcsys2">
         <link name="rail" />
         <link name="base" />
+        <link name="kinect" />
         <link name="shaft" />
         <link name="arm0" />
         <link name="arm1" />
@@ -20,6 +21,7 @@
         <link name="blade" />
         <joint name="world_to_rail_joint" />
         <joint name="rail_to_base_joint" />
+        <joint name="base_to_kinect_joint" />
         <joint name="base_to_shaft_joint" />
         <joint name="shaft_to_arm0_joint" />
         <joint name="arm0_to_arm1_joint" />
