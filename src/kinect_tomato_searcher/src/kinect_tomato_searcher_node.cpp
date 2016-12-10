@@ -1,10 +1,12 @@
 #include <ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
+#include <dynamic_reconfigure/server.h>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 #include <image_transport/image_transport.h>
+#include <kinect_tomato_searcher/SearchConfig.h>
 #include <sensor_msgs/image_encodings.h>
 
 #include <opencv2/highgui/highgui.hpp>
@@ -104,12 +106,16 @@ private:
 };
 
 
-class SearchTomato {
+class SearchTomato
+{
 public:
   SearchTomato()
     : tomato_contours {},
-      siObj {}
+      siObj {},
+      server {},
+      f(std::bind(&dynamic_reconfigure_callback, std::placeholders::_1, std::placeholders::_2))
   {
+    server.setCallback(f);
   }
 
   void update(const cv::Mat& capture_rgb) {
@@ -147,6 +153,11 @@ public:
   }
 
 private:
+  static void dynamic_reconfigure_callback(kinect_tomato_searcher::SearchConfig& config, uint32_t level)
+  {
+    ROS_INFO("%d", config.int_param);
+  }
+
   void imageProsessing(const cv::Mat& rgb, cv::Mat& binary) {
     cv::Mat blur, hsv;
     cv::GaussianBlur(rgb, blur, cv::Size(5, 5), 4.0, 4.0);
@@ -225,8 +236,17 @@ private:
     return false;
   }
 
+  static uint16_t h_min_;
+  static uint16_t h_max_;
+  static uint16_t s_min_;
+  static uint16_t s_max_;
+  static uint16_t v_min_;
+  static uint16_t v_max_;
+
   std::vector<std::vector<cv::Point> > tomato_contours;
   ShowImage siObj;
+  dynamic_reconfigure::Server<kinect_tomato_searcher::SearchConfig> server;
+  dynamic_reconfigure::Server<kinect_tomato_searcher::SearchConfig>::CallbackType f;
 };
 
 
