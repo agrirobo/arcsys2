@@ -6,6 +6,7 @@ add_definitions("-std=c++11")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   cv_bridge
+  dynamic_recongigure
   geometry_msgs
   image_transport
   sensor_msgs
@@ -14,10 +15,10 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_ros
 )
 
-catkin_package(
-  CATKIN_DEPENDS
+catkin_package(CATKIN_DEPENDS
   roscpp
   cv_bridge
+  dynamic_recongigure
   geometry_msgs
   image_transport
   sensor_msgs
