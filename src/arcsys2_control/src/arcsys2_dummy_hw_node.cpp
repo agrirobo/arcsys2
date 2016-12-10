@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
   hardware_interface::JointStateInterface joint_state_interface {};
   hardware_interface::PositionJointInterface position_joint_interface {};
 
-  DammyPositionControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl::BuildDataType shaft_builder {"rail_to_base_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl shaft_control {shaft_builder};
   DammyPositionControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl arm0_control {arm0_builder};
@@ -133,9 +133,9 @@ int main(int argc, char *argv[])
   DammyPositionControl arm1_control {arm1_builder};
   DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl arm2_control {arm2_builder};
-  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl effector_base_control {effector_base_builder};
-  DammyPositionControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl::BuildDataType effector_end_builder {"effector_to_blade_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl effector_end_control {effector_end_builder};
 
   Arcsys2HW robot {&joint_state_interface};
