@@ -18,13 +18,13 @@
   <xacro:property name="rail_width"  value="3.600" />
   <xacro:property name="rail_height" value="${default_size}" />
 
-  <xacro:property name="base_depth"  value="1.000" />
+  <xacro:property name="base_depth"  value="0.600" />
   <xacro:property name="base_width"  value="0.850" />
-  <xacro:property name="base_height" value="1.000" />
+  <xacro:property name="base_height" value="0.500" />
 
   <xacro:property name="shaft_depth"  value="${default_size}" />
   <xacro:property name="shaft_width"  value="${default_size}" />
-  <xacro:property name="shaft_height" value="1.000" />
+  <xacro:property name="shaft_height" value="0.800" />
 
   <xacro:property name="arm0_depth"  value="0.125" />
   <xacro:property name="arm0_width"  value="${default_size}" />
@@ -52,39 +52,39 @@
 
 
 
-  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width}" height="${rail_height}" />
+  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width}" height="${rail_height}" color="white" />
 
   <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="${-1*rail_width}" upper="${rail_width}">
     <origin xyz="0 0 ${base_height/2}" />
   </xacro:PRISMATIC_JOINT>
 
-  <xacro:PLAIN_LINK name="base" depth="${base_depth}" width="${base_width}" height="${base_height}" />
+  <xacro:PLAIN_LINK name="base" depth="${base_depth}" width="${base_width}" height="${base_height}" color="red" />
 
   <xacro:FIXED_JOINT parent="base" child="kinect">
     <origin xyz="${kinect_offset_x} ${kinect_offset_y} ${kinect_offset_z}" />
   </xacro:FIXED_JOINT>
 
-  <xacro:PLAIN_LINK name="kinect" depth="${kinect_depth}" width="${kinect_width}" height="${kinect_height}" />
+  <xacro:PLAIN_LINK name="kinect" depth="${kinect_depth}" width="${kinect_width}" height="${base_height+kinect_height}" color="green" />
 
   <xacro:FIXED_JOINT parent="base" child="shaft">
-    <origin xyz="0 0 ${shaft_height/2}" />
+    <origin xyz="-0.15 0 ${shaft_height/2}" />
   </xacro:FIXED_JOINT>
 
-  <xacro:PLAIN_LINK name="shaft" depth="${shaft_depth}" width="${shaft_width}" height="${shaft_height}" />
+  <xacro:PLAIN_LINK name="shaft" depth="${shaft_depth}" width="${shaft_width}" height="${shaft_height}" color="blue" />
 
   <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="${-default_size}" upper="${default_size}">
     <origin xyz="${shaft_depth/2} 0 ${arm_init}" />
   </xacro:PRISMATIC_JOINT>
 
-  <xacro:SCARA_LINK name="arm0" depth="${arm0_depth}" width="${arm0_width}" height="${arm0_height}" />
+  <xacro:SCARA_LINK name="arm0" depth="${arm0_depth}" width="${arm0_width}" height="${arm0_height}" color="red" />
   <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_depth="${arm0_depth}" />
-  <xacro:SCARA_LINK name="arm1" depth="${arm1_depth}" width="${arm1_width}" height="${arm1_height}" />
+  <xacro:SCARA_LINK name="arm1" depth="${arm1_depth}" width="${arm1_width}" height="${arm1_height}" color="green" />
   <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_depth="${arm1_depth}" />
-  <xacro:SCARA_LINK name="arm2" depth="${arm2_depth}" width="${arm2_width}" height="${arm2_height}" />
+  <xacro:SCARA_LINK name="arm2" depth="${arm2_depth}" width="${arm2_width}" height="${arm2_height}" color="blue" />
   <xacro:SCARA_JOINT parent="arm2" child="effector" parent_depth="${arm2_depth}" />
-  <xacro:SCARA_LINK name="effector" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" />
+  <xacro:SCARA_LINK name="effector" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" color="red" />
   <xacro:WRIST_JOINT parent="effector" child="blade" parent_depth="${effector_depth/2}" />
-  <xacro:SCARA_LINK name="blade" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" />
+  <xacro:SCARA_LINK name="blade" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" color="red" />
 
 
 
@@ -151,4 +151,5 @@
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
   </xacro:macro>
+
 </robot>
