@@ -5,7 +5,8 @@
   </include>
 
   <include file="$(find arcsys2_move_group_interface)/launch/move_group_interface.launch">
-    <arg name="joint_tolerance" value="0.1" />
+    <arg name="joint_tolerance" value="0.01" />
+    <arg name="reverse_coordinate" value="false" />
   </include>
 
 </launch>
