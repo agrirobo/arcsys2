@@ -155,7 +155,12 @@ public:
 private:
   static void dynamic_reconfigure_callback(kinect_tomato_searcher::SearchConfig& config, uint32_t level)
   {
-    ROS_INFO("%d", config.int_param);
+    h_min_ = config.h_min;
+    h_max_ = config.h_max;
+    s_min_ = config.s_min;
+    s_max_ = config.s_max;
+    v_min_ = config.v_min;
+    v_max_ = config.v_max;
   }
 
   void imageProsessing(const cv::Mat& rgb, cv::Mat& binary) {
@@ -248,6 +253,12 @@ private:
   dynamic_reconfigure::Server<kinect_tomato_searcher::SearchConfig> server;
   dynamic_reconfigure::Server<kinect_tomato_searcher::SearchConfig>::CallbackType f;
 };
+uint16_t SearchTomato::h_min_;
+uint16_t SearchTomato::h_max_;
+uint16_t SearchTomato::s_min_;
+uint16_t SearchTomato::s_max_;
+uint16_t SearchTomato::v_min_;
+uint16_t SearchTomato::v_max_;
 
 
 class ImageConverter {
