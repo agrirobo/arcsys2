@@ -1,11 +1,13 @@
 <launch>
 
-  <arg name="joint_tolerance" default="0.1" />
-  <arg name="position_tolerance" default="0.1" />
-  <arg name="orientation_tolerance" default="0.1" />
+  <arg name="joint_tolerance" default="0.01" />
+  <arg name="effector_length" default="0.225" />
+  <arg name="shift_margin"    default="0.850" />
 
   <node name="move_group_interface_node" pkg="arcsys2_move_group_interface" type="arcsys2_move_group_interface_node" output="screen">
     <param name="joint_tolerance" value="$(arg joint_tolerance)" />
+    <param name="effector_length" value="$(arg effector_length)" />
+    <param name="shift_margin"    value="$(arg shift_margin)" />
   </node>
 
 </launch>
