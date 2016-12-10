@@ -5,6 +5,4 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/arcsys2.srdf
   CONFIG:
-    author_name: YamaCIR-KIT
-    author_email: httperror@404-notfound.jp
-    generated_timestamp: 1481312232
+    generated_timestamp: 1481341493

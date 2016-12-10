@@ -13,8 +13,8 @@
   <xacro:property name="default_size" value="0.1" />
 
   <xacro:property name="rail_length"  value="3.600" /> <!-- OK? -->
-  <xacro:property name="shaft_height" value="1.400" />
-  <xacro:property name="arm0_length"  value="0.100" />
+  <xacro:property name="shaft_height" value="1.350" />
+  <xacro:property name="arm0_length"  value="0.125" />
   <xacro:property name="arm1_length"  value="0.216" /> <!-- OK? -->
   <xacro:property name="arm2_length"  value="0.199" /> <!-- OK? -->
   <xacro:property name="eff_length"   value="0.225" /> <!-- OK? -->
@@ -55,7 +55,7 @@
   <xacro:SCARA_LINK name="effector_end" length="${eff_length/2}" color="green" />
 
   <xacro:FIXED_JOINT parent="shaft" child="kinect">
-    <origin xyz="0 0.1 0" />
+    <origin xyz="0 0.265 0" />
   </xacro:FIXED_JOINT>
 
   <xacro:PLAIN_LINK name="kinect" color="green" />

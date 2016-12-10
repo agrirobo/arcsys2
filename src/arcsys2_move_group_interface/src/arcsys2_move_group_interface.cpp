@@ -114,7 +114,7 @@ public:
     // else if (joint_values[0] < (rail_bounds_.min_position_ + shift_margin_)) sign_ = 1.0;
 
     updateShiftSign(joint_values[0]);
-    joint_values[0] += sign_ * 1.0;
+    joint_values[0] += sign_ * 0.5;
 
     move_group_.setJointValueTarget(joint_values);
     move_group_.plan(plan);
@@ -128,7 +128,7 @@ private:
     moveit_msgs::RobotTrajectory msg;
     move_group_.computeCartesianPath(waypoints, 0.10, 0.0, msg);
 
-    robot_trajectory::RobotTrajectory trajectory {move_group_.getRobotModel(), move_group_.getName()};
+    robot_trajectory::RobotTrajectory trajectory {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
     trajectory.setRobotTrajectoryMsg(*move_group_.getCurrentState(), msg);
 
     trajectory_processing::IterativeParabolicTimeParameterization iptp;

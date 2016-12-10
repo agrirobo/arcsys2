@@ -156,25 +156,25 @@ int main(int argc, char *argv[])
 
   hardware_interface::JointStateInterface joint_state_interface {};
   hardware_interface::PositionJointInterface position_joint_interface {};
-  hardware_interface::VelocityJointInterface velocity_joint_interface {};
+  // hardware_interface::VelocityJointInterface velocity_joint_interface {};
 
   SimplePositionControl::BuildDataType shaft_builder {"rail_to_shaft_joint", joint_state_interface, position_joint_interface};
   SimplePositionControl shaft_control {shaft_builder};
   SimplePositionControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
   SimplePositionControl arm0_control {arm0_builder};
   auto ics_id_it = ics_ids.cbegin();
-  ICSControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
-  ICSControl arm1_control {arm1_builder, ics_driver, *ics_id_it++};
-  ICSControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
-  ICSControl arm2_control {arm2_builder, ics_driver, *ics_id_it++};
-  ICSControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
-  ICSControl effector_base_control {effector_base_builder, ics_driver, *ics_id_it++};
+  DammyPositionControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl arm1_control {arm1_builder};
+  DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl arm2_control {arm2_builder};
+  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_base_joint", joint_state_interface, position_joint_interface};
+  DammyPositionControl effector_base_control {effector_base_builder};
   DammyPositionControl::BuildDataType effector_end_builder {"effector_base_to_effector_end_joint", joint_state_interface, position_joint_interface};
   DammyPositionControl effector_end_control {effector_end_builder};
 
   Arcsys2HW robot {&joint_state_interface};
   robot.registerInterface(&position_joint_interface);
-  robot.registerInterface(&velocity_joint_interface);
+  // robot.registerInterface(&velocity_joint_interface);
   robot.registerControl(&shaft_control);
   robot.registerControl(&arm0_control);
   robot.registerControl(&arm1_control);
@@ -227,6 +227,7 @@ inline SimpleControl<JntCmdIF, CmdMsg>::SimpleControl(BuildDataType& build_data)
     pub_ {nh_.advertise<CmdMsg>("cmd", 1)},
     sub_ {nh_.subscribe("odom", 1, &SimpleControl<JntCmdIF, CmdMsg>::odomCb, this)}
 {
+  registerJoint(data_, build_data);
 }
 
 template<class JntCmdIF, typename CmdMsg>
