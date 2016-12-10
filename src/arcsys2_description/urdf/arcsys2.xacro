@@ -30,7 +30,7 @@
 
   <xacro:PLAIN_LINK name="shaft" height="${shaft_height}" color="red"/>
 
-  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.2" upper="0.2">
+  <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="-0.1" upper="0.1">
     <origin xyz="${default_size/2} 0 ${shaft_height/4}"/>
     <!-- ここのdefault_size -> シャフトの奥行き -->
     <!-- zは初期位置以外の意味は無いと思われる -->
