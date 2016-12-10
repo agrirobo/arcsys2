@@ -52,9 +52,9 @@
 
 
 
-  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width}" height="${rail_height}" color="white" />
+  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width - base_width}" height="${rail_height}" color="white" />
 
-  <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="${-1*rail_width}" upper="${rail_width}">
+  <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="0" upper="${rail_width - base_width}">
     <origin xyz="0 0 ${base_height/2}" />
   </xacro:PRISMATIC_JOINT>
 
@@ -95,9 +95,9 @@
         <geometry> <box size="${depth} ${width} ${height}"/> </geometry>
         <material name="${color}"/>
       </visual>
-      <collision>
-        <geometry> <box size="${depth} ${width} ${height}"/> </geometry>
-      </collision>
+      <!-- <collision>                                                        -->
+      <!--   <geometry> <box size="${depth} ${width} ${height}"/> </geometry> -->
+      <!-- </collision>                                                       -->
     </link>
   </xacro:macro>
 
@@ -108,9 +108,9 @@
         <geometry> <box size="${depth} ${width} ${height}"/> </geometry>
         <material name="${color}"/>
       </visual>
-      <collision>
-        <geometry> <box size="${depth} ${width} ${height}"/> </geometry>
-      </collision>
+      <!-- <collision>                                                        -->
+      <!--   <geometry> <box size="${depth} ${width} ${height}"/> </geometry> -->
+      <!-- </collision>                                                       -->
     </link>
   </xacro:macro>
 

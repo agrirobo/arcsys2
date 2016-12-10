@@ -10,22 +10,22 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="arcsys2">
+        <link name="rail" />
+        <link name="base" />
         <link name="shaft" />
         <link name="arm0" />
         <link name="arm1" />
         <link name="arm2" />
         <link name="effector" />
         <link name="blade" />
-        <link name="base" />
-        <link name="rail" />
         <joint name="world_to_rail_joint" />
         <joint name="rail_to_base_joint" />
         <joint name="base_to_shaft_joint" />
         <joint name="shaft_to_arm0_joint" />
         <joint name="arm0_to_arm1_joint" />
         <joint name="arm1_to_arm2_joint" />
-        <joint name="effector_to_blade_joint" />
         <joint name="arm2_to_effector_joint" />
+        <joint name="effector_to_blade_joint" />
         <chain base_link="rail" tip_link="blade" />
     </group>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
