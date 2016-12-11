@@ -28,6 +28,9 @@
   <xacro:property name="base_width"  value="0.850" />
   <xacro:property name="base_height" value="0.500" />
 
+  <xacro:property name="shaft_offx"   value="-0.15" />
+  <xacro:property name="shaft_offy"   value="0" />
+  <xacro:property name="shaft_offz"   value="0" />
   <xacro:property name="shaft_depth"  value="${default_size}" />
   <xacro:property name="shaft_width"  value="${default_size}" />
   <xacro:property name="shaft_height" value="0.800" />
@@ -48,9 +51,9 @@
   <xacro:property name="effector_width"  value="${default_size}" />
   <xacro:property name="effector_height" value="${default_size}" />
 
-  <xacro:property name="kinect_offx" value="${default_size}" />
+  <xacro:property name="kinect_offx" value="0" />
   <xacro:property name="kinect_offy" value="0.265" />
-  <xacro:property name="kinect_offz" value="${default_size}" />
+  <xacro:property name="kinect_offz" value="0" />
 
   <xacro:property name="kinect_depth"  value="${default_size}" />
   <xacro:property name="kinect_width"  value="${default_size}" />
@@ -72,15 +75,15 @@
   </xacro:PLAIN_LINK>
 
   <xacro:FIXED_JOINT parent="base" child="kinect">
-    <origin xyz="${kinect_offx} ${kinect_offy} ${kinect_offz}" />
+    <origin xyz="${kinect_offx} ${kinect_offy} ${kinect_offz+base_height/2}" />
   </xacro:FIXED_JOINT>
 
   <xacro:PLAIN_LINK name="kinect" depth="${kinect_depth}" width="${kinect_width}" height="${kinect_height}" color="green">
-    <origin xyz="0 0 ${rail_height+base_height}" />
+    <origin xyz="0 0 0" />
   </xacro:PLAIN_LINK>
 
   <xacro:FIXED_JOINT parent="base" child="shaft">
-    <origin xyz="-0.15 0 ${shaft_height/2}" />
+    <origin xyz="${shaft_offx} ${shaft_offy} ${shaft_offz+shaft_height/2}" />
   </xacro:FIXED_JOINT>
 
   <xacro:PLAIN_LINK name="shaft" depth="${shaft_depth}" width="${shaft_width}" height="${shaft_height}" color="blue">
@@ -119,7 +122,7 @@
 
 
 <!-- MACRO DEFINITION -->
-  <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} color:=white *origin">
+  <xacro:macro name="PLAIN_LINK" params="name *origin width:=${default_size} depth:=${default_size} height:=${default_size} color:=white">
     <link name="${name}">
       <xacro:insert_block name="origin" />
       <visual>
