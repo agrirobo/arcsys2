@@ -92,14 +92,25 @@
   </xacro:PRISMATIC_JOINT>
 
   <xacro:SCARA_LINK name="arm0" depth="${arm0_depth}" width="${arm0_width}" height="${arm0_height}" color="red" />
-  <xacro:SCARA_JOINT parent="arm0" child="arm1" parent_depth="${arm0_depth}" />
+
+  <xacro:REVOLUTE_JOINT parent="arm0" child="arm1" axisz="1">
+    <origin xyz="${arm0_depth} 0 0" />
+  </xacro:REVOLUTE_JOINT>
+
   <xacro:SCARA_LINK name="arm1" depth="${arm1_depth}" width="${arm1_width}" height="${arm1_height}" color="green" />
-  <xacro:SCARA_JOINT parent="arm1" child="arm2" parent_depth="${arm1_depth}" />
+
+  <xacro:REVOLUTE_JOINT parent="arm1" child="arm2" axisz="1">
+    <origin xyz="${arm1_depth} 0 0" />
+  </xacro:REVOLUTE_JOINT>
+
   <xacro:SCARA_LINK name="arm2" depth="${arm2_depth}" width="${arm2_width}" height="${arm2_height}" color="blue" />
-  <xacro:SCARA_JOINT parent="arm2" child="effector" parent_depth="${arm2_depth}" />
+
+  <xacro:REVOLUTE_JOINT parent="arm2" child="effector" axisz="1">
+    <origin xyz="${arm2_depth} 0 0" />
+  </xacro:REVOLUTE_JOINT>
+
   <xacro:SCARA_LINK name="effector" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" color="red" />
 
-  <!-- <xacro:WRIST_JOINT parent="effector" child="blade" parent_depth="${effector_depth/2}" lower="0" upper="pi*3/4" /> -->
   <xacro:REVOLUTE_JOINT parent="effector" child="blade" axisx="1" lower="0" upper="${pi*3/4}">
     <origin xyz="${effector_depth/2} 0 0" />
   </xacro:REVOLUTE_JOINT>
@@ -142,26 +153,6 @@
       <parent link="${parent}"/>
       <child link="${child}"/>
       <axis xyz="${x} ${y} ${z}"/>
-      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
-    </joint>
-  </xacro:macro>
-
-  <xacro:macro name="SCARA_JOINT" params="parent child parent_depth lower:=${-pi/2} upper:=${pi/2}">
-    <joint name="${parent}_to_${child}_joint" type="revolute">
-      <origin xyz="${parent_depth} 0 0"/>
-      <parent link="${parent}"/>
-      <child link="${child}"/>
-      <axis xyz="0 0 1"/>
-      <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
-    </joint>
-  </xacro:macro>
-
-  <xacro:macro name="WRIST_JOINT" params="parent child parent_depth lower:=${-pi/2} upper:=${pi/2}">
-    <joint name="${parent}_to_${child}_joint" type="revolute">
-      <origin xyz="${parent_depth} 0 0"/>
-      <parent link="${parent}"/>
-      <child link="${child}"/>
-      <axis xyz="1 0 0"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
     </joint>
   </xacro:macro>
