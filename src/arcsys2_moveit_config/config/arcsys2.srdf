@@ -10,50 +10,51 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="arcsys2">
-        <link name="rail" />
-        <link name="shaft" />
-        <link name="arm0" />
-        <link name="arm1" />
-        <link name="arm2" />
-        <link name="effector_base" />
-        <link name="effector_end" />
-        <joint name="world_to_rail_joint" />
-        <joint name="rail_to_shaft_joint" />
+        <joint name="rail_to_base_joint" />
+        <joint name="base_to_shaft_joint" />
         <joint name="shaft_to_arm0_joint" />
         <joint name="arm0_to_arm1_joint" />
         <joint name="arm1_to_arm2_joint" />
-        <joint name="arm2_to_effector_base_joint" />
-        <joint name="effector_base_to_effector_end_joint" />
-        <chain base_link="rail" tip_link="effector_end" />
+        <joint name="arm2_to_effector_joint" />
+        <joint name="effector_to_blade_joint" />
+        <chain base_link="rail" tip_link="blade" />
     </group>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="world_to_rail_joint" type="fixed" parent_frame="world" child_link="rail" />
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="arm0" link2="arm1" reason="Adjacent" />
     <disable_collisions link1="arm0" link2="arm2" reason="Never" />
-    <disable_collisions link1="arm0" link2="effector_base" reason="Never" />
-    <disable_collisions link1="arm0" link2="effector_end" reason="Never" />
+    <disable_collisions link1="arm0" link2="base" reason="Never" />
+    <disable_collisions link1="arm0" link2="blade" reason="Never" />
+    <disable_collisions link1="arm0" link2="effector" reason="Never" />
     <disable_collisions link1="arm0" link2="kinect" reason="Never" />
     <disable_collisions link1="arm0" link2="rail" reason="Never" />
     <disable_collisions link1="arm0" link2="shaft" reason="Adjacent" />
     <disable_collisions link1="arm1" link2="arm2" reason="Adjacent" />
-    <disable_collisions link1="arm1" link2="effector_base" reason="Never" />
-    <disable_collisions link1="arm1" link2="effector_end" reason="Never" />
+    <disable_collisions link1="arm1" link2="base" reason="Never" />
+    <disable_collisions link1="arm1" link2="blade" reason="Never" />
+    <disable_collisions link1="arm1" link2="effector" reason="Never" />
     <disable_collisions link1="arm1" link2="kinect" reason="Never" />
     <disable_collisions link1="arm1" link2="rail" reason="Never" />
-    <disable_collisions link1="arm1" link2="shaft" reason="Default" />
-    <disable_collisions link1="arm2" link2="effector_base" reason="Adjacent" />
-    <disable_collisions link1="arm2" link2="effector_end" reason="Never" />
+    <disable_collisions link1="arm1" link2="shaft" reason="Never" />
+    <disable_collisions link1="arm2" link2="base" reason="Never" />
+    <disable_collisions link1="arm2" link2="blade" reason="Never" />
+    <disable_collisions link1="arm2" link2="effector" reason="Adjacent" />
     <disable_collisions link1="arm2" link2="kinect" reason="Never" />
     <disable_collisions link1="arm2" link2="rail" reason="Never" />
     <disable_collisions link1="arm2" link2="shaft" reason="Never" />
-    <disable_collisions link1="effector_base" link2="effector_end" reason="Adjacent" />
-    <disable_collisions link1="effector_base" link2="kinect" reason="Never" />
-    <disable_collisions link1="effector_base" link2="rail" reason="Never" />
-    <disable_collisions link1="effector_base" link2="shaft" reason="Never" />
-    <disable_collisions link1="effector_end" link2="kinect" reason="Never" />
-    <disable_collisions link1="effector_end" link2="rail" reason="Never" />
-    <disable_collisions link1="kinect" link2="rail" reason="Never" />
-    <disable_collisions link1="kinect" link2="shaft" reason="Adjacent" />
-    <disable_collisions link1="rail" link2="shaft" reason="Adjacent" />
+    <disable_collisions link1="base" link2="blade" reason="Never" />
+    <disable_collisions link1="base" link2="effector" reason="Never" />
+    <disable_collisions link1="base" link2="kinect" reason="Adjacent" />
+    <disable_collisions link1="base" link2="rail" reason="Adjacent" />
+    <disable_collisions link1="base" link2="shaft" reason="Adjacent" />
+    <disable_collisions link1="blade" link2="effector" reason="Adjacent" />
+    <disable_collisions link1="blade" link2="kinect" reason="Never" />
+    <disable_collisions link1="blade" link2="rail" reason="Never" />
+    <disable_collisions link1="effector" link2="kinect" reason="Never" />
+    <disable_collisions link1="effector" link2="rail" reason="Never" />
+    <disable_collisions link1="effector" link2="shaft" reason="Never" />
+    <disable_collisions link1="kinect" link2="rail" reason="Default" />
+    <disable_collisions link1="kinect" link2="shaft" reason="Never" />
+    <disable_collisions link1="rail" link2="shaft" reason="Never" />
 </robot>

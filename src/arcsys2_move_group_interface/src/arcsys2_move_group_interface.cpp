@@ -35,7 +35,7 @@ public:
       listener_ {buffer_},
       tomapo_ {},
       waypoints_ {},
-      rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_shaft_joint")->getVariableBounds()[0]},
+      rail_bounds_ {move_group_.getRobotModel()->getJointModel("rail_to_base_joint")->getVariableBounds()[0]},
       sign_ {1.0}
   {
     node_handle.getParam("effector_length", eef_length_);
@@ -70,8 +70,6 @@ public:
 
   bool startSequence()
   {
-    waypoints_.clear();
-
     geometry_msgs::Pose pose1 {tomapo_};
     pose1.position.x -= eef_length_;
     move_group_.setPoseTarget(pose1);
@@ -79,6 +77,9 @@ public:
     moveit::planning_interface::MoveGroup::Plan plan; // NEED?
     move_group_.plan(plan);
     if (!move_group_.execute(plan)) return false;
+    // waypoints_.push_back(pose1);
+
+    waypoints_.clear();
 
     geometry_msgs::Pose pose2 {tomapo_};
     waypoints_.push_back(pose2);
@@ -91,7 +92,8 @@ public:
     pose4.position.x -= eef_length_;
     waypoints_.push_back(pose4);
 
-    return move_group_.execute(planCartesianPath(waypoints_));
+    // return move_group_.execute(planCartesianPath(waypoints_));
+    return move_group_.execute(planCartesianPath());
   }
 
   bool shift()
@@ -110,11 +112,8 @@ public:
 
     move_group_.execute(plan);
 
-    // if (joint_values[0] > (rail_bounds_.max_position_ - shift_margin_)) sign_ = -1.0;
-    // else if (joint_values[0] < (rail_bounds_.min_position_ + shift_margin_)) sign_ = 1.0;
-
     updateShiftSign(joint_values[0]);
-    joint_values[0] += sign_ * 1.0;
+    joint_values[0] += sign_ * 0.5;
 
     move_group_.setJointValueTarget(joint_values);
     move_group_.plan(plan);
@@ -123,16 +122,19 @@ public:
   }
 
 private:
-  moveit::planning_interface::MoveGroup::Plan planCartesianPath(std::vector<geometry_msgs::Pose>& waypoints)
+  moveit::planning_interface::MoveGroup::Plan planCartesianPath()
   {
     moveit_msgs::RobotTrajectory msg;
-    move_group_.computeCartesianPath(waypoints, 0.10, 0.0, msg);
+    move_group_.computeCartesianPath(waypoints_, 0.10, 0.0, msg, false);
 
+    // robot_trajectory::RobotTrajectory trajectory {move_group_.getCurrentState()->getRobotModel(), move_group_.getName()};
     robot_trajectory::RobotTrajectory trajectory {move_group_.getRobotModel(), move_group_.getName()};
     trajectory.setRobotTrajectoryMsg(*move_group_.getCurrentState(), msg);
 
     trajectory_processing::IterativeParabolicTimeParameterization iptp;
     iptp.computeTimeStamps(trajectory);
+
+    trajectory.getRobotTrajectoryMsg(msg);
 
     moveit::planning_interface::MoveGroup::Plan plan;
     plan.trajectory_ = msg;

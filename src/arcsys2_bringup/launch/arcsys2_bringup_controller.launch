@@ -9,7 +9,7 @@
 
   <node name="arcsys2_control_node" pkg="arcsys2_control" type="$(arg control_node)">
     <rosparam>
-      ics_id_vec: [0, 1, 2]
+      ics_id_vec: [1, 3, 2, 0]
     </rosparam>
   </node>
 
