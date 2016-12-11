@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 generate_dynamic_reconfigure_options(
   cfg/Search.cfg
+  cfg/Calibration.cfg
 )
 
 catkin_package(CATKIN_DEPENDS
@@ -44,7 +45,7 @@ add_executable(kinect_tomato_selector_node src/kinect_tomato_selector_node.cpp)
 ## same as for the library above
 add_dependencies(kinect_tomato_searcher_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
 add_dependencies(kinect_tomato_broadcaster_node ${catkin_EXPORTED_TARGETS})
-add_dependencies(kinect_tomato_selector_node ${catkin_EXPORTED_TARGETS})
+add_dependencies(kinect_tomato_selector_node ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(kinect_tomato_searcher_node ${catkin_LIBRARIES})
