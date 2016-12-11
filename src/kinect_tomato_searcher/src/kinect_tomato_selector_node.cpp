@@ -9,9 +9,9 @@
 
 struct Calibrator
 {
-  const double offset_x_;
-  const double offset_y_;
-  const double offset_z_;
+  double offset_x_;
+  double offset_y_;
+  double offset_z_;
 
   geometry_msgs::Pose calibrate(geometry_msgs::Pose) const;
 };
