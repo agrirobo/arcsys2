@@ -6,8 +6,9 @@
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 #include <image_transport/image_transport.h>
-#include <kinect_tomato_searcher/SearchConfig.h>
 #include <sensor_msgs/image_encodings.h>
+
+#include <kinect_tomato_searcher/SearchConfig.h>
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
