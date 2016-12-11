@@ -2,13 +2,14 @@
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="arcsys2">
 
+<!-- MATERIAL -->
   <material name="white"> <color rgba="${255/255} ${255/255} ${255/255} 1.0" /> </material>
   <material name="red">   <color rgba="${255/255} ${  0/255} ${  0/255} 1.0" /> </material>
   <material name="green"> <color rgba="${  0/255} ${255/255} ${  0/255} 1.0" /> </material>
   <material name="blue">  <color rgba="${  0/255} ${  0/255} ${255/255} 1.0" /> </material>
 
 
-
+<!-- PROPERTY -->
   <xacro:property name="pi" value="3.1415926535897931" />
 
   <xacro:property name="default_size" value="0.100" />
@@ -51,26 +52,34 @@
   <xacro:property name="kinect_height" value="${default_size}" />
 
 
-
-  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width - base_width}" height="${rail_height}" color="white" />
+<!-- LINK AND JOINT -->
+  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width-base_width}" height="${rail_height}">
+    <origin xyz="${rail_width-base_width} 0 0" />
+  </xacro:PLAIN_LINK>
 
   <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="0" upper="${rail_width - base_width}">
     <origin xyz="0 0 ${base_height/2}" />
   </xacro:PRISMATIC_JOINT>
 
-  <xacro:PLAIN_LINK name="base" depth="${base_depth}" width="${base_width}" height="${base_height}" color="red" />
+  <xacro:PLAIN_LINK name="base" depth="${base_depth}" width="${base_width}" height="${base_height}" color="red">
+    <origin xyz="0 0 0" />
+  </xacro:PLAIN_LINK>
 
   <xacro:FIXED_JOINT parent="base" child="kinect">
     <origin xyz="${kinect_offset_x} ${kinect_offset_y} ${kinect_offset_z}" />
   </xacro:FIXED_JOINT>
 
-  <xacro:PLAIN_LINK name="kinect" depth="${kinect_depth}" width="${kinect_width}" height="${base_height+kinect_height}" color="green" />
+  <xacro:PLAIN_LINK name="kinect" depth="${kinect_depth}" width="${kinect_width}" height="${kinect_height}" color="green">
+    <origin xyz="0 0 ${base_height}" />
+  </xacro:PLAIN_LINK>
 
   <xacro:FIXED_JOINT parent="base" child="shaft">
     <origin xyz="-0.15 0 ${shaft_height/2}" />
   </xacro:FIXED_JOINT>
 
-  <xacro:PLAIN_LINK name="shaft" depth="${shaft_depth}" width="${shaft_width}" height="${shaft_height}" color="blue" />
+  <xacro:PLAIN_LINK name="shaft" depth="${shaft_depth}" width="${shaft_width}" height="${shaft_height}" color="blue">
+    <origin xyz="0 0 0" />
+  </xacro:PLAIN_LINK>
 
   <xacro:PRISMATIC_JOINT parent="shaft" child="arm0" z="1" lower="${-default_size}" upper="${default_size}">
     <origin xyz="${shaft_depth/2} 0 ${arm_init}" />
@@ -87,30 +96,24 @@
   <xacro:SCARA_LINK name="blade" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" color="red" />
 
 
-
-  <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} color:=white">
+<!-- MACRO DEFINITION -->
+  <xacro:macro name="PLAIN_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} color:=white *origin">
     <link name="${name}">
-      <origin xyz="0 0 0"/>
+      <xacro:insert_block name="origin" />
       <visual>
-        <geometry> <box size="${depth} ${width} ${height}"/> </geometry>
-        <material name="${color}"/>
+        <geometry> <box size="${depth} ${width} ${height}" /> </geometry>
+        <material name="${color}" />
       </visual>
-      <!-- <collision>                                                        -->
-      <!--   <geometry> <box size="${depth} ${width} ${height}"/> </geometry> -->
-      <!-- </collision>                                                       -->
     </link>
   </xacro:macro>
 
-  <xacro:macro name="SCARA_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} color:=white">
+  <xacro:macro name="SCARA_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} offset_y:=0 offset_z:=0 color:=white">
     <link name="${name}">
       <visual>
-        <origin xyz="${depth/2} 0 0"/>
-        <geometry> <box size="${depth} ${width} ${height}"/> </geometry>
-        <material name="${color}"/>
+        <origin xyz="${depth/2} ${offset_y} ${offset_z}" />
+        <geometry> <box size="${depth} ${width} ${height}" /> </geometry>
+        <material name="${color}" />
       </visual>
-      <!-- <collision>                                                        -->
-      <!--   <geometry> <box size="${depth} ${width} ${height}"/> </geometry> -->
-      <!-- </collision>                                                       -->
     </link>
   </xacro:macro>
 
