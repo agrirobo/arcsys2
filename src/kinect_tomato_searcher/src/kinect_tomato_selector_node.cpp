@@ -12,11 +12,15 @@
 
 struct Calibrator
 {
+  Calibrator(double offset_x, double offset_y, double offset_z);
   double offset_x_;
   double offset_y_;
   double offset_z_;
 
   geometry_msgs::Pose calibrate(geometry_msgs::Pose) const;
+private:
+  dynamic_reconfigure::Server<kinect_tomato_searcher::CalibrationConfig> server;
+  dynamic_reconfigure::Server<kinect_tomato_searcher::CalibrationConfig>::CallbackType f;
   void callback(kinect_tomato_searcher::CalibrationConfig& config, uint32_t level);
 };
 
@@ -48,6 +52,16 @@ int main(int argc, char** argv)
   calibrator = std::unique_ptr<Calibrator> {new Calibrator {offset_x, offset_y, offset_z}};
   ros::spin();
   return 0;
+}
+
+Calibrator::Calibrator(double offset_x, double offset_y, double offset_z)
+  : offset_x_ {offset_x},
+    offset_y_ {offset_y},
+    offset_z_ {offset_z},
+    server {},
+    f(std::bind(&Calibrator::callback, this, std::placeholders::_1, std::placeholders::_2))
+{
+   server.setCallback(f);
 }
 
 inline geometry_msgs::Pose Calibrator::calibrate(geometry_msgs::Pose pose) const
