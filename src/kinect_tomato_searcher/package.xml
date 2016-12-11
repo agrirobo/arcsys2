@@ -13,6 +13,7 @@
 
   <depend>roscpp</depend>
   <depend>cv_bridge</depend>
+  <depend>dynamic_reconfigure</depend>
   <depend>geometry_msgs</depend>
   <depend>image_transport</depend>
   <depend>sensor_msgs</depend>

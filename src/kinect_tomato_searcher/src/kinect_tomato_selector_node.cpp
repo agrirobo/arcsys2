@@ -1,7 +1,10 @@
 #include <ros/ros.h>
+#include <dynamic_reconfigure/server.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 #include <geometry_msgs/PoseStamped.h>
+
+#include <kinect_tomato_searcher/CalibrationConfig.h>
 
 #include <algorithm>
 #include <memory>
@@ -9,11 +12,16 @@
 
 struct Calibrator
 {
-  const double offset_x_;
-  const double offset_y_;
-  const double offset_z_;
+  Calibrator(double offset_x, double offset_y, double offset_z);
+  double offset_x_;
+  double offset_y_;
+  double offset_z_;
 
   geometry_msgs::Pose calibrate(geometry_msgs::Pose) const;
+private:
+  dynamic_reconfigure::Server<kinect_tomato_searcher::CalibrationConfig> server;
+  dynamic_reconfigure::Server<kinect_tomato_searcher::CalibrationConfig>::CallbackType f;
+  void callback(kinect_tomato_searcher::CalibrationConfig& config, uint32_t level);
 };
 
 class NearSelector
@@ -46,12 +54,29 @@ int main(int argc, char** argv)
   return 0;
 }
 
+Calibrator::Calibrator(double offset_x, double offset_y, double offset_z)
+  : offset_x_ {offset_x},
+    offset_y_ {offset_y},
+    offset_z_ {offset_z},
+    server {},
+    f(std::bind(&Calibrator::callback, this, std::placeholders::_1, std::placeholders::_2))
+{
+   server.setCallback(f);
+}
+
 inline geometry_msgs::Pose Calibrator::calibrate(geometry_msgs::Pose pose) const
 {
   pose.position.x += offset_x_;
   pose.position.y += offset_y_;
   pose.position.z += offset_z_;
   return pose;
+}
+
+void Calibrator::callback(kinect_tomato_searcher::CalibrationConfig& config, uint32_t level)
+{
+  offset_x_ = config.offset_x;
+  offset_y_ = config.offset_y;
+  offset_z_ = config.offset_z;
 }
 
 inline geometry_msgs::Pose NearSelector::select(const geometry_msgs::PoseArray& pose_array)

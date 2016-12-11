@@ -1,11 +1,14 @@
 #include <ros/ros.h>
 #include <cv_bridge/cv_bridge.h>
+#include <dynamic_reconfigure/server.h>
 #include <geometry_msgs/Point.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseArray.h>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/image_encodings.h>
+
+#include <kinect_tomato_searcher/SearchConfig.h>
 
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -104,12 +107,16 @@ private:
 };
 
 
-class SearchTomato {
+class SearchTomato
+{
 public:
   SearchTomato()
     : tomato_contours {},
-      siObj {}
+      siObj {},
+      server {},
+      f(std::bind(&dynamic_reconfigure_callback, std::placeholders::_1, std::placeholders::_2))
   {
+    server.setCallback(f);
   }
 
   void update(const cv::Mat& capture_rgb) {
@@ -147,6 +154,16 @@ public:
   }
 
 private:
+  static void dynamic_reconfigure_callback(kinect_tomato_searcher::SearchConfig& config, uint32_t level)
+  {
+    h_min_ = config.h_min;
+    h_max_ = config.h_max;
+    s_min_ = config.s_min;
+    s_max_ = config.s_max;
+    v_min_ = config.v_min;
+    v_max_ = config.v_max;
+  }
+
   void imageProsessing(const cv::Mat& rgb, cv::Mat& binary) {
     cv::Mat blur, hsv;
     cv::GaussianBlur(rgb, blur, cv::Size(5, 5), 4.0, 4.0);
@@ -185,7 +202,9 @@ private:
     for(y = 0; y < hsv.rows; y++) {
       for(x = 0; x < hsv.cols; x++) {
         a = hsv.step*y+(x*3);
-        if((hsv.data[a] <= 45 || hsv.data[a] <= 320) && hsv.data[a+1] >= 30 && hsv.data[a+2] >= 50)
+        if((hsv.data[a] <= h_min_ || hsv.data[a] >= h_max_) &&
+           (hsv.data[a+1] >= s_min_) &&
+           (hsv.data[a+2] >= v_min_))
           binary.at<unsigned char>(y,x) = 255;
         else
           binary.at<unsigned char>(y,x) = 0;
@@ -225,9 +244,24 @@ private:
     return false;
   }
 
+  static uint16_t h_min_;
+  static uint16_t h_max_;
+  static uint16_t s_min_;
+  static uint16_t s_max_;
+  static uint16_t v_min_;
+  static uint16_t v_max_;
+
   std::vector<std::vector<cv::Point> > tomato_contours;
   ShowImage siObj;
+  dynamic_reconfigure::Server<kinect_tomato_searcher::SearchConfig> server;
+  dynamic_reconfigure::Server<kinect_tomato_searcher::SearchConfig>::CallbackType f;
 };
+uint16_t SearchTomato::h_min_;
+uint16_t SearchTomato::h_max_;
+uint16_t SearchTomato::s_min_;
+uint16_t SearchTomato::s_max_;
+uint16_t SearchTomato::v_min_;
+uint16_t SearchTomato::v_max_;
 
 
 class ImageConverter {
