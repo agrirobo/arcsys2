@@ -12,8 +12,13 @@
 <!-- PROPERTY -->
   <xacro:property name="pi" value="3.1415926535897931" />
 
-  <xacro:property name="default_size" value="0.100" />
-  <xacro:property name="arm_init" value="0.200" />
+  <xacro:property name="default_size"     value="0.100" />
+  <xacro:property name="default_lower"    value="${-pi/2}" />
+  <xacro:property name="default_upper"    value="${+pi/2}" />
+  <xacro:property name="default_effort"   value="1.0" />
+  <xacro:property name="default_velocity" value="1.0" />
+
+  <xacro:property name="arm_init"     value="0.200" />
 
   <xacro:property name="rail_depth"  value="${default_size}" />
   <xacro:property name="rail_width"  value="3.600" />
@@ -43,9 +48,9 @@
   <xacro:property name="effector_width"  value="${default_size}" />
   <xacro:property name="effector_height" value="${default_size}" />
 
-  <xacro:property name="kinect_offset_x" value="${default_size}" />
-  <xacro:property name="kinect_offset_y" value="0.265" />
-  <xacro:property name="kinect_offset_z" value="${default_size}" />
+  <xacro:property name="kinect_offx" value="${default_size}" />
+  <xacro:property name="kinect_offy" value="0.265" />
+  <xacro:property name="kinect_offz" value="${default_size}" />
 
   <xacro:property name="kinect_depth"  value="${default_size}" />
   <xacro:property name="kinect_width"  value="${default_size}" />
@@ -53,11 +58,12 @@
 
 
 <!-- LINK AND JOINT -->
-  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width-base_width}" height="${rail_height}">
-    <origin xyz="${rail_width-base_width} 0 0" />
+  <xacro:PLAIN_LINK name="rail" depth="${rail_depth}" width="${rail_width*2}" height="${rail_height}">
+    <origin xyz="${rail_width} 0 0" />
   </xacro:PLAIN_LINK>
 
-  <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="0" upper="${rail_width - base_width}">
+  <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="0" upper="${rail_width-base_width/2}">
+  <!-- <xacro:PRISMATIC_JOINT parent="rail" child="base" y="1" lower="${rail_width-base_width/2}" upper="0"> -->
     <origin xyz="0 0 ${base_height/2}" />
   </xacro:PRISMATIC_JOINT>
 
@@ -66,11 +72,11 @@
   </xacro:PLAIN_LINK>
 
   <xacro:FIXED_JOINT parent="base" child="kinect">
-    <origin xyz="${kinect_offset_x} ${kinect_offset_y} ${kinect_offset_z}" />
+    <origin xyz="${kinect_offx} ${kinect_offy} ${kinect_offz}" />
   </xacro:FIXED_JOINT>
 
   <xacro:PLAIN_LINK name="kinect" depth="${kinect_depth}" width="${kinect_width}" height="${kinect_height}" color="green">
-    <origin xyz="0 0 ${base_height}" />
+    <origin xyz="0 0 ${rail_height+base_height}" />
   </xacro:PLAIN_LINK>
 
   <xacro:FIXED_JOINT parent="base" child="shaft">
@@ -92,7 +98,12 @@
   <xacro:SCARA_LINK name="arm2" depth="${arm2_depth}" width="${arm2_width}" height="${arm2_height}" color="blue" />
   <xacro:SCARA_JOINT parent="arm2" child="effector" parent_depth="${arm2_depth}" />
   <xacro:SCARA_LINK name="effector" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" color="red" />
-  <xacro:WRIST_JOINT parent="effector" child="blade" parent_depth="${effector_depth/2}" />
+
+  <!-- <xacro:WRIST_JOINT parent="effector" child="blade" parent_depth="${effector_depth/2}" lower="0" upper="pi*3/4" /> -->
+  <xacro:REVOLUTE_JOINT parent="effector" child="blade" axisx="1" lower="0" upper="${pi*3/4}">
+    <origin xyz="${effector_depth/2} 0 0" />
+  </xacro:REVOLUTE_JOINT>
+
   <xacro:SCARA_LINK name="blade" depth="${effector_depth/2}" width="${effector_width}" height="${effector_height}" color="red" />
 
 
@@ -107,10 +118,10 @@
     </link>
   </xacro:macro>
 
-  <xacro:macro name="SCARA_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} offset_y:=0 offset_z:=0 color:=white">
+  <xacro:macro name="SCARA_LINK" params="name width:=${default_size} depth:=${default_size} height:=${default_size} offy:=0 offz:=0 color:=white">
     <link name="${name}">
       <visual>
-        <origin xyz="${depth/2} ${offset_y} ${offset_z}" />
+        <origin xyz="${depth/2} ${offy} ${offz}" />
         <geometry> <box size="${depth} ${width} ${height}" /> </geometry>
         <material name="${color}" />
       </visual>
@@ -119,9 +130,9 @@
 
   <xacro:macro name="FIXED_JOINT" params="parent child *origin">
     <joint name="${parent}_to_${child}_joint" type="fixed">
-      <xacro:insert_block name="origin"/>
-      <parent link="${parent}"/>
-      <child link="${child}"/>
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}" />
+      <child link="${child}" />
     </joint>
   </xacro:macro>
 
@@ -152,6 +163,16 @@
       <child link="${child}"/>
       <axis xyz="1 0 0"/>
       <limit lower="${lower}" upper="${upper}" effort="1" velocity="1"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="REVOLUTE_JOINT" params="parent child *origin axisx:=0 axisy:=0 axisz:=0 lower:=${default_lower} upper:=${default_upper} effort:=${default_effort} velocity:=${default_velocity}">
+    <joint name="${parent}_to_${child}_joint" type="revolute">
+      <xacro:insert_block name="origin" />
+      <parent link="${parent}" />
+      <child link="${child}" />
+      <axis xyz="${axisx} ${axisy} ${axisz}" />
+      <limit lower="${lower}" upper="${upper}" effort="${effort}" velocity="${velocity}" />
     </joint>
   </xacro:macro>
 
