@@ -45,7 +45,7 @@ class ICSControl
 public:
   using JntCmdType = hardware_interface::PositionJointInterface;
   using BuildDataType = JointControlBuildData<JntCmdType>;
-  ICSControl(BuildDataType&, ics::ICS3&, const ics::ID&);
+  ICSControl(BuildDataType&, ics::ICS3&, const ics::ID&, const bool = false);
   void fetch() override;
   void move() override;
 private:
@@ -53,6 +53,7 @@ private:
   ics::ICS3& driver_;
   ics::ID id_;
   double last_pos_;
+  bool enable_reverse_;
 };
 
 template<class JntCmdIF, typename CmdMsg>
@@ -165,7 +166,7 @@ int main(int argc, char *argv[])
   ICSControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
   ICSControl arm1_control {arm1_builder, ics_driver, *ics_id_it++};
   ICSControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
-  ICSControl arm2_control {arm2_builder, ics_driver, *ics_id_it++};
+  ICSControl arm2_control {arm2_builder, ics_driver, *ics_id_it++, true};
   ICSControl::BuildDataType effector_base_builder {"arm2_to_effector_joint", joint_state_interface, position_joint_interface};
   ICSControl effector_base_control {effector_base_builder, ics_driver, *ics_id_it++};
   ICSControl::BuildDataType effector_end_builder {"effector_to_blade_joint", joint_state_interface, position_joint_interface};
@@ -198,11 +199,12 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, const ics::ID& id)
+inline ICSControl::ICSControl(BuildDataType& build_data, ics::ICS3& driver, const ics::ID& id, const bool enable_reverse)
   : data_ {build_data.joint_name_},
     driver_(driver), // for ubuntu 14.04
     id_ {id},
-    last_pos_ {0}
+    last_pos_ {0},
+    enable_reverse_ {enable_reverse}
 {
   registerJoint(data_, build_data);
 }
@@ -214,7 +216,8 @@ inline void ICSControl::fetch()
 
 inline void ICSControl::move()
 {
-  last_pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_)) / 2 + last_pos_ / 2;
+  if (enable_reverse_) last_pos_ = -driver_.move(id_, ics::Angle::newRadian(-data_.cmd_)) / 2 + last_pos_ / 2;
+  else last_pos_ = driver_.move(id_, ics::Angle::newRadian(data_.cmd_)) / 2 + last_pos_ / 2;
 }
 
 template<class JntCmdIF, typename CmdMsg>
