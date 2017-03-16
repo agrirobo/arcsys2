@@ -57,3 +57,15 @@ target_link_libraries(arcsys2_dummy_hw_node
   ${catkin_LIBRARIES}
   ics3
 )
+
+add_executable(arcsys2_split_dammy_hw_node
+  src/arcsys2_split_dammy_hw_node.cpp
+)
+
+add_dependencies(arcsys2_split_dammy_hw_node
+  ${catkin_EXPORTED_TARGETS}
+)
+
+target_link_libraries(arcsys2_split_dammy_hw_node
+  ${catkin_LIBRARIES}
+)
