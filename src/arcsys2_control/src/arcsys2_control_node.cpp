@@ -99,13 +99,13 @@ private:
 };
 
 template<class JntCmdIF>
-class DammyControl
+class DummyControl
   : public JointControlInterface
 {
 public:
   using JntCmdType = JntCmdIF;
   using BuildDataType = JointControlBuildData<JntCmdType>;
-  DammyControl(BuildDataType&);
+  DummyControl(BuildDataType&);
   void fetch() override;
   void move() override;
 private:
