@@ -87,8 +87,8 @@ private:
   JointData data_;
 };
 
-using DammyPositionControl = DammyControl<hardware_interface::PositionJointInterface>;
-using DammyVelocityControl = DammyControl<hardware_interface::VelocityJointInterface>;
+using DummyPositionControl = DummyControl<hardware_interface::PositionJointInterface>;
+using DummyVelocityControl = DummyControl<hardware_interface::VelocityJointInterface>;
 
 class Arcsys2HW
   : public hardware_interface::RobotHW
@@ -125,18 +125,18 @@ int main(int argc, char *argv[])
   hardware_interface::JointStateInterface joint_state_interface {};
   hardware_interface::PositionJointInterface position_joint_interface {};
 
-  DammyPositionControl::BuildDataType shaft_builder {"rail_to_base_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl shaft_control {shaft_builder};
-  DammyPositionControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl arm0_control {arm0_builder};
-  DammyPositionControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl arm1_control {arm1_builder};
-  DammyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl arm2_control {arm2_builder};
-  DammyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl effector_base_control {effector_base_builder};
-  DammyPositionControl::BuildDataType effector_end_builder {"effector_to_blade_joint", joint_state_interface, position_joint_interface};
-  DammyPositionControl effector_end_control {effector_end_builder};
+  DummyPositionControl::BuildDataType shaft_builder {"rail_to_base_joint", joint_state_interface, position_joint_interface};
+  DummyPositionControl shaft_control {shaft_builder};
+  DummyPositionControl::BuildDataType arm0_builder {"shaft_to_arm0_joint", joint_state_interface, position_joint_interface};
+  DummyPositionControl arm0_control {arm0_builder};
+  DummyPositionControl::BuildDataType arm1_builder {"arm0_to_arm1_joint", joint_state_interface, position_joint_interface};
+  DummyPositionControl arm1_control {arm1_builder};
+  DummyPositionControl::BuildDataType arm2_builder {"arm1_to_arm2_joint", joint_state_interface, position_joint_interface};
+  DummyPositionControl arm2_control {arm2_builder};
+  DummyPositionControl::BuildDataType effector_base_builder {"arm2_to_effector_joint", joint_state_interface, position_joint_interface};
+  DummyPositionControl effector_base_control {effector_base_builder};
+  DummyPositionControl::BuildDataType effector_end_builder {"effector_to_blade_joint", joint_state_interface, position_joint_interface};
+  DummyPositionControl effector_end_control {effector_end_builder};
 
   Arcsys2HW robot {&joint_state_interface};
   robot.registerInterface(&position_joint_interface);
@@ -212,27 +212,27 @@ inline void DCMotorControl::odomCb(const nav_msgs::OdometryConstPtr& odom)
 }
 
 template<class JntCmdIF>
-inline DammyControl<JntCmdIF>::DammyControl(BuildDataType& build_data)
+inline DummyControl<JntCmdIF>::DummyControl(BuildDataType& build_data)
   : data_ {build_data.joint_name_}
 {
   registerJoint(data_, build_data);
 }
 
 template<>
-inline void DammyPositionControl::fetch()
+inline void DummyPositionControl::fetch()
 {
   data_.pos_ = data_.cmd_;
 }
 
 template<>
-inline void DammyVelocityControl::fetch()
+inline void DummyVelocityControl::fetch()
 {
   data_.pos_ += data_.cmd_ * 0.01; // FIXME: test code
   data_.vel_ = data_.cmd_;
 }
 
 template<class JntCmdIF>
-inline void DammyControl<JntCmdIF>::move()
+inline void DummyControl<JntCmdIF>::move()
 {
 }
 
