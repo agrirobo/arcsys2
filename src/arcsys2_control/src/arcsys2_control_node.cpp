@@ -112,8 +112,8 @@ private:
   JointData data_;
 };
 
-using DammyPositionControl = DammyControl<hardware_interface::PositionJointInterface>;
-using DammyVelocityControl = DammyControl<hardware_interface::VelocityJointInterface>;
+using DummyPositionControl = DummyControl<hardware_interface::PositionJointInterface>;
+using DummyVelocityControl = DummyControl<hardware_interface::VelocityJointInterface>;
 
 class Arcsys2HW
   : public hardware_interface::RobotHW
@@ -284,27 +284,27 @@ inline void SimpleVelocityControl::odomCb(const nav_msgs::OdometryConstPtr& odom
 }
 
 template<class JntCmdIF>
-inline DammyControl<JntCmdIF>::DammyControl(BuildDataType& build_data)
+inline DummyControl<JntCmdIF>::DummyControl(BuildDataType& build_data)
   : data_ {build_data.joint_name_}
 {
   registerJoint(data_, build_data);
 }
 
 template<>
-inline void DammyPositionControl::fetch()
+inline void DummyPositionControl::fetch()
 {
   data_.pos_ = data_.cmd_;
 }
 
 template<>
-inline void DammyVelocityControl::fetch()
+inline void DummyVelocityControl::fetch()
 {
   data_.pos_ += data_.cmd_ * 0.01; // FIXME: test code
   data_.vel_ = data_.cmd_;
 }
 
 template<class JntCmdIF>
-inline void DammyControl<JntCmdIF>::move()
+inline void DummyControl<JntCmdIF>::move()
 {
 }
 
